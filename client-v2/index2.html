@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+
+  </head>
+  <body>
+    <div class="game-container">
+      <header class="game-state-container">
+        <div class="game-state" id="game-state">Answer</div>
+      </header>
+      <header class="header-container">
+        <div class="player-score-container">
+          Pihh <span class="player-score">5</span>
+        </div>
+        <div class="round-timer">0:40</div>
+        <div class="game-score-container">
+          Round <span class="game-round">5</span>
+        </div>
+      </header>
+      <main class="question-container">
+        <div class="question" onclick="closeChosen()">
+          <div>
+
+              I drink to forget _____?
+          </div>
+          <div class="waiting-answers">
+            <div class="waiting-answers-counter">
+                <div>
+                    0/6
+                </div>
+                <small>Left.</small>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="hand-container" id="player-hand">
+        <div class="player-hand-controls">
+          <div class="player-hand-controls__left" onclick="prevCard()"></div>
+          <div class="player-hand-controls__mid" onclick="selectCard()"></div>
+          <div class="player-hand-controls__right" onclick="nextCard()"></div>
+        </div>
+        <div class="player-hand">
+          <div class="player-card selected">Alcoholism</div>
+          <div class="player-card next">Carlos Cruz</div>
+          <div class="player-card next2">My wife</div>
+          <div class="player-card">O zé na noite</div>
+          <div class="player-card">Michael jackson</div>
+          <div class="player-card">Child abuse</div>
+          <div class="player-card">A defective condom</div>
+          <div class="player-card">Two girls one cup</div>
+          <div class="player-card prev2">My sister</div>
+          <div class="player-card prev">Your uncle</div>
+        </div>
+
+      </footer>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+    <script>
+      let selectedCard = -1;
+      let answered = false
+      function answer() {
+        answered = true;
+        //this.classList.remove("chosen");
+        this.classList.add("gone");
+        setTimeout(()=>{
+
+            this.remove();
+        },10000)
+        changeGameState("Wait");
+      }
+
+      function changeGameState(state) {
+        const $state = document.getElementById("game-state");
+        $state.innerHTML = state;
+      }
+      let isRotating = false;
+      function selectCard() {
+        if(answered) return
+        const $card = document.querySelector(".player-card.selected");
+        const $cards = Array.from(document.querySelectorAll(".player-card"));
+        let currentSelectedIndex = 0;
+
+        for (let i = 0; i < $cards.length; i++) {
+          if ($cards[i].classList.contains("selected")) {
+            currentSelectedIndex = i;
+            break;
+          }
+        }
+        selectedCard = currentSelectedIndex;
+        $card.classList.add("chosen");
+        $card.classList.remove("selected");
+        $card.addEventListener("click", answer);
+
+        changeGameState("Swipe up");
+      }
+      function closeChosen() {
+        console.log("close it", selectedCard);
+        if (selectedCard > -1) {
+          const $cards = Array.from(document.querySelectorAll(".player-card"));
+          $cards[selectedCard].classList.remove("chosen");
+          $cards[selectedCard].classList.add("selected");
+          $cards[selectedCard].removeEventListener("click", answer);
+          selectedCard = -1;
+          changeGameState("Answer");
+        }
+      }
+
+      function rotateCard(direction = "next") {
+        if (answered) return;
+        if (isRotating) return;
+        isRotating = true;
+        setTimeout(function () {
+          isRotating = false;
+        }, 400);
+        const $cards = Array.from(document.querySelectorAll(".player-card"));
+        let currentSelectedIndex = 0;
+
+        for (let i = 0; i < $cards.length; i++) {
+          if ($cards[i].classList.contains("selected")) {
+            currentSelectedIndex = i;
+          }
+          $cards[i].classList.remove("selected");
+          $cards[i].classList.remove("chosen");
+          $cards[i].classList.remove("prev");
+          $cards[i].classList.remove("next");
+          $cards[i].classList.remove("prev2");
+          $cards[i].classList.remove("next2");
+          $cards[i].classList.remove("gone");
+        }
+
+        if (direction == "next") {
+          currentSelectedIndex += 1;
+          currentSelectedIndex = currentSelectedIndex % 10;
+          currentNextIndex = currentSelectedIndex + 1;
+          currentPrevIndex = currentSelectedIndex - 1;
+          currentPrevPrevIndex = currentSelectedIndex - 2;
+          currentNextNextIndex = currentSelectedIndex + 2;
+          if (currentSelectedIndex == 0) {
+            currentPrevIndex = 9;
+            currentPrevPrevIndex = 8
+          }
+          if (currentSelectedIndex == 1) {
+            currentPrevPrevIndex = 9
+          }
+          if (currentSelectedIndex == 9) {
+            currentNextIndex = 0;
+          }
+          if (currentSelectedIndex == 8) {
+            currentNextNextIndex = 0;
+          }
+        } else {
+          currentSelectedIndex -= 1;
+          currentNextIndex = currentSelectedIndex + 1;
+          currentPrevIndex = currentSelectedIndex - 1;
+          currentPrevPrevIndex = currentSelectedIndex - 2;
+          currentNextNextIndex = currentSelectedIndex + 2;
+
+          if (currentSelectedIndex == 0) {
+            currentPrevIndex = 9;
+            currentPrevPrevIndex = 8
+          }
+          if (currentSelectedIndex == 1) {
+            currentPrevPrevIndex = 9
+          }
+          if (currentSelectedIndex == -1) {
+            currentSelectedIndex = 9;
+            currentNextIndex = 0;
+            currentNextNextIndex = 1;
+            currentPrevIndex = 8;
+            currentPrevPrevIndex = 7;
+          }
+        }
+        
+        $cards[currentSelectedIndex].classList.add("selected");
+        $cards[currentPrevIndex].classList.add("prev");
+        $cards[currentPrevPrevIndex].classList.add("prev2");
+        $cards[currentNextIndex].classList.add("next");
+        $cards[currentNextNextIndex].classList.add("next2");
+      }
+
+      function nextCard() {
+        rotateCard();
+      }
+
+      function prevCard() {
+        rotateCard("prev");
+      }
+    </script>
+  </body>
+</html>

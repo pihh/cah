@@ -1,0 +1,386 @@
+// Required Core Stylesheet
+@import "node_modules/@glidejs/glide/src/assets/sass/glide.core";
+
+// Optional Theme Stylesheet
+@import "node_modules/@glidejs/glide/src/assets/sass/glide.theme";
+
+@font-face {
+  font-family: "helvetica-neue-lt-std-75-bold";
+  src: url("/HelveticaNeueLTStd-Bd.otf") format("woff"),
+    url("/HelveticaNeueLTStd-Bd.otf") format("opentype"),
+    url("/HelveticaNeueLTStd-Bd.otf") format("truetype");
+}
+* {
+  font-family: "helvetica-neue-lt-std-75-bold";
+}
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.game-container {
+  background-color: black;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  .game-state-container {
+    display: flex;
+    color: white;
+    width: calc(100% - 2em);
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1em;
+    border-bottom: 0.5px solid white;
+    .game-state {
+      text-align: center;
+      width: 100%;
+      font-size: 2em;
+    }
+  }
+  .header-container {
+    display: flex;
+    color: white;
+    width: calc(100% - 2em);
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1em;
+    max-width: 850px;
+    margin: 0 auto;
+
+    .round-timer {
+      font-size: 2em;
+    }
+    .player-score,
+    .game-round {
+      background-color: white;
+      color: black;
+      border-radius: 100%;
+      padding: 0.25em;
+      min-width: 1.25em;
+      min-height: 1.25em;
+      display: inline-block;
+      text-align: center;
+      font-weight: bolder;
+    }
+  }
+  .question-container {
+    height: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    width: 100%;
+
+    .question {
+      height: 100%;
+      color: white;
+      font-size: 2.5em;
+      padding: 1em;
+    }
+  }
+  .hand-container {
+    height: 70vh;
+    .player-hand-controls {
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      z-index: 100;
+      margin-top: -100px;
+      div {
+        height: 100%;
+        width: 25%;
+        // border: 1px solid red;
+      }
+      .player-hand-controls__mid {
+        width: 100%;
+      }
+    }
+    .player-hand {
+      //position: relative;
+      height: 100%;
+      top: 0;
+      overflow: hidden;
+      //width: 80%;
+      margin: auto;
+
+      .player-card {
+        position: absolute;
+        transition: transform 1s, left 1s, opacity 1s, z-index 0s;
+        opacity: 1;
+        cursor: pointer;
+        width: 15rem;
+        height: 22rem;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        font-weight: bold;
+        font-family: Helvetica, sans-serif;
+        background-color: white;
+        box-shadow: 0 0.5em 0.65em rgba(0, 0, 0, 0.05);
+        font-size: 2em;
+        transform: translateY(100vw);
+        &.selected {
+          z-index: 10;
+          left: 50%;
+          transform: translateY(-100px) translateX(-50%);
+        }
+        &.next {
+          z-index: 5;
+          left: 50%;
+          transform: translateY(-25px) translateX(25%) rotate(10deg);
+        }
+        &.next2 {
+            z-index: 4;
+            left: 50%;
+            transform: translateY(25px) translateX(60%) rotate(15deg)
+          }
+        &.prev {
+          z-index: 5;
+          left: 50%;
+          transform: translateY(-25px) translateX(-125%) rotate(-10deg);
+        }
+        &.prev2 {
+          z-index: 4;
+          left: 50%;
+          transform: translateY(25px) translateX(-175%) rotate(-15deg)
+        }
+        &.chosen {
+          // top: 0;
+          // height: 100%;
+          // width: 85vw;
+          // position: fixed;
+          left: 50%;
+          transform: translateX(-50%) translateY(-165px) scale(1.35);
+          z-index: 100;
+        }
+        &.gone {
+          transform: scale(2) translateX(-15%) translateY(-25%);
+          opacity: 0;
+          transition: all 1s;
+          // display: none;
+        }
+      }
+    }
+  }
+}
+
+.waiting-answers-counter {
+  background: white;
+  border-radius: 100%;
+  padding: 1em;
+  width: 1em;
+  height: 1em;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 1em;
+  small {
+    font-size: 40%;
+  }
+}
+.vote-page__question-container {
+  height: 6em;
+  border-top: 1px solid white;
+  padding: 1em;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  div {
+    height: 100%;
+
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.vote-page__answers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  scroll-behavior: smooth;
+  //   padding-top: 5em;
+  position: relative;
+  height: 100%;
+  .vote-page__answers-slider {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 3em;
+    // margin-left: -1em;
+    // padding-left: 3em;
+    // padding-right: 6em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    align-items: center;
+    height: 100%;
+    // padding-top: 7.5em;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  .player-card {
+    min-width: 15rem;
+    min-height: 22rem;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    opacity: 1;
+    position: relative;
+    > div {
+      cursor: pointer;
+      width: 15rem !important;
+      height: 22rem;
+      border-radius: 0.75rem;
+      padding: 2rem 1rem;
+      font-weight: bold;
+      font-family: Helvetica, sans-serif;
+      background-color: white;
+      box-shadow: 0 0.5em 0.65em rgba(0, 0, 0, 0.05);
+      font-size: 2em;
+
+      position: absolute;
+      opacity: 1;
+      &.selected {
+        // position: fixed;
+        transform: translateY(-3.5em);
+      }
+      &.transition {
+        transition: 1s all;
+      }
+    }
+    .vote-info {
+      display: flex;
+      background: white;
+      height: 2em;
+      width: 2em;
+      color: black;
+      border-radius: 100%;
+      padding: 1.5em;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+/* BUTTON */
+
+@mixin button($bcolor, $url, $x1, $y1, $bor, $col) {
+  background: $bcolor;
+  -webkit-mask: url($url);
+  mask: url($url);
+  -webkit-mask-size: $x1 $y1;
+  mask-size: $x1 $y1;
+  border: $bor;
+  color: $col;
+}
+
+.transition-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000;
+  height: calc( 100vh - 2em );
+  width: calc( 100vw - 2em );
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  &.showing {
+    display: flex;
+  }
+  // nature, urban , natureSmaller
+  // https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png
+  // https://raw.githubusercontent.com/pizza3/asset/master/natureSmaller.png
+  @include button(
+    #fff,
+    "https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png",
+    2300%,
+    100%,
+    none,
+    #000
+  );
+
+  &.enter {
+    cursor: pointer;
+    -webkit-animation: ani2 0.7s steps(22) forwards;
+    animation: ani2 0.7s steps(22) forwards;
+  }
+  &.leave {
+    -webkit-animation: ani 0.7s steps(22) forwards;
+    animation: ani 0.7s steps(22) forwards;
+  }
+}
+
+.mas {
+//   position: absolute;
+  color: #000;
+  text-align: center;
+  width: 100%;
+  font-size: 3em;
+//   position: absolute;
+
+  margin-top: 17px;
+  overflow: hidden;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+@-webkit-keyframes ani {
+  from {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+}
+
+@keyframes ani {
+  from {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+}
+
+@-webkit-keyframes ani2 {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@keyframes ani2 {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}

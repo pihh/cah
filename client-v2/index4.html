@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div class="transition-container">
+      <span class="mas">It's Time to vote !!!</span>
+    </div>
+
+
+    <div class="game-container">
+      <header class="game-state-container">
+        <div class="game-state" id="game-state">Answer</div>
+      </header>
+      <header class="header-container">
+        <div class="player-score-container">
+          Pihh <span class="player-score">5</span>
+        </div>
+        <div class="round-timer">2:00</div>
+        <div class="game-score-container">
+          Round <span class="game-round">5</span>
+        </div>
+      </header>
+
+      <main class="vote-page__answers">
+        <div class="vote-page__answers-slider">
+          <div>&nbsp;</div>
+          <div class="player-card" onclick="voteAnswer(0)">
+            <div>Alcoholism</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(1)">
+            <div>Carlos Cruz</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(2)">
+            <div>My wife</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(3)">
+            <div>O zé na noite</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(4)">
+            <div>Michael jackson</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(5)">
+            <div>Child abuse</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(6)">
+            <div>A defective condom</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(7)">
+            <div>Two girls one cup</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(8)">
+            <div>My sister</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div class="player-card" onclick="voteAnswer(9)">
+            <div>Your uncle</div>
+            <span class="vote-info">+1 <br />Point </span>
+          </div>
+          <div>&nbsp;</div>
+        </div>
+      </main>
+      <main class="vote-page__question-container">
+        <div class="question">
+          <div>I drink to forget _____?</div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+    <script>
+
+      let time = 120;
+
+      const countdown = setInterval(function(){
+        time -=1;
+        if(time == 0){
+          //clearInterval(countdown);
+          time = 120;
+        }
+        const $timmer = document.querySelector('.round-timer')
+        const minutes = Math.floor(time / 60)
+        let seconds = `${time%60}`
+        if(seconds.length < 2){
+          seconds = '0'+seconds
+        }
+        $timmer.innerHTML= minutes+':'+seconds
+        
+      },1000)
+
+      let isTransitioning = false;
+      let isOpen = false;
+
+      function startTransition() {
+        if (isTransitioning) return;
+        if (isOpen) return;
+        isOpen = true;
+        isTransitioning = true;
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 2000);
+        const $transitionContainer = document.querySelector(
+          ".transition-container"
+        );
+        
+        $transitionContainer.classList.remove('leave')
+        $transitionContainer.classList.add('showing')
+        $transitionContainer.classList.add('enter')
+      }
+
+      function endtransition() {
+        if (isTransitioning) return;
+        if (!isOpen)return;
+        
+        isTransitioning = true;
+        setTimeout(() => {
+          isOpen = false;
+          isTransitioning = false;
+          $transitionContainer.classList.remove('showing')
+        }, 2000);
+        const $transitionContainer = document.querySelector(
+          ".transition-container"
+        );
+        $transitionContainer.classList.remove('enter')
+        $transitionContainer.classList.add('showing')
+        $transitionContainer.classList.add('leave')
+      }
+      function voteAnswer(index) {
+      
+      }
+    </script>
+  </body>
+</html>
