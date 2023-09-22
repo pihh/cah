@@ -1,0 +1,28 @@
+
+
+<div class="transition-container" [class.showing]="transitionVoteShowing" [class.enter]="transitionVoteEnter" [class.leave]="transitionVoteLeave">
+  <span class="mas">It's Time to vote !!!</span>
+</div>
+
+
+<div class="transition-container" [class.showing]="resultShowing" [class.enter]="resultEnter" [class.leave]="resultLeave">
+  <div class="result-page hidden" [class.hidden]="resultHidden">
+    <div class="player-card result-card " >
+      <div class="question-card">{{resultQuestion}}</div>
+
+    </div>
+    <div class="player-card result-card " >
+      <div class="answer-card">{{resultAnswer}}</div>
+
+    </div>
+  </div>
+
+  <div class="pyro">
+    <div class="before"></div>
+    <div class="after"></div>
+  </div>
+</div>
+<div class="game-container">
+  <router-outlet></router-outlet>
+
+</div>

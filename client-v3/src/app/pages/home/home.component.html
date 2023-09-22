@@ -1,0 +1,18 @@
+<app-header
+  [state]="state"
+  [name]="name"
+  [score]="score"
+  [round]="round"
+  ></app-header>
+
+<app-board-question
+  [question]="question"
+  [totalAnswers]="totalAnswers"
+  [totalPlayers]="totalPlayers"
+>
+
+</app-board-question>
+<app-player-hand
+  [cards]="cards"
+  (onAnswerEvent)="onAnswerEvent($event)"
+></app-player-hand>
