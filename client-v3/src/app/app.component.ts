@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'client-v3';
+  resultQuestion = "What is a must-have at a children's party?"
+  resultAnswer = "Carlos Cruz"
 
   transitionToVotePageSubscription: any;
   transitionToGamePageSubscription: any;
@@ -20,13 +22,19 @@ export class AppComponent {
     hand:[]
   }
   constructor(public gameService: GameService, public router: Router) {
-    // if(!this.gameService.connected){
-    //   this.router.navigate(['/login'])
-    // }
+    this.isFirstTime()
   }
 
-  resultQuestion = "What is a must-have at a children's party?"
-  resultAnswer = "Carlos Cruz"
+
+  public isFirstTime(){
+    const username = this.gameService.username;
+    const uuid = this.gameService.connection;
+    if(username == "" || uuid == ""){
+      this.router.navigate(['/game']);
+      return true
+    }
+    return false;
+  }
 
   ngOnInit() {
 
@@ -38,16 +46,8 @@ export class AppComponent {
       .getTransitionToGamePageEmiter()
       .subscribe(() => this.enterResultPage());
 
-    console.log({
-      enterResultPage: this.enterResultPage,
-      enterVotePage: this.enterVotePage,
-      self: this,
-    });
+
     /*
-    this.gameService.startGame()
-    this.gameService.onInit().subscribe((data: any) => {
-      console.log('onInit', { data });
-    });
 
     this.gameService.onAudio().subscribe((data:any)=>{
       // console.log('onAudio', { data });
@@ -58,7 +58,10 @@ export class AppComponent {
     let state = ''
 
     this.gameService.onUpdate().subscribe((data: any) => {
-      // console.log('onUpdate',data)
+      let canRedirect = true
+      if(this.router.url == "/login") {
+        canRedirect = false
+      }
       try{
         // console.log('onUpdate', { data ,state:data.episode.state});
         if(data.episode.state !==state){
@@ -70,14 +73,17 @@ export class AppComponent {
 
           }
           if(state === 'vote'){
-            this.enterVotePage()
+            if(canRedirect){
+              this.enterVotePage()
+            }
           }else if(state ==="results"){
-            console.clear()
-            console.log('RESULTS')
-            console.log(data)
-            this.enterResultPage()
+            if(canRedirect){
+              this.enterResultPage()
+            }
           }else{
-            this.router.navigate(['/game']);
+            if(canRedirect){
+              this.router.navigate(['/game']);
+            }
           }
         }
       }catch(ex){
@@ -87,7 +93,7 @@ export class AppComponent {
 
     this.gameService.onUpdatePlayer().subscribe((data: any) => {
       try{
-        // console.log('onUpdatePlayer', { data });
+
         if(typeof data =="object" && data){
           this.player = data
         }
@@ -106,17 +112,15 @@ export class AppComponent {
   resultHidden = true;
 
   enterResultPage() {
-    // console.log('enter result page"');
+
     if (this.transitioning) return;
     this.transitioning = true;
     this.resultShowing = true;
-    //this.gameService.endEpisode()
+
     setTimeout(() => {
       this.resultLeave = false;
       this.resultEnter = true;
-      //this.gameService.step()
-      // console.log('enterResultPage');
-      //debugger;
+
     }, 10);
     setTimeout(() => {
 

@@ -5,6 +5,8 @@ import { TransitionComponent } from './transition/transition.component';
 import { BoardQuestionComponent } from './board-question/board-question.component';
 import { BoardAnswersComponent } from './board-answers/board-answers.component';
 import { PlayerHandComponent } from './player-hand/player-hand.component';
+import { StepsComponent } from './steps/steps.component';
+import { StepTemplateComponent } from './step-template/step-template.component';
 
 
 const declarations = [
@@ -12,7 +14,8 @@ const declarations = [
   TransitionComponent,
   BoardQuestionComponent,
   BoardAnswersComponent,
-  PlayerHandComponent
+  PlayerHandComponent,
+  StepsComponent,StepTemplateComponent
 ]
 const exports = declarations
 
@@ -21,6 +24,7 @@ const exports = declarations
   exports,
   imports: [
     CommonModule
-  ]
+  ],
+
 })
 export class ComponentsModule { }

@@ -5,15 +5,20 @@ import { io } from 'socket.io-client';
 @Injectable({
   providedIn: 'root',
 })
+
 export class GameService {
+  player = {};
+  game = {};
+  socket: any;
+
+  public round = 0;
+  public score = 0;
+
   connection = localStorage.getItem('connection-identifier') || '';
   username = localStorage.getItem('username-identifier') || '';
 
-  player = {};
-  game = {};
 
-  socket: any;
-
+  // Observers
   public init$: BehaviorSubject<string> = new BehaviorSubject('');
   public game$: BehaviorSubject<string> = new BehaviorSubject('');
   public audio$: BehaviorSubject<string> = new BehaviorSubject('');
@@ -23,13 +28,6 @@ export class GameService {
     this.connect();
   }
 
-  get playerName() {
-    try {
-      return this.username;
-    } catch (ex) {
-      return 'xx';
-    }
-  }
 
   setConnection(connection: any) {
     this.connection = connection;
@@ -42,9 +40,9 @@ export class GameService {
 
   connect() {
 
-
     this.connection = localStorage.getItem('connection-identifier') || '';
     this.username = localStorage.getItem('username-identifier') || '';
+
     if(!this.socket){
 
       this.socket = io('http://localhost:3000');
@@ -63,18 +61,19 @@ export class GameService {
         this.setUsername(data.username)
         this.socket.emit('join')
       })
-
-
-
     }
 
 
   }
 
-  public round = 0;
+  public updateUsername(){
+    this.socket.emit('update-username', this.username)
+  }
+
+
   public onUpdate() {
     this.socket.on('update-game', (game: any) => {
-      console.log('update-game',game)
+      // console.log('update-game',game)
       if(game){
         this.round = game.history.length + 1;
         this.game$.next(game);
@@ -83,14 +82,12 @@ export class GameService {
     return this.game$.asObservable();
   }
 
-  public score = 0;
-  public playerUpdates:any[] = []
+
+
   public onUpdatePlayer() {
     this.socket.on('update-player', (data: any) => {
-      console.log('update-player',{data})
 
-      if(data){    //} && this.playerUpdates.indexOf(data.updateId) == -1){
-
+      if(data){
         this.score = data.player.score;
         this.player$.next(data.player);
       }

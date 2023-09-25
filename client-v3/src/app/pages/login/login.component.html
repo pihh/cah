@@ -1,6 +1,50 @@
-<div class="login-page">
-
+<!-- <div class="login-page">
+  <h1></h1>
   <input [(ngModel)]="name">
   <button (click)="connect()">Connect</button>
   {{name}}
+</div> -->
+
+<main class="question-container">
+  <div class="question">
+    <div>
+      Cards <br />Against<br />
+      Humanity
+    </div>
+    <input [(ngModel)]="gameService.username" />
+  </div>
+</main>
+<footer>
+  <button (click)="connect()">Connect</button>
+</footer>
+
+
+<div class="wizard-container wizardOpen" [class.wizardOpen]="wizardOpen">
+  <section>
+    <swiper-container #swiperRef swiperElement [config]="config" init="false" pagination="true">
+      <swiper-slide *ngFor="let slide of slides" class="slide">
+        <div class="slide-inside">
+          <div class="slide-image">
+
+            <div class="image"
+            [style.backgroundImage]="'url(https://placehold.co/600x400/EEE/31343C)'"
+
+            ></div>
+          </div>
+          <div class="wizard-content">
+
+            <h2>{{ slide.title }}</h2>
+            <p>
+              {{slide.description}}
+            </p>
+            <div *ngIf="slide.button">
+              <button (click)="closeWizard()">Start</button>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+  </section>
+
 </div>
