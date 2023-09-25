@@ -56,7 +56,7 @@ const PlayerManager = {
         username ||
         uniqueNamesGenerator({
           dictionaries: [adjectives, colors, animals],
-        });
+        }).split('-').slice(0, 2).join(' ');
       player = new Player(socketId, uuid, username);
       player.online = true;
       player.firstConnection = true;

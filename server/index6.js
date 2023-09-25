@@ -46,6 +46,12 @@ io.on('connection', (socket) => {
     Game.join(player)
   })
 
+  socket.on('update-username',(data)=>{
+    const player = Game.playerManager.getPlayer(socket.id)
+    console.log('update-username', player);
+    Game.updateUsername(player,data)
+  })
+
   socket.on('answer', (data)=> {
     const player = Game.playerManager.getPlayer(socket.id)
     console.log('answer', data);
@@ -66,7 +72,9 @@ io.on('connection', (socket) => {
     
     console.log("disconnected", socket.id);
     let player = Game.playerManager.getPlayer(socket.id)
-    Game.leave(player)//.online = false;
+    if(player){
+      Game.leave(player)//.online = false;
+    }
    
   })
 

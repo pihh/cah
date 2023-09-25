@@ -48,7 +48,12 @@ class GameManager extends EventEmitter{
     this.startEpisode();
   }
 
-
+  updateUsername(player,username){
+    player = this.playerManager.getPlayer(player.uuid)
+    player.username = username;
+    this.updatePlayer('update-username', player)
+    this.updateGame('update-username')
+  }
   join(player){
     player = this.playerManager.getPlayer(player.uuid)
     
