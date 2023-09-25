@@ -7,6 +7,25 @@
     <title>Vite App</title>
   </head>
   <body>
+    <div class="transition-container">
+      <div class="result-page hidden">
+        <div class="player-card result-card " >
+          <div class="question-card">What is a must-have at a children's party?</div>
+          
+        </div>
+        <div class="player-card result-card " >
+          <div class="answer-card">O Carlos Cruz</div>
+          
+        </div>
+      </div>
+
+      <div class="pyro">
+        <div class="before"></div>
+        <div class="after"></div>
+      </div>
+    </div>
+
+
     <div class="game-container">
       <header class="game-state-container">
         <div class="game-state" id="game-state">Vote</div>
@@ -76,29 +95,68 @@
 
     <script type="module" src="/main.js"></script>
     <script>
+
+      let time = 120;
+
+      const countdown = setInterval(function(){
+        time -=1;
+        if(time == 0){
+          //clearInterval(countdown);
+          time = 120;
+        }
+        const $timmer = document.querySelector('.round-timer')
+        const minutes = Math.floor(time / 60)
+        let seconds = `${time%60}`
+        if(seconds.length < 2){
+          seconds = '0'+seconds
+        }
+        $timmer.innerHTML= minutes+':'+seconds
+        
+      },1000)
+
+      let isTransitioning = false;
+      let isOpen = false;
+
+      function startTransition() {
+        if (isTransitioning) return;
+        if (isOpen) return;
+        isOpen = true;
+        isTransitioning = true;
+        setTimeout(()=>{
+          document.querySelector('.result-page').classList.remove('hidden');
+        },500)
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 2000);
+        const $transitionContainer = document.querySelector(
+          ".transition-container"
+        );
+        
+        $transitionContainer.classList.remove('leave')
+        $transitionContainer.classList.add('showing')
+        $transitionContainer.classList.add('enter')
+      }
+
+      function endtransition() {
+        if (isTransitioning) return;
+        if (!isOpen)return;
+        
+        isTransitioning = true;
+        setTimeout(() => {
+          isOpen = false;
+          isTransitioning = false;
+          $transitionContainer.classList.remove('showing')
+        }, 2000);
+        const $transitionContainer = document.querySelector(
+          ".transition-container"
+        );
+        $transitionContainer.classList.remove('enter')
+        $transitionContainer.classList.add('showing')
+        $transitionContainer.classList.add('leave')
+        document.querySelector('.result-page').classList.add('hidden');
+      }
       function voteAnswer(index) {
-        const $cards = Array.from(document.querySelectorAll(".player-card"));
-        const $card = $cards[index];
-        let selectedIndex = -1;
-        for (let i = 0; i < $cards.length; i++) {
-          const $c = $cards[i];
-
-          if ($c.querySelector("div").classList.contains("selected")) {
-            selectedIndex = i;
-          }
-
-          $c.querySelector("div").classList.remove("selected");
-          $c.querySelector("div").classList.add("transition");
-        }
-
-        if (selectedIndex != index || selectedIndex == -1) {
-          $card.querySelector("div").classList.add("selected");
-        }
-        if(selectedIndex == index) {
-          $card.querySelector("div").classList.add("selected");
-          $card.querySelector("div").classList.add("gone");
-        }
-        console.log("vote", $card);
+      
       }
     </script>
   </body>

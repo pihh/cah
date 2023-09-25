@@ -1,0 +1,126 @@
+@import 'https://fonts.googleapis.com/css?family=Droid+Sans+Mono';
+.board{
+    background: url(https://img.freepik.com/free-photo/wooden-wall-scratched-material-background-texture-concept_53876-30228.jpg?w=2000);
+    background-size: cover;
+    background-position: center;
+}
+.swiper{
+    height: initial !important;
+}
+.player-hand{
+    position: fixed;
+    top: 0;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    scrollbar-width: thin;
+    width: 100%;
+}
+.player-hand-container{
+    position: relative;
+    overflow-x: auto;
+    
+    display: flex;
+    flex-direction: row;
+}
+
+.player-hand-container .card{
+    flex: 0 0 auto;
+}
+.cardContainer{
+
+  overflow: hidden;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  margin: 0 auto;
+
+}
+
+.card{
+  /* Card Sizing */
+  width: 2.5in;
+  height: 4in;
+  border-radius: .25in;
+  
+  /* Display Properties */
+  float: left;
+  margin: 10px;
+}
+
+.dark{
+  /* Color information */
+  border: 3px solid black;
+  color: white;
+  background: black;
+}
+
+.waiting{
+    border: 3px dashed black !important;
+}
+.light{
+  /* Color information */
+  border: 3px solid black;
+  color: black;
+  background: white;
+}
+
+.text{
+  /*font information*/
+  font-family: Helvetica,sans-serif;
+  font-weight: bolder;
+  font-size: 26px;
+  padding-left:7%;
+  padding-right:7%;
+  word-wrap: break-word;
+}
+
+.subtext{
+  /*font information*/
+  font-family: Helvetica,sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  padding-left:7%;
+  padding-right:7%;
+  word-wrap: break-word;
+}
+
+.menu{
+  list-style-type: none;
+}
+
+.menu li:hover{
+  color: #d9d9d9;
+}
+
+.cardstack{
+  width:2.5in;
+  float:left;
+}
+
+.stackcard{
+  /* Card Sizing */
+  width: 2.5in;
+  height: 4in;
+  border-radius: .25in;
+  
+  /* Display Properties */
+  position:absolute;
+  margin: 10px;
+}
+
+.stackcard:nth-child(2){
+  margin: 10px;
+  margin-top: 80px;
+}
+
+.stackcard:nth-child(3){
+  margin: 10px;
+  margin-top: 150px;
+}
+
+.stackcard:nth-child(4){
+  margin: 10px;
+  margin-top: 220px;
+}

@@ -81,7 +81,7 @@ body {
     }
   }
   .hand-container {
-    height: 70vh;
+    height: 40vh;
     .player-hand-controls {
       height: 100%;
       position: absolute;
@@ -133,10 +133,10 @@ body {
           transform: translateY(-25px) translateX(25%) rotate(10deg);
         }
         &.next2 {
-            z-index: 4;
-            left: 50%;
-            transform: translateY(25px) translateX(60%) rotate(15deg)
-          }
+          z-index: 4;
+          left: 50%;
+          transform: translateY(25px) translateX(60%) rotate(15deg);
+        }
         &.prev {
           z-index: 5;
           left: 50%;
@@ -145,7 +145,7 @@ body {
         &.prev2 {
           z-index: 4;
           left: 50%;
-          transform: translateY(25px) translateX(-175%) rotate(-15deg)
+          transform: translateY(25px) translateX(-175%) rotate(-15deg);
         }
         &.chosen {
           // top: 0;
@@ -157,9 +157,10 @@ body {
           z-index: 100;
         }
         &.gone {
-          transform: scale(2) translateX(-15%) translateY(-25%);
-          opacity: 0;
-          transition: all 1s;
+          transform: scale(0.5) translateY(-22em) translateX(-100%);
+          //transform: scale(2) translateX(-15%) translateY(-25%);
+          opacity: 0.05;
+          transition: all 0.4s;
           // display: none;
         }
       }
@@ -200,6 +201,64 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+}
+.result-page.hidden > div:nth-child(1){
+
+}
+.result-page {
+  &.hidden {
+    .player-card:nth-child(1) {
+        transform:rotate(180deg) translate(-100vw, -10vh)
+    }
+    .player-card:nth-child(2) {
+      transform: rotate(-180deg) translate(100vw, 10vh);
+    }
+  }
+  .player-card {
+    min-width: 15rem;
+    min-height: 22rem;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    opacity: 1;
+    position: relative;
+    transition: 1s;
+    > div {
+      cursor: pointer;
+      width: 15rem !important;
+      height: 22rem;
+      border-radius: 0.75rem;
+      padding: 2rem 1rem;
+      font-weight: bold;
+      font-family: Helvetica, sans-serif;
+      background-color: white;
+      box-shadow: 0 0.5em 0.65em rgba(0, 0, 0, 0.05);
+      font-size: 2em;
+
+      position: absolute;
+      opacity: 1;
+      text-align: left;
+      &.question-card {
+        background: black;
+        color: white;
+        z-index: -1;
+        transform: rotate(-12deg) translateX(-20px) translateY(3em);
+      }
+      &.answer-card {
+        z-index: 1;
+        transform: rotate(12deg) translateX(0px) translateY(-2em);
+        box-shadow: 5px 8px 0.65em rgba(0, 0, 0, 0.07);
+      }
+
+      &.selected {
+        // position: fixed;
+        transform: translateY(-3.5em);
+      }
+      &.transition {
+        transition: 1s all;
+      }
+    }
   }
 }
 .vote-page__answers {
@@ -252,12 +311,17 @@ body {
 
       position: absolute;
       opacity: 1;
+      text-align: left;
       &.selected {
         // position: fixed;
         transform: translateY(-3.5em);
       }
       &.transition {
         transition: 1s all;
+      }
+      &.gone {
+        transition: 1s all;
+        transform: translateY(-200vw);
       }
     }
     .vote-info {
@@ -291,8 +355,8 @@ body {
   top: 0;
   left: 0;
   z-index: 100000;
-  height: calc( 100vh - 2em );
-  width: calc( 100vw - 2em );
+  height: calc(100vh - 2em);
+  width: calc(100vw - 2em);
   display: none;
   justify-content: center;
   align-items: center;
@@ -324,12 +388,12 @@ body {
 }
 
 .mas {
-//   position: absolute;
+  //   position: absolute;
   color: #000;
   text-align: center;
   width: 100%;
   font-size: 3em;
-//   position: absolute;
+  //   position: absolute;
 
   margin-top: 17px;
   overflow: hidden;
@@ -382,5 +446,149 @@ body {
   to {
     -webkit-mask-position: 0 0;
     mask-position: 0 0;
+  }
+}
+
+/** FIREWORKS **/
+$particles: 50;
+$width: 500;
+$height: 500;
+
+// Create the explosion...
+$box-shadow: ();
+$box-shadow2: ();
+@for $i from 0 through $particles {
+  $box-shadow: $box-shadow,
+    random($width)-$width /
+      2 +
+      px
+      random($height)-$height /
+      1.2 +
+      px
+      hsl(random(360), 100, 50);
+  $box-shadow2: $box-shadow2, 0 0 #fff;
+}
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+
+  @-ms-keyframes #{$animationName} {
+    @content;
+  }
+
+  @keyframes #{$animationName} {
+    @content;
+  }
+}
+
+@mixin animation-delay($settings) {
+  -moz-animation-delay: $settings;
+  -webkit-animation-delay: $settings;
+  -o-animation-delay: $settings;
+  -ms-animation-delay: $settings;
+  animation-delay: $settings;
+}
+
+@mixin animation-duration($settings) {
+  -moz-animation-duration: $settings;
+  -webkit-animation-duration: $settings;
+  -o-animation-duration: $settings;
+  -ms-animation-duration: $settings;
+  animation-duration: $settings;
+}
+
+@mixin animation($settings) {
+  -moz-animation: $settings;
+  -webkit-animation: $settings;
+  -o-animation: $settings;
+  -ms-animation: $settings;
+  animation: $settings;
+}
+
+@mixin transform($settings) {
+  transform: $settings;
+  -moz-transform: $settings;
+  -webkit-transform: $settings;
+  -o-transform: $settings;
+  -ms-transform: $settings;
+}
+
+.pyro {
+  top: 30%;
+  left: 0;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.pyro > .before,
+.pyro > .after {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  box-shadow: $box-shadow2;
+  @include animation(
+    (
+      1s bang ease-out infinite backwards,
+      1s gravity ease-in infinite backwards,
+      5s position linear infinite backwards
+    )
+  );
+}
+
+.pyro > .after {
+  @include animation-delay((1.25s, 1.25s, 1.25s));
+  @include animation-duration((1.25s, 1.25s, 6.25s));
+}
+
+@include keyframes(bang) {
+  to {
+    box-shadow: $box-shadow;
+  }
+}
+
+@include keyframes(gravity) {
+  to {
+    @include transform(translateY(200px));
+    opacity: 0;
+  }
+}
+
+@include keyframes(position) {
+  0%,
+  19.9% {
+    margin-top: 10%;
+    margin-left: 40%;
+  }
+  20%,
+  39.9% {
+    margin-top: 40%;
+    margin-left: 30%;
+  }
+  40%,
+  59.9% {
+    margin-top: 20%;
+    margin-left: 70%;
+  }
+  60%,
+  79.9% {
+    margin-top: 30%;
+    margin-left: 20%;
+  }
+  80%,
+  99.9% {
+    margin-top: 30%;
+    margin-left: 80%;
   }
 }

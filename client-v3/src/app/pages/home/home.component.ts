@@ -8,10 +8,15 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class HomeComponent {
   state = 'Answer';
-  name = 'Pihh';
-  score = 5;
-  round = 6;
-
+  name="pihh";
+  score=0
+  get round(){
+    try{
+      return this.gameService.round
+    }catch(ex){
+      return 0
+    }
+  }
   question = 'I drink to forget _____?';
   totalAnswers = 0;
   totalPlayers = 6;
@@ -39,7 +44,7 @@ export class HomeComponent {
 
     this.gameService.onUpdate().subscribe((data: any) => {
       try{
-        console.log(data)
+        // console.log(data)
         this.question = data.episode.question.text
         this.totalAnswers = data.episode.player_answers.length;
         this.totalPlayers = data.players.length;
@@ -49,9 +54,9 @@ export class HomeComponent {
     });
 
     this.gameService.onUpdatePlayer().subscribe((data: any) => {
-      console.log('onUpdatePlayer', typeof data, data);
+      // console.log('onUpdatePlayer', typeof data, data);
       if (data && typeof data == 'object') {
-        this.name = data.name;
+        this.name = data.username;
         this.score = data.score;
         this.cards = data.hand;
       }

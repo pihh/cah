@@ -19,12 +19,17 @@ export class AppComponent {
   player: any = {
     hand:[]
   }
-  constructor(public gameService: GameService, public router: Router) {}
+  constructor(public gameService: GameService, public router: Router) {
+    // if(!this.gameService.connected){
+    //   this.router.navigate(['/login'])
+    // }
+  }
 
   resultQuestion = "What is a must-have at a children's party?"
   resultAnswer = "Carlos Cruz"
 
   ngOnInit() {
+
     this.transitionToVotePageSubscription = this.gameService
       .getTransitionToVotePageEmiter()
       .subscribe(() => this.enterVotePage());
@@ -38,16 +43,24 @@ export class AppComponent {
       enterVotePage: this.enterVotePage,
       self: this,
     });
-
+    /*
     this.gameService.startGame()
     this.gameService.onInit().subscribe((data: any) => {
       console.log('onInit', { data });
     });
+
+    this.gameService.onAudio().subscribe((data:any)=>{
+      // console.log('onAudio', { data });
+      var audio = new Audio(data);
+      audio.play();
+    })
+    */
     let state = ''
 
     this.gameService.onUpdate().subscribe((data: any) => {
-      console.log('onUpdate', { data ,state:data.episode.state});
+      // console.log('onUpdate',data)
       try{
+        // console.log('onUpdate', { data ,state:data.episode.state});
         if(data.episode.state !==state){
           state = data.episode.state;
           try{
@@ -58,9 +71,25 @@ export class AppComponent {
           }
           if(state === 'vote'){
             this.enterVotePage()
-          }else if(state ==="complete"){
+          }else if(state ==="results"){
+            console.clear()
+            console.log('RESULTS')
+            console.log(data)
             this.enterResultPage()
+          }else{
+            this.router.navigate(['/game']);
           }
+        }
+      }catch(ex){
+        console.warn(ex)
+      }
+    });
+
+    this.gameService.onUpdatePlayer().subscribe((data: any) => {
+      try{
+        // console.log('onUpdatePlayer', { data });
+        if(typeof data =="object" && data){
+          this.player = data
         }
       }catch(ex){
 
@@ -77,16 +106,16 @@ export class AppComponent {
   resultHidden = true;
 
   enterResultPage() {
-    console.log('enter result page"');
+    // console.log('enter result page"');
     if (this.transitioning) return;
     this.transitioning = true;
     this.resultShowing = true;
-    this.gameService.endEpisode()
+    //this.gameService.endEpisode()
     setTimeout(() => {
       this.resultLeave = false;
       this.resultEnter = true;
-      this.gameService.step()
-      console.log('enterResultPage');
+      //this.gameService.step()
+      // console.log('enterResultPage');
       //debugger;
     }, 10);
     setTimeout(() => {
@@ -125,7 +154,7 @@ export class AppComponent {
     setTimeout(() => {
       this.transitionVoteLeave = false;
       this.transitionVoteEnter = true;
-      console.log('enterVotePage');
+      // console.log('enterVotePage');
     }, 1);
     setTimeout(() => {
       this.router.navigate(['/vote']);

@@ -15,13 +15,120 @@ class Game {
   question = {};
   answers = [];
 
-  episode = {};
+  episode = {
+    state: "starting",
+  };
   history = [];
 
   constructor() {
     this.id = crypto.randomUUID();
+    this.resetDeck()
+    this.episode = {
+      state: "starting",
+      answers: [],
+      player_answers: [],
+      player_votes: [],
+      result: [],
+    };
   }
 
+  resetDeck() {
+    this.cards = CARDS
+    this.questions = this.shuffle(
+      this.cards.filter((el) => el.cardType === 'Q')
+    );
+    this.answers = this.shuffle(this.cards.filter((el) => el.cardType === 'A'));
+  }
+
+  reset(){
+    this.resetDeck()
+    this.score = {}
+    for (let i = 0; i < this.players.length; i++) {
+      this.players[i].reset();
+      for (let j = 0; j < 9; j++) {
+        this.players[i].draw(this.answers.pop(0));
+      }
+    }
+  }
+
+  get activePlayers(){
+    try{
+      return this.players.filter((el) => el.online === true)
+    }catch(ex){
+      return []
+    }
+  }
+
+  join(uuid,name,socket){
+    let player;
+    let hasPlayer = false
+    for(let i = 0 ; i < this.players.length; i++){
+      player = this.players[i];
+      if(player.uuid === uuid){
+        hasPlayer=true;
+        player.online= true;
+        this.draw(player)
+        break;
+      }
+    }
+    if(!hasPlayer){
+      let player = new Player(uuid,name,socket)
+      this.players.push(player)
+    }
+    if(this.activePlayers.length == 1){
+      this.startGame()
+    }
+  }
+
+  countdown = 150;
+  coundownIntervalFunction;
+
+  update(countdown=150){
+    this.countdown = countdown;
+    this.coundownIntervalFunction = setInterval(() => {
+      this.countdown -=1
+      if(this.countdown == 0){
+        clearInterval(this.coundownIntervalFunction);
+        this.coundownIntervalFunction = false;
+        this.nextStep()
+      }
+    })
+  }
+  nextStep() {
+    if(this.episode.state == "answer"){
+      this.update();
+      this.episode.state = "vote";
+      this.voteStep()
+    }else if(this.episode.state =="vote"){
+      this.update(10)
+      this.episode.state = "show-results";
+      this.showResultsStep()
+    }else if(this.episode.state == "show-results"){
+      this.update()
+      this.episode.state = "answer"
+      this.answerStep()
+    }
+  }
+
+  answerStep(){}
+  voteStep(){}
+  showResultsStep(){}
+
+  startGame(){
+    this.running = true;
+  }
+
+  shuffle(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+
+    return array;
+  }
+  /*
   getPlayerId(uuid){
     let index = -1;
     for(let i = 0; i < this.players.length; i++) {
@@ -205,5 +312,6 @@ class Game {
 
     return array;
   }
+  */
 }
 module.exports = Game;

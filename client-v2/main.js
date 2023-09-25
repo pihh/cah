@@ -1,244 +1,144 @@
 import "./style.scss";
-import Glide from "@glidejs/glide";
 
-//new Glide('.glide').mount()
+import { io } from "socket.io-client";
+import { Game } from "./game";
+
 /*
-class GameClient{
-    
-    get $hand(){
-        return document.querySelector('#cards-hand');
-    }
-    get $cards(){
-        try{
-            return [... this.$hand.querySelectorAll('.card-answer')]
-        }catch(e){
-            return []
-        }
-    }
-    constructor(){
-        this.draw()
-    }
+window.game = new Game()
+console.log({window,self:this,game:new Game()})
+*/
 
-    draw(){
-        const len = this.$cards.length
-        for (let i = len; i < 10; i++){
-            const $card = document.createElement('div')
-            $card.classList.add('card-answer')
-            this.$hand.appendChild($card)
-        }
-    }
+class GameClient {
+  connection = localStorage.getItem("connection-identifier") || "";
+  username = localStorage.getItem("username-identifier") || "";
 
+  player={}
+  game={}
+
+  constructor() {
+    this.connect();
+  }
+
+  connect(){
+	if(this.socket){
+		this.socket.emit('forceDisconnect');
+	}
+	this.socket = io("http://localhost:3000", {
+      query: {
+        connection: this.connection,
+        username: this.username,
+      },
+    });
+
+	this.socket.on('register',(data)=>{
+		this.setConnection(data.connection);
+		this.setUsername(data.username);
+		this.connect();
+	})
+
+	this.socket.on('update-game',(data)=>{
+		console.log('update-game',data.episode.state);
+		console.log('update-game',data.episode);
+		this.game = data
+	})
+	this.socket.on('update-player',(data)=>{
+		console.log('update-player',data);
+		this.player = data
+	})
+	this.socket.on('connected',(data)=>{
+		//this.setConnection(data.connection);
+		//this.setUsername(data.username);
+		//this.connect();
+		setTimeout(()=>{
+			this.socket.emit('answer',1)
+
+			setTimeout(()=>{
+				this.socket.emit('vote',0)
+			},100)
+		},100)
+	})
+  }
+
+  answer(){
+
+  }
 }
 
-	/**
-	 *
-	 *  Page Annuaire - Carousel circulaire handcrafted
-	 *
-	 *
-	function infiniteCarousel (containerId, carouselId, activeKeyboard) {
-		this.containerId = containerId;
-		this.carouselId = carouselId;
-		this.activeKeyboard = activeKeyboard || false;
-		this.selected = $(this.carouselId + ' .selected');
+const game = new GameClient();
+/*
+export class GameClient {
+  connection = localStorage.getItem("connection-identifier") || "";
+  username = localStorage.getItem("username-identifier") || "";
 
-		// Gère le deplacement des items par ajout de classes
-		this.moveToSelected = function (element) {
-
-			// Permet d'eviter bug si on clique plus d'une dizaine de fois sur une lettre présente sur un bord en limitant le deplacement à 1x1 lettre
-			if (typeof element == 'object') {
-				if(element.hasClass('nextRightSecond') || element.hasClass('next')){
-					element = 'next';
-				}	else if(element.hasClass('prevLeftSecond') || element.hasClass('prev') )	{
-					element = 'prev';
-				}	else {
-					var selected = element;
-				}
-			}
-
-			if(typeof element == 'string') {
-				if (element == 'next') {
-					var selected = $(this.carouselId + ' .selected').next();
-				} else if (element == 'prev') {
-					var selected = $(this.carouselId + ' .selected').prev();
-				}
-			}
-
-			// Changement d'element selectionné en fonction de la direction
-
-
-			// On reattribut les classes sur les elements pour créer l'effet de slide
-			var next = $(selected).next();
-			var prev = $(selected).prev();
-			var prevSecond = $(prev).prev();
-			var nextSecond = $(next).next();
-
-			$(selected).removeClass().addClass('selected');
-
-			$(prev).removeClass().addClass('prev');
-			$(next).removeClass().addClass('next');
-
-			$(nextSecond).removeClass().addClass('nextRightSecond');
-			$(prevSecond).removeClass().addClass('prevLeftSecond');
-
-			$(nextSecond).nextAll().removeClass().addClass('hideRight');
-			$(prevSecond).prevAll().removeClass().addClass('hideLeft');
-
-			// Si on va vers la droite, on prend la premiere lettre de la liste et on l'ajoute a la fin de la liste
-			if(element == 'next'){
-				var htmlToAppend = $(this.carouselId + ' > div:first-child');
-				$(this.carouselId).append(htmlToAppend);
-				$(this.carouselId + ' > div:last-child').removeClass().addClass('hideRight');
-			}
-
-			// Si on va vers la gauche, on prend la derniere lettre de la liste et on l'ajoute au debut de la liste
-			if(element == 'prev'){
-				var htmlToAppend = $(this.carouselId + ' > div:last-child');
-				$(this.carouselId).prepend(htmlToAppend);
-				$(this.carouselId + ' > div:first-child').removeClass().addClass('hideLeft');
-			}
-
-			// Met à jour element ciblé et lance une fonction traitement Ajax
-			this.selected = $(selected);
-			this.doAjaxRequest();
-
-		},
-
-			// Possibilité d'insérer du contenu dans la grille en recuperant les données à aller chercher via requete Ajax
-			this.doAjaxRequest = function()	{
-
-				var ajaxUrl = this.selected.data('ajax-url');
-				// Simule requete Ajax (visuel cosmétique uniquement)
-				$('.awk-liste-marques').removeClass('visible');
-				setTimeout(function(){
-					$('.awk-liste-marques').addClass('visible');
-				}, 300);
-
-			},
-
-			// Initialiser les evenements
-			this.initEvents = function () {
-				var that = this;
-
-				// Events clavier | Permet de naviguer dans le carousel au clavier
-				if(this.activeKeyboard){
-					$(document).keydown(function(e) {
-						switch(e.which) {
-							case 37: // left
-								that.moveToSelected('prev');
-								break;
-							case 39: // right
-								that.moveToSelected('next');
-								break;
-							default: return;
-						}
-						e.preventDefault();
-					});
-				}
-
-				// Events mouse | Clic sur une lettre, on centre la lettre
-				$(this.carouselId + ' div').click(function() {
-					that.moveToSelected($(this));
-				});
-
-				// Clic sur precedent
-				$(this.containerId + ' .awk-prev').click(function() {
-					that.moveToSelected('prev');
-				});
-
-				// Clic sur suivant
-				$(this.containerId + ' .awk-next').click(function() {
-					that.moveToSelected('next');
-				});
-			},
-			// Initialiser le carousel
-			this.init = function () {
-				this.moveToSelected();
-				this.initEvents();
-			}
-	};
-
-
-
-let $Game;
-(function(){
-    $Game = new GameClient()
-
-
-	/*  Code du slider réutilisable en créant une nouvelle instance, avec des arguments différents   *
-	var carouselAlphabet = new infiniteCarousel('#awk-carousel-container', '#awk-circular-carousel', true);
-	carouselAlphabet.init();
-})()
-
-<button class="glide__bullet" data-glide-dir="=0"></button>
-*/
-(function () {
-  /*
-  const $hand = document.getElementById("player-hand-cards");
-  const $handControls = document.getElementById("player-hand-bullets");
-  for (let i = 0; i < 10; i++) {
-    const $card = document.createElement("li");
-    $card.classList.add("glide__slide");
-    $card.classList.add("player-card");
-    $card.innerHTML = i;
-    $hand.appendChild($card);
-
-    const $bullet = document.createElement("button");
-    $bullet.classList.add("glide__bullet");
-    $bullet.setAttribute("data-glide-dir", "=" + i);
-    $handControls.appendChild($bullet);
-  }
-  const glide = new Glide(".glide", {
-    type: "carousel",
-    startAt: 0,
-    focusAt: "center",
-    perView: 3,
-  });
-
-
-  glide.on(['mount.before', 'run'], function(e) {
-    // Handler logic ...
-    console.log('eh',e, glide)
-  })
-
-  glide.mount();
-  //new Glide('.glide').mount()
-  */
-  /*
-  function unify(e) { return e.changedTouches ? e.changedTouches[0] : e };
-  let x0 = null;
-
-  function lock(e) { x0 = unify(e).clientX };
-
-  let i = 0;
-
-  function move(e) {
-    if(x0 || x0 === 0) {
-      let dx = unify(e).clientX - x0, s = Math.sign(dx);
-      console.log(dx)
-      //if((i > 0 || s < 0) && (i < N - 1 || s > 0))
-      //  _C.style.setProperty('--i', i -= s);
-      
-      x0 = null
+  constructor() {
+    if (this.connection !== "" && this.name !== "") {
+      this.connect();
+    } else {
+      this.ping();
     }
-  };
+  }
 
-  const $hand = document.getElementById("player-hand");
-  $hand.addEventListener("mousedown", lock, false);
-  $hand.addEventListener("touchstart", lock, false);
+  ping() {
+	console.log('pinging')
+    this.socket = io("http://localhost:3000", {
+      query: {
+        connection: "",
+        username: "",
+      },
+    });
+	this.socket.on("ping",(data)=>{
+		console.log('ping',data)
+		this.setConnection(data.connection);
+		this.setUsername(data.username);
+		this.connect();
+	})
+  }
+  connect() {
+	console.log('connecting')
+	if(this.socket){
+		this.socket.emit('forceDisconnect');
+	}
+	this.socket = io("http://localhost:3000", {
+      query: {
+        connection: this.connection,
+        username: this.username,
+      },
+    });
+	this.socket.on("connected",(data)=> {
+		console.log('connected',data)
+	})
+	this.socket.on('update-player',(data)=>{
+		console.log('update-player',data)
+	})
+	this.socket.on('update-game',(data)=>{
+		console.log('update-game',data)
+	})
+  }
 
-  $hand.addEventListener("mouseup", move, false);
-  $hand.addEventListener("touchend", move, false);
-  */
- const $handButtonMid = document.querySelector('.player-hand-controls__mid');
- const $handButtonLeft = document.querySelector('.player-hand-controls__left');
- const $handButtonRight = document.querySelector('.player-hand-controls__right');
+  setConnection(connection){
+	this.connection = connection;
+	localStorage.setItem("connection-identifier",connection) 
+  }
+  setUsername(username){
+	this.username = username;
+	localStorage.setItem("username-identifier",username) 
+  }
+}
 
- function nextCard(){
+let game = new GameClient()
+/*
+const connection = localStorage.getItem('connection-identifier') || "" //(Math.random() + 1).toString(36).substring(7)+ Date.now();
+const name = localStorage.getItem('name-identifier') || "" //(Math.random() + 1).toString(36).substring(7)+ Date.now();
+//localStorage.setItem('connection-identifier', connection)
+//localStorage.setItem('name-identifier', name)
 
- }
+this.playerName = name;
+this.socket = io('http://localhost:3000',{
 
- function prevCard(){}
+  query: {
+	"connection": connection,
+	"name":name
+  }
+});
 
-
-})();
-
+*/

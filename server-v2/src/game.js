@@ -1,10 +1,6 @@
 const CARDS = require("../constants/cards").filter(el => el.numAnswers <=1);
 const Player = require("./player");
-
-const crypto = require('crypto');
-
 class Game {
-  id= "";
   running = false;
 
   cards = CARDS;
@@ -18,9 +14,7 @@ class Game {
   episode = {};
   history = [];
 
-  constructor() {
-    this.id = crypto.randomUUID();
-  }
+  constructor() {}
 
   getPlayerId(uuid){
     let index = -1;
@@ -87,7 +81,7 @@ class Game {
       }
     }
   }
-  
+
   start() {
     this.reset();
     this.step();
@@ -180,20 +174,75 @@ class Game {
       }
     }
 
-
+    //this.players[bestAnswer.player.id].score += 1;
+    //this.updateScore();
     this.episode.state= "done"
     this.episode.result = {
       answer: bestAnswer,
       player: bestAnswer.player,
       question: this.episode.question,
     };
- 
+    //await this.readCard('Question')
+    //await this.readCard(this.episode.result.question.text)
+    //await this.readCard('Winner')
+    //await this.readCard(this.episode.result.answer.text)
     this.history.push(this.episode);
 
     return bestAnswer.player
     //this.step();
   }
- 
+  /*
+  start() {
+    this.running = true;
+
+    this.cards = CARDS;
+    /*
+        this.score = {};
+        this.questions = this.shuffle(
+          this.cards.filter((el) => el.cardType === 'Q')
+        );
+        this.answers = this.shuffle(this.cards.filter((el) => el.cardType === 'A'));
+        for (let i = 0; i < this.players.length; i++) {
+          this.players[i].reset();
+          for (let j = 0; j < 9; j++) {
+            this.players[i].draw(this.answers.pop(0));
+          }
+        }
+    
+        this.step();
+      }
+        
+
+  addPlayer(uuid) {
+    if (this.running) return;
+    //const player = new Player(uuid);
+    let foundPlayer = new Player(uuid);;
+    for(let i = 0; i < this.players.length; i++) {
+        if(this.players[i].uuid === uuid){
+          foundPlayer = this.players[i]
+          break;
+        }
+    }
+
+    return foundPlayer
+  }
+
+  getPlayerId(uuid){
+    let index = -1;
+    for(let i = 0; i < this.players.length; i++) {
+      if(this.players[i].uuid === uuid){
+        return i
+      }
+    }
+    return index
+  }
+  setPlayerName(data){
+    let {uuid,name} = data;
+    let playerIndex = this.getPlayerId(uuid)
+    this.players[playerIndex].name = name
+    
+  }
+  */
 
   shuffle(array) {
     for (var i = array.length - 1; i > 0; i--) {

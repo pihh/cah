@@ -6,78 +6,103 @@ import { io } from 'socket.io-client';
   providedIn: 'root',
 })
 export class GameService {
-  constructor() {
-    console.log(this, 'gameService');
-  }
+  connection = localStorage.getItem('connection-identifier') || '';
+  username = localStorage.getItem('username-identifier') || '';
 
-  public connection = localStorage.getItem('connection-identifier') || '';
+  player = {};
+  game = {};
+
+  socket: any;
 
   public init$: BehaviorSubject<string> = new BehaviorSubject('');
   public game$: BehaviorSubject<string> = new BehaviorSubject('');
+  public audio$: BehaviorSubject<string> = new BehaviorSubject('');
   public player$: BehaviorSubject<string> = new BehaviorSubject('');
 
-  socket = io('http://localhost:3000');
+  constructor() {
+    this.connect();
+  }
 
-  private setConnection(uuid: any) {
-    if (this.connection) {
-      return this.connection;
-    } else {
-      uuid += (Math.random() + 1).toString(36).substring(7);
-      localStorage.setItem('connection-identifier', uuid);
-      this.connection = uuid;
-      return uuid;
+  get playerName() {
+    try {
+      return this.username;
+    } catch (ex) {
+      return 'xx';
     }
   }
-  public onInit() {
-    this.socket.on('init', (data: any) => {
-      let { uuid, game } = data;
-      this.setConnection(uuid);
 
-      this.init$.next(game);
-      const name = localStorage.getItem('playerName');
-      if (name) {
-        this.addPlayer(name);
-      }
-    });
-    return this.init$.asObservable();
+  setConnection(connection: any) {
+    this.connection = connection;
+    localStorage.setItem('connection-identifier', connection);
+  }
+  setUsername(username: any) {
+    this.username = username;
+    localStorage.setItem('username-identifier', username);
   }
 
+  connect() {
+
+
+    this.connection = localStorage.getItem('connection-identifier') || '';
+    this.username = localStorage.getItem('username-identifier') || '';
+    if(!this.socket){
+
+      this.socket = io('http://localhost:3000');
+
+      this.socket.on('connect',()=>{
+        // console.log('connected')
+        this.socket.emit('handshake',{
+          uuid: localStorage.getItem('connection-identifier') || '',
+          username: localStorage.getItem('username-identifier') || ''
+        })
+      })
+
+      this.socket.on('identified', (data:any)=>{
+        // console.log('identified',data)
+        this.setConnection(data.uuid)
+        this.setUsername(data.username)
+        this.socket.emit('join')
+      })
+
+
+
+    }
+
+
+  }
+
+  public round = 0;
   public onUpdate() {
-    this.socket.on('update', (data: any) => {
-      let { game } = data;
-      this.game$.next(game);
+    this.socket.on('update-game', (game: any) => {
+      console.log('update-game',game)
+      if(game){
+        this.round = game.history.length + 1;
+        this.game$.next(game);
+      }
     });
     return this.game$.asObservable();
   }
 
+  public score = 0;
+  public playerUpdates:any[] = []
   public onUpdatePlayer() {
     this.socket.on('update-player', (data: any) => {
-      this.player$.next(data);
+      console.log('update-player',{data})
+
+      if(data){    //} && this.playerUpdates.indexOf(data.updateId) == -1){
+
+        this.score = data.player.score;
+        this.player$.next(data.player);
+      }
     });
     return this.player$.asObservable();
   }
 
-  public addPlayer(name: string) {
-    this.socket.emit('add-player', { uuid: this.connection, name });
-  }
-
-  public startGame() {
-    this.socket.emit('start-game');
-  }
-
-  public step() {
-    this.socket.emit('step');
-  }
-
-  public endEpisode() {
-    this.socket.emit('end-episode');
-  }
-
   public vote(idx: any) {
-    this.socket.emit('vote', { uuid: this.connection, idx: idx });
+    this.socket.emit('vote', idx);
   }
   public answer(idx: any) {
-    this.socket.emit('answer', { uuid: this.connection, idx: idx });
+    this.socket.emit('answer', idx);
   }
 
   handReset: EventEmitter<any> = new EventEmitter();

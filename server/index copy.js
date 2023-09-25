@@ -1,3 +1,4 @@
+const cards = require("./constants/cards");
 const Game = require("./src/game");
 const app = require("express")();
 const httpServer = require("http").createServer(app);
@@ -7,72 +8,20 @@ const io = require("socket.io")(httpServer, {
 
 const port = process.env.PORT || 3000;
 
-const Players = {};
-const Games = {};
 const CardsAgainstHumanity = new Game();
 
-Games[CardsAgainstHumanity.id] = CardsAgainstHumanity;
-
-
+const socketsStatus = {};
 
 io.on("connection", (socket) => {
-  const socketUuid = socket.handshake.query.connection;
-  const name = socket.handshake.query.name || "xxx";
   const socketId = socket.id;
 
-  if (!Players[socketUuid]) {
-    Players[socketUuid] = {
-      uuid: socketUuid,
-      mute: false,
-    };
-  }
-
-  Players[socketUuid].online = true;
-  Players[socketUuid].socketId = socketId;
-
-  let player;
-  let newPlayer = true;
-  for (let i = 0; i < CardsAgainstHumanity.players.length; i++) {
-    player = CardsAgainstHumanity.players[i];
-    if (player.uuid == socketUuid) {
-      newPlayer = false;
-      player.active = true;
-      player.name = name;
-      
-      break;
-    }
-  }
-  player = CardsAgainstHumanity.addPlayer(socketUuid, name, socketId);
-  player.socketId = socketId
-  if (!CardsAgainstHumanity.running) {
-    CardsAgainstHumanity.start();
-    CardsAgainstHumanity.draw(player)
-  }
-
-  io.to(socket.id).emit("init", {
-    socketId: socket.id,
-    uuid: socketUuid,
-    game: CardsAgainstHumanity,
-  });
-
-  setTimeout(() => {
-    io.to(socketId).emit("update-player", player);
-  }, 1);
-  io.emit("update", { game: CardsAgainstHumanity });
-
-  /*
   socketsStatus[socket.id] = {
     online: true,
     mute: false,
-    uuid: socketUuid
   };
 
-  setTimeout(() => {
-    io.to(socket.id).emit("init", {
-      uuid: socket.id,
-      game: CardsAgainstHumanity,
-    });
-  }, 1);
+  console.log("a user connected", socket.id);
+
 
   function updateGame(){
     if(!CardsAgainstHumanity.episode){
@@ -80,56 +29,12 @@ io.on("connection", (socket) => {
     }
     io.emit("update", { game: CardsAgainstHumanity });
   }
-
-  socket.on('add-player',(data)=>{
-    let { uuid, name } = data;
-    let hasPlayer = false;
-    let player;
-    for(let i =0; i < CardsAgainstHumanity.players.length;i++){
-      player = CardsAgainstHumanity.players[i]
-      if(player.uuid === uuid){
-        player.active = true;
-        player.name = name
-        hasPlayer = true;
-        break
-      }
-    }
-    if(!hasPlayer){
-      player = CardsAgainstHumanity.addPlayer(uuid, name, socket.id);
-      
-    }
-    if(!CardsAgainstHumanity.running){
-      CardsAgainstHumanity.start()
-    }
-    setTimeout(() => {
-      io.to(player.socketId).emit("update-player", player);
-    }, 1);
-    io.emit("update", { game: CardsAgainstHumanity });
- 
-
-  })
-  /*
- 
-
   setTimeout(() => {
     io.to(socket.id).emit("init", {
       uuid: socket.id,
       game: CardsAgainstHumanity,
     });
   }, 1);
-
-  socket.on("add-player", (message) => {
-    let { uuid, name } = message;
-    let player = CardsAgainstHumanity.addPlayer(uuid, name, socket.id);
-
-  })
-
-
-  console.log("a user connected", socket.id);
-
-
-
-  
 
   socket.on("add-player", (message) => {
     let { uuid, name } = message;
@@ -164,7 +69,7 @@ io.on("connection", (socket) => {
     }
     updateGame()
   });
-  
+
   socket.on("answer", (data) => {
     let { uuid, idx } = data;
     if (CardsAgainstHumanity.answer(data)) {
@@ -248,7 +153,6 @@ io.on("connection", (socket) => {
       }
     }
   });
-  */
 });
 
 httpServer.listen(port, () => console.log(`listening on port ${port}`));

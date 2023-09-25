@@ -5,9 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
-
   </head>
   <body>
+    <div class="transition-container">
+      <span class="mas">It's Time to vote !!!</span>
+    </div>
     <div class="game-container">
       <header class="game-state-container">
         <div class="game-state" id="game-state">Answer</div>
@@ -16,7 +18,7 @@
         <div class="player-score-container">
           Pihh <span class="player-score">5</span>
         </div>
-        <div class="round-timer">0:40</div>
+        <div class="round-timer">2:00</div>
         <div class="game-score-container">
           Round <span class="game-round">5</span>
         </div>
@@ -24,15 +26,13 @@
       <main class="question-container">
         <div class="question" onclick="closeChosen()">
           <div>
-
-              I drink to forget _____?
+            <!-- I drink to forget _____? -->
+            What is a must-have at a children's party?
           </div>
           <div class="waiting-answers">
             <div class="waiting-answers-counter">
-                <div>
-                    0/6
-                </div>
-                <small>Left.</small>
+              <div><span class="total-answers">0</span>/6</div>
+              <small>Left.</small>
             </div>
           </div>
         </div>
@@ -55,22 +55,21 @@
           <div class="player-card prev2">My sister</div>
           <div class="player-card prev">Your uncle</div>
         </div>
-
       </footer>
     </div>
 
     <script type="module" src="/main.js"></script>
     <script>
       let selectedCard = -1;
-      let answered = false
+      let answered = false;
       function answer() {
         answered = true;
         //this.classList.remove("chosen");
         this.classList.add("gone");
-        setTimeout(()=>{
-
-            this.remove();
-        },10000)
+        document.querySelector(".total-answers").innerHTML =1
+        setTimeout(() => {
+          this.remove();
+        }, 500);
         changeGameState("Wait");
       }
 
@@ -80,7 +79,7 @@
       }
       let isRotating = false;
       function selectCard() {
-        if(answered) return
+        if (answered) return;
         const $card = document.querySelector(".player-card.selected");
         const $cards = Array.from(document.querySelectorAll(".player-card"));
         let currentSelectedIndex = 0;
@@ -142,10 +141,10 @@
           currentNextNextIndex = currentSelectedIndex + 2;
           if (currentSelectedIndex == 0) {
             currentPrevIndex = 9;
-            currentPrevPrevIndex = 8
+            currentPrevPrevIndex = 8;
           }
           if (currentSelectedIndex == 1) {
-            currentPrevPrevIndex = 9
+            currentPrevPrevIndex = 9;
           }
           if (currentSelectedIndex == 9) {
             currentNextIndex = 0;
@@ -162,10 +161,10 @@
 
           if (currentSelectedIndex == 0) {
             currentPrevIndex = 9;
-            currentPrevPrevIndex = 8
+            currentPrevPrevIndex = 8;
           }
           if (currentSelectedIndex == 1) {
-            currentPrevPrevIndex = 9
+            currentPrevPrevIndex = 9;
           }
           if (currentSelectedIndex == -1) {
             currentSelectedIndex = 9;
@@ -175,7 +174,7 @@
             currentPrevPrevIndex = 7;
           }
         }
-        
+
         $cards[currentSelectedIndex].classList.add("selected");
         $cards[currentPrevIndex].classList.add("prev");
         $cards[currentPrevPrevIndex].classList.add("prev2");
@@ -190,6 +189,62 @@
       function prevCard() {
         rotateCard("prev");
       }
+
+      let time = 120;
+
+      const countdown = setInterval(function () {
+        time -= 1;
+        if (time == 0) {
+          //clearInterval(countdown);
+          time = 120;
+        }
+        const $timmer = document.querySelector(".round-timer");
+        const minutes = Math.floor(time / 60);
+        let seconds = `${time % 60}`;
+        if (seconds.length < 2) {
+          seconds = "0" + seconds;
+        }
+        $timmer.innerHTML = minutes + ":" + seconds;
+      }, 1000);
+
+      let isTransitioning = false;
+      let isOpen = false;
+
+      function startTransition() {
+        if (isTransitioning) return;
+        if (isOpen) return;
+        isOpen = true;
+        isTransitioning = true;
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 2000);
+        const $transitionContainer = document.querySelector(
+          ".transition-container"
+        );
+
+        $transitionContainer.classList.remove("leave");
+        $transitionContainer.classList.add("showing");
+        $transitionContainer.classList.add("enter");
+      }
+
+      function endtransition() {
+        if (isTransitioning) return;
+        if (!isOpen) return;
+
+        isTransitioning = true;
+        setTimeout(() => {
+          isOpen = false;
+          isTransitioning = false;
+          $transitionContainer.classList.remove("showing");
+        }, 2000);
+        const $transitionContainer = document.querySelector(
+          ".transition-container"
+        );
+        $transitionContainer.classList.remove("enter");
+        $transitionContainer.classList.add("showing");
+        $transitionContainer.classList.add("leave");
+      }
+      function voteAnswer(index) {}
     </script>
   </body>
 </html>

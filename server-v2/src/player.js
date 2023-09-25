@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-
 class Player {
   hand = [];
   score = 0;
@@ -15,8 +13,6 @@ class Player {
     this.uuid = id
     this.name = name;
     this.socketId = socketId
-    this.muted = false;
-    this.online = true;
     //this.id = id;
   }
 

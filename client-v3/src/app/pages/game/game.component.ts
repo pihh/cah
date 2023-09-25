@@ -8,9 +8,27 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class GameComponent {
   state = 'Vote';
-  name = 'Pihh';
-  score = 5;
-  round = 6;
+  get name(){
+    try{
+      return this.gameService.username
+    }catch(ex){
+      return 0
+    }
+  }
+  get score(){
+    try{
+      return this.gameService.score
+    }catch(ex){
+      return 0
+    }
+  }
+  get round(){
+    try{
+      return this.gameService.round
+    }catch(ex){
+      return 0
+    }
+  }
 
   question = 'I drink to forget _____?';
   totalAnswers = 0;
@@ -38,7 +56,7 @@ export class GameComponent {
 
     this.gameService.onUpdate().subscribe((data: any) => {
       try{
-        console.log(data)
+        // console.log(data)
         this.answers = data.episode.answers
         //this.question = data.episode.question.text
         //this.totalAnswers = data.episode.player_answers.length;
