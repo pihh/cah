@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body style="background: black !important">
+    <div class="modal-container in">
+     
+      <div class="modal-container__panel">
+        <div class="modal-container__panel__content">
+          <h1>It's time to vote</h1>
+        </div>
+        <div class="modal-container__panel__separator">
+          <div
+            id="modal-container__panel__separator-line"
+            class="modal-container__panel__separator__show"
+          ></div>
+        </div>
+      </div>
+
+      <div class="modal-container__panel">
+        <div
+          class="modal-container__panel__content modal-container__panel__content__bottom"
+        >
+          <h1>It's time to vote</h1>
+        </div>
+      </div>
+
+      
+      <div class="player-card result-card modal-card hidden" >
+        <div class="question-card">What is a must-have at a children's party?</div>
+        
+      </div>
+      <div class="player-card result-card modal-card hidden" >
+        <div class="answer-card">O Carlos Cruz</div>
+        
+      </div>
+    
+    </div>
+
+    <style></style>
+    <script type="module" src="/main.js"></script>
+    <script>
+      const $animationTimeout = 2000;
+      const $separatorLine = document.getElementById(
+        "modal-container__panel__separator-line"
+      );
+      const $modalContainer = document.querySelector(".modal-container");
+      const $modalContainerPanels = [
+        ...$modalContainer.querySelectorAll(".modal-container__panel"),
+      ];
+      const $modalContainerPanelTop = $modalContainerPanels[0];
+      const $modalContainerPanelBottom = $modalContainerPanels[1];
+      const $resultCard = [...$modalContainer.querySelectorAll('.player-card')]
+      const $resultCardQuestion = $resultCard[0]
+      const $resultCardAnswer = $resultCard[1]
+
+      function openSeparator() {
+        $separatorLine.classList.add("modal-container__panel__separator__show");
+      }
+      function closeSeparator() {
+        $separatorLine.classList.remove(
+          "modal-container__panel__separator__show"
+        );
+      }
+
+      function openCards(){
+        $resultCard.forEach(function($card){
+          // $card.style.display = "flex";
+          console.log($card)
+          $card.classList.add("show")
+          $card.classList.remove("hidden")
+        })
+      }
+
+      function closeCards(){
+        $resultCard.forEach(function($card){
+          $card.classList.remove("show")
+        })
+      }
+
+      let isTransitioningModal = false;
+      function openModal(callback) {
+        if(isTransitioningModal) return;
+        isTransitioningModal = true;
+        $modalContainer.classList.add("modal-container__show");
+        setTimeout(function () {
+          $modalContainer.classList.add("modal-container__white-bg");
+          closeSeparator();
+          
+          setTimeout(function () {
+            $modalContainer.classList.remove("in");
+            openCards()
+            setTimeout(function () {
+              isTransitioningModal = false;
+              if (callback) callback();
+            }, $animationTimeout);
+          }, 300);
+        }, 700);
+      }
+
+      function closeModal() {
+        if(isTransitioningModal)return;
+        isTransitioningModal = true;
+        $modalContainer.classList.remove("in");
+        $modalContainer.classList.add("out");
+        closeCards()
+        setTimeout(function () {
+          openSeparator();
+          setTimeout(function () {
+            $modalContainer.classList.remove("modal-container__white-bg");
+            $modalContainer.classList.remove("modal-container__show");
+            setTimeout(function () {
+              $modalContainer.classList.add("in");
+              $modalContainer.classList.remove("out");
+              isTransitioningModal = false;
+            }, 750);
+          }, 100);
+        }, 300);
+      }
+
+      (function () {
+        setTimeout(function () {
+          console.log("will open modal");
+          openModal(closeModal);
+          //openModal();
+        }, 1000);
+      })();
+    </script>
+  </body>
+</html>

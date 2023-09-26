@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'client-v3';
-  resultQuestion = "What is a must-have at a children's party?"
-  resultAnswer = "Carlos Cruz"
+  resultQuestion = "What is a must-have at a children's party?";
+  resultAnswer = 'Carlos Cruz';
 
   transitionToVotePageSubscription: any;
   transitionToGamePageSubscription: any;
@@ -19,25 +19,89 @@ export class AppComponent {
   playerUpdateSubscription: any;
 
   player: any = {
-    hand:[]
-  }
+    hand: [],
+  };
   constructor(public gameService: GameService, public router: Router) {
-    this.isFirstTime()
+    this.isFirstTime();
+
   }
 
+  isTransitioningModal = false;
+  modalShowing: boolean = false;
+  modalWhiteBg: boolean = false;
+  modalShowingState = 'in';
+  modalSeparatorShowing = true;
+  modalMode = 'text';
+  modalCardShowing: boolean = false;
 
-  public isFirstTime(){
+  openModal(mode = 'text', callback?: any) {
+    if (this.isTransitioningModal) return;
+    this.isTransitioningModal = true;
+
+    this.modalMode = mode;
+    this.modalShowing = true;
+    setTimeout(() => {
+      this.modalWhiteBg = true;
+      this.closeSeparator();
+
+      setTimeout(() => {
+        this.modalShowingState = '';
+
+        this.openCards();
+
+        setTimeout(() => {
+          this.isTransitioningModal = false;
+          if (callback) callback();
+        }, 4000);
+      }, 300);
+    }, 700);
+  }
+  closeModal(mode = 'text') {
+    if (this.isTransitioningModal) return;
+    this.isTransitioningModal = true;
+    this.modalMode = mode;
+    this.modalShowingState = 'out';
+
+    this.closeCards();
+    setTimeout(() => {
+      this.openSeparator();
+      setTimeout(() => {
+        this.modalWhiteBg = false;
+        this.modalShowing = false;
+
+        setTimeout(() => {
+          this.modalShowingState = 'in';
+          this.isTransitioningModal = false;
+        }, 700);
+      }, 200);
+    }, 100);
+  }
+
+  openCards() {
+    this.modalCardShowing = true;
+  }
+  closeCards() {
+    this.modalCardShowing = false;
+  }
+
+  openSeparator() {
+    this.modalSeparatorShowing = true;
+  }
+  closeSeparator() {
+    this.modalSeparatorShowing = false;
+  }
+
+  public isFirstTime() {
     const username = this.gameService.username;
     const uuid = this.gameService.connection;
-    if(username == "" || uuid == ""){
+    if (username == '' || uuid == '') {
       this.router.navigate(['/game']);
-      return true
+      return true;
     }
     return false;
   }
 
   ngOnInit() {
-
     this.transitionToVotePageSubscription = this.gameService
       .getTransitionToVotePageEmiter()
       .subscribe(() => this.enterVotePage());
@@ -45,7 +109,6 @@ export class AppComponent {
     this.transitionToGamePageSubscription = this.gameService
       .getTransitionToGamePageEmiter()
       .subscribe(() => this.enterResultPage());
-
 
     /*
 
@@ -55,54 +118,49 @@ export class AppComponent {
       audio.play();
     })
     */
-    let state = ''
+    let state = '';
 
     this.gameService.onUpdate().subscribe((data: any) => {
-      let canRedirect = true
-      if(this.router.url == "/login") {
-        canRedirect = false
+      let canRedirect = true;
+      if (this.router.url == '/login') {
+        canRedirect = false;
       }
-      try{
+      try {
         // console.log('onUpdate', { data ,state:data.episode.state});
-        if(data.episode.state !==state){
+        if (data.episode.state !== state) {
           state = data.episode.state;
-          try{
-            this.resultQuestion = data.history[data.history.length - 1].result.question.text
-            this.resultAnswer = data.history[data.history.length - 1].result.answer.text
-          }catch(ex){
-
-          }
-          if(state === 'vote'){
-            if(canRedirect){
-              this.enterVotePage()
+          try {
+            this.resultQuestion =
+              data.history[data.history.length - 1].result.question.text;
+            this.resultAnswer =
+              data.history[data.history.length - 1].result.answer.text;
+          } catch (ex) {}
+          if (state === 'vote') {
+            if (canRedirect) {
+              this.enterVotePage();
             }
-          }else if(state ==="results"){
-            if(canRedirect){
-              this.enterResultPage()
+          } else if (state === 'results') {
+            if (canRedirect) {
+              this.enterResultPage();
             }
-          }else{
-            if(canRedirect){
+          } else {
+            if (canRedirect) {
               this.router.navigate(['/game']);
             }
           }
         }
-      }catch(ex){
-        console.warn(ex)
+      } catch (ex) {
+        console.warn(ex);
       }
     });
 
     this.gameService.onUpdatePlayer().subscribe((data: any) => {
-      try{
-
-        if(typeof data =="object" && data){
-          this.player = data
+      try {
+        if (typeof data == 'object' && data) {
+          this.player = data;
         }
-      }catch(ex){
-
-      }
+      } catch (ex) {}
     });
-
-
   }
 
   // Enter results page animation
@@ -112,26 +170,27 @@ export class AppComponent {
   resultHidden = true;
 
   enterResultPage() {
-
-    if (this.transitioning) return;
-    this.transitioning = true;
-    this.resultShowing = true;
-
-    setTimeout(() => {
-      this.resultLeave = false;
-      this.resultEnter = true;
-
-    }, 10);
-    setTimeout(() => {
-
-      this.resultHidden = false;
-    }, 500);
-    setTimeout(() => {
+    this.openModal("card",()=>{
+      this.closeModal()
       this.router.navigate(['/game']);
-    }, 1500);
-    setTimeout(() => {
-      this.leaveResultPage();
-    }, 5000);
+    })
+    // if (this.transitioning) return;
+    // this.transitioning = true;
+    // this.resultShowing = true;
+
+    // setTimeout(() => {
+    //   this.resultLeave = false;
+    //   this.resultEnter = true;
+    // }, 10);
+    // setTimeout(() => {
+    //   this.resultHidden = false;
+    // }, 500);
+    // setTimeout(() => {
+    //   this.router.navigate(['/game']);
+    // }, 1500);
+    // setTimeout(() => {
+    //   this.leaveResultPage();
+    // }, 5000);
   }
   leaveResultPage() {
     this.resultShowing = true;
@@ -152,6 +211,12 @@ export class AppComponent {
   transitionVoteLeave = false;
   transitioning = false;
   enterVotePage() {
+
+    this.openModal("text",()=>{
+      this.closeModal()
+      this.router.navigate(['/vote']);
+    })
+    /*
     if (this.transitioning) return;
     this.transitioning = true;
     this.transitionVoteShowing = true;
@@ -166,6 +231,7 @@ export class AppComponent {
     setTimeout(() => {
       this.leaveVotePage();
     }, 2000);
+    */
   }
 
   leaveVotePage() {
@@ -173,7 +239,6 @@ export class AppComponent {
     this.transitionVoteLeave = true;
     this.transitionVoteEnter = false;
     setTimeout(() => {
-
       this.transitioning = false;
       this.transitionVoteShowing = false;
       this.transitionVoteLeave = false;

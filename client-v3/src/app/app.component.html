@@ -1,19 +1,24 @@
-
-
-<div class="transition-container" [class.showing]="transitionVoteShowing" [class.enter]="transitionVoteEnter" [class.leave]="transitionVoteLeave">
+<div
+  class="transition-container"
+  [class.showing]="transitionVoteShowing"
+  [class.enter]="transitionVoteEnter"
+  [class.leave]="transitionVoteLeave"
+>
   <span class="mas">It's Time to vote !!!</span>
 </div>
 
-
-<div class="transition-container" [class.showing]="resultShowing" [class.enter]="resultEnter" [class.leave]="resultLeave">
+<div
+  class="transition-container"
+  [class.showing]="resultShowing"
+  [class.enter]="resultEnter"
+  [class.leave]="resultLeave"
+>
   <div class="result-page hidden" [class.hidden]="resultHidden">
-    <div class="player-card result-card " >
-      <div class="question-card">{{resultQuestion}}</div>
-
+    <div class="player-card result-card">
+      <div class="question-card">{{ resultQuestion }}</div>
     </div>
-    <div class="player-card result-card " >
-      <div class="answer-card">{{resultAnswer}}</div>
-
+    <div class="player-card result-card">
+      <div class="answer-card">{{ resultAnswer }}</div>
     </div>
   </div>
 
@@ -22,7 +27,50 @@
     <div class="after"></div>
   </div>
 </div>
+
+<div class="modal-container-wraper" [class.showing]="isTransitioningModal">
+  <div
+    class="modal-container {{ modalShowingState }}"
+    [class.modal-container__show]="modalShowing"
+    [class.show]="modalShowing"
+    [class.modal-container__white-bg]="modalWhiteBg"
+  >
+    <div class="modal-container__panel">
+      <div class="modal-container__panel__content">
+        <h1 *ngIf="modalMode =='text'">It's time to vote</h1>
+      </div>
+      <div class="modal-container__panel__separator" >
+        <div
+          id="modal-container__panel__separator-line"
+          [class.modal-container__panel__separator__show]="modalSeparatorShowing"
+        ></div>
+      </div>
+    </div>
+
+    <div class="modal-container__panel">
+      <div
+        class="modal-container__panel__content modal-container__panel__content__bottom"
+      >
+        <h1 *ngIf="modalMode =='text'">It's time to vote</h1>
+      </div>
+    </div>
+    <div *ngIf="modalMode == 'card'">
+
+      <div class="player-card result-card modal-card " [class.show]="modalCardShowing">
+        <div class="question-card">{{ resultQuestion }}</div>
+      </div>
+      <div class="player-card result-card modal-card " [class.show]="modalCardShowing">
+        <div class="answer-card">{{ resultAnswer }}</div>
+      </div>
+      <div class="pyro">
+        <div class="before"></div>
+        <div class="after"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div class="game-container">
   <router-outlet></router-outlet>
-
 </div>
