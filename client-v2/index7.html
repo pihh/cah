@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <!-- <script src="./index.js"></script> -->
+    <title>Draggable site</title>
+    <style>
+      body {
+        color: #333;
+        text-align: center;
+        background: #222;
+        margin: 0;
+      }
+      .game-container {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .game-component {
+        border: 1px solid red;
+      }
+      .game-header {
+        height: 140px;
+      }
+      .game-hand {
+        height: 300px;
+      }
+      .game-body {
+        flex: 1;
+      }
+
+      .index {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        background-color: wheat;
+      }
+
+      .main {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        height: 800px;
+        /* overflow: hidden; */
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        /* width: 80%; */
+        width: 100%;
+      }
+      .cell {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 250px;
+        font-size: 26px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+        color: rgba(0, 0, 0, 0.92);
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        height: 350px;
+        transform-origin: center bottom;
+        background: red;
+      }
+      .picker {
+        position: relative;
+        overflow: visible;
+        width: 100vw;
+        height: 90vh;
+        border-radius: 2px;
+        background-color: transparent;
+      }
+      /* .cell:nth-child(1){
+        left: 8em;
+        top: 4em;
+      } */
+
+      .game-player-card {
+        width: 250px;
+        height: 350px;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        font-weight: 700;
+        font-family: Helvetica, sans-serif;
+        background-color: #fff;
+        box-shadow: 0 0.5em 0.65em #0000000d;
+        font-size: 2em; 
+        margin-left: -3.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="index">
+      <div class="main">
+        <div id="picker" class="picker">
+          <div class="center-control" style="border:1px solid red">
+
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 1</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 2</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 3</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 4</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 5</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 6</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 7</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 8</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 9</div>
+          </div>
+          <div class="cell game-player-card">
+            <div class="cell-content">Card 10</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--
+    <main class="game-container">
+      <div class="game-component game-header"></div>
+      <div class="game-component game-body"></div>
+      <div class="game-component game-hand">
+        <div class="game-player-card"><img />1</div>
+        <div class="game-player-card"><img />2</div>
+        <div class="game-player-card"><img />3</div>
+        <div class="game-player-card"><img />4</div>
+        <div class="game-player-card"><img />5</div>
+        <div class="game-player-card"><img />6</div>
+        <div class="game-player-card"><img />7</div>
+        <div class="game-player-card"><img />8</div>
+        <div class="game-player-card"><img />9</div>
+        <div class="game-player-card"><img />10</div>
+      </div>
+    </main>
+  -->
+    <script type="module" src="/circular-slider.js"></script>
+    <!--
+    <script>
+      const $slider = document.querySelector(".game-hand");
+
+      const sliderWidth = 400; // item * nItems + 20*nItems; //slider.offsetWidth;
+      let isDown = false;
+      let startX;
+      let startY;
+      let totalDistance = sliderWidth / 2;
+      let lastX = 0;
+
+      $slider.addEventListener("scroll", function () {
+        content.style.top = "-" + $slider.scrollTop + "px";
+        scrollCircle.style.paddingTop = $slider.scrollTop * 2 + "px";
+      });
+
+      const onSlideEnd = () => {
+        isDown = false;
+        $slider.classList.remove("active");
+      };
+
+      const onSlideStart = (e) => {
+        isDown = true;
+        $slider.classList.add("active");
+        startX = e.pageX || e.touches[0].pageX - $slider.offsetLeft;
+        lastX = startX;
+        //scrollLeft = slider.scrollLeft;
+      };
+
+      const onSlideMove = (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX || e.touches[0].pageX - $slider.offsetLeft;
+
+        const distance = x - lastX;
+
+        lastX = x;
+
+        if (totalDistance - distance < 0) {
+          totalDistance = 0;
+        } else if (totalDistance - distance <= sliderWidth) {
+          totalDistance -= distance;
+        } else {
+          totalDistance = sliderWidth;
+        }
+        const percentage = (totalDistance / sliderWidth) * 100;
+        console.log({ totalDistance, percentage });
+      };
+      /*
+        if (totalDistance - distance < 0) {
+          totalDistance = 0;
+        } else if (totalDistance - distance <= sliderWidth) {
+          totalDistance -= distance;
+        } else {
+          totalDistance = sliderWidth;
+        }
+        const percentage = (totalDistance / sliderWidth) * 50;
+        console.log({ percentage });
+
+      /*
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      let totalDistance = 0;
+      let lastX = 0;
+      const slider = document.querySelector(".items");
+      const sliderUl = document.querySelector(".items ul");
+
+      const end = () => {
+        isDown = false;
+        slider.classList.remove("active");
+      };
+
+      const start = (e) => {
+        isDown = true;
+        slider.classList.add("active");
+        startX = e.pageX || e.touches[0].pageX - slider.offsetLeft;
+        lastX = startX;
+        scrollLeft = slider.scrollLeft;
+      };
+
+      const move = (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX || e.touches[0].pageX - slider.offsetLeft;
+
+        const item = document.querySelector(".item").offsetWidth;
+        const nItems = 10;
+        const distance = x - lastX;
+        const sliderWidth = 400; // item * nItems + 20*nItems; //slider.offsetWidth;
+        const sliderLeft = slider.scrollLeft;
+
+        // console.log({ distance, sliderWidth, sliderLeft });
+        lastX = x;
+        if (totalDistance - distance < 0) {
+          totalDistance = 0;
+        } else if (totalDistance - distance <= sliderWidth) {
+          totalDistance -= distance;
+        } else {
+          totalDistance = sliderWidth;
+        }
+        const percentage = (totalDistance / sliderWidth) * 100;
+        console.log({ totalDistance, percentage });
+        /*
+        if (totalDistance - distance < 0) {
+          totalDistance = 0;
+        } else if (totalDistance - distance <= sliderWidth) {
+          totalDistance -= distance;
+        } else {
+          totalDistance = sliderWidth;
+        }
+        const percentage = (totalDistance / sliderWidth) * 50;
+        console.log({ percentage });
+
+        // Primeiro é 0 translate
+        // Segundo é 50 translate
+        const items = [...document.querySelectorAll(".items .item")];
+
+        for (let i = 0; i < items.length; i++) {
+          let $item = items[i];
+          var translateY = Math.abs(i - percentage) * 50;
+          var rotate = (i - percentage) * 12;
+          $item.style.transform = `translateY(${
+            translateY / 10
+          }%) translateX(-${
+            Math.abs(i - percentage) * 10
+          }%) rotate(${rotate}deg)`;
+
+          // var rotate = 0
+          // $item.style.transform = `translateY(${translate}px) rotate(${rotate}deg)`
+          /*let translate = i * 50 + percentage*100*50 - percentage*i*100*50//* (1-percentage);
+            let rotate =  i * 10 + percentage*10*50//* (1-percentage)
+            console.log(`translateY(${translate}px) rotate(${rotate}deg)`,percentage)
+            $item.style.transform = `translateY(${translate}px) rotate(${rotate}deg)`
+                   let translate = percentage + 
+                   *
+        }
+      };
+      */
+
+      (() => {
+        $slider.addEventListener("mousedown", onSlideStart);
+        $slider.addEventListener("touchstart", onSlideStart);
+
+        $slider.addEventListener("mousemove", onSlideMove);
+        $slider.addEventListener("touchmove", onSlideMove);
+
+        $slider.addEventListener("mouseleave", onSlideEnd);
+        $slider.addEventListener("mouseup", onSlideEnd);
+        $slider.addEventListener("touchend", onSlideEnd);
+      })();
+    </script>
+    -->
+  </body>
+</html>
