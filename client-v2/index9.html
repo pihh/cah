@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <!-- <script src="./index.js"></script> -->
+    <title>Draggable site</title>
+    <style>
+      body {
+        color: #333;
+        text-align: center;
+        background: #222;
+        margin: 0;
+      }
+      .game-container {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .game-component {
+        border: 1px solid red;
+      }
+      .game-header {
+        height: 140px;
+      }
+      .game-hand {
+        height: 300px;
+      }
+      .game-body {
+        flex: 1;
+      }
+
+      .index {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        background-color: wheat;
+      }
+
+      .main {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        height: 800px;
+        /* overflow: hidden; */
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        /* width: 80%; */
+        width: 100%;
+      }
+      .cell {
+        position: absolute;
+        top: 4em;
+        left: calc(50% - 125px);
+        width: 250px;
+        font-size: 26px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+        color: rgba(0, 0, 0, 0.92);
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        height: 350px;
+        transform-origin: center bottom;
+        background: red;
+      }
+      .picker {
+        position: relative;
+        overflow: visible;
+        width: 100vw;
+        height: 90vh;
+        border-radius: 2px;
+        background-color: transparent;
+        box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset,
+          rgba(0, 0, 0, 0.75) -48px 0px 17px -7px inset;
+      }
+      .picker-wrapper {
+        position: relative;
+        overflow: visible;
+        width: 100%;
+        height: 100%;
+        border-radius: 2px;
+        background-color: transparent;
+        box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset,
+          rgba(0, 0, 0, 0.75) -48px 0px 17px -7px inset;
+        overflow: hidden;
+      }
+      /* .cell:nth-child(1){
+        left: 8em;
+        top: 4em;
+      } */
+
+      /*
+
+@for $counter from 1 through 10 {
+  .cell.game-player-card:nth-child(#{$counter}) {
+    transform: scale(#{1.02- $counter*0.02}) translate3d(0px, #{$counter* 10-10 }px, 0);
+    z-index: #{10 - $counter} ;
+    }
+}
+
+*/
+      .picker-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .game-player-card {
+        width: 250px;
+        height: 350px;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        font-weight: 700;
+        font-family: Helvetica, sans-serif;
+        background-color: #fff;
+        box-shadow: 0 0.5em 0.65em #0000000d;
+        font-size: 2em;
+        /* margin-left: -3.5rem; */
+        opacity: 1;
+      }
+      .cell.game-player-card:nth-child(1) {
+        scale: 1;
+        translate: 0px 0px 0;
+        z-index: 9;
+        /* box-shadow: none; */
+      }
+      .cell.game-player-card:nth-child(2) {
+        scale: 0.98;
+        translate: 0px 10px 0;
+        z-index: 8;
+      }
+      .cell.game-player-card:nth-child(3) {
+        scale: 0.96;
+        translate: 0px 20px 0;
+        z-index: 7;
+      }
+      .cell.game-player-card:nth-child(4) {
+        scale: 0.94;
+        translate: 0px 30px 0;
+        z-index: 6;
+      }
+      .cell.game-player-card:nth-child(5) {
+        scale: 0.92;
+        translate: 0px 40px 0;
+        z-index: 5;
+      }
+      .cell.game-player-card:nth-child(6) {
+        scale: 0.9;
+        translate: 0px 50px 0;
+        z-index: 4;
+      }
+      .cell.game-player-card:nth-child(7) {
+        scale: 0.88;
+        translate: 0px 60px 0;
+        z-index: 3;
+      }
+      .cell.game-player-card:nth-child(8) {
+        scale: 0.86;
+        translate: 0px 70px 0;
+        z-index: 2;
+      }
+      .cell.game-player-card:nth-child(9) {
+        scale: 0.84;
+        translate: 0px 80px 0;
+        z-index: 1;
+      }
+      .cell.game-player-card:nth-child(10) {
+        scale: 0.82;
+        translate: 0px 90px 0;
+        z-index: 0;
+      }
+      .cell.game.player-card {
+        transition: 0s all;
+      }
+
+      .card-hidden {
+        background: transparent;
+        color: transparent;
+        box-shadow: none;
+        pointer-events: none;
+      }
+
+      #picker {
+        max-width: 1000px;
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="index">
+      <div class="main">
+        <h1></h1>
+        <div id="picker" class="picker">
+          <div class="picker-wrapper"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const THRESHOLD_X = 100;
+      const THRESHOLD_Y = 150;
+      const LIMIT_X = 200;
+
+      const TEMPLATE = function (index) {
+        const $container = document.createElement("div");
+        const $content = document.createElement("div");
+
+        $container.classList.add("cell");
+        $container.classList.add("game-player-card");
+        $content.classList.add("cell-content");
+        $content.innerHTML = `Card #${index}`;
+        $container.appendChild($content);
+        return $container;
+      };
+
+      const $wrapper = document.querySelector(".picker-wrapper");
+
+      for (let i = 0; i < 10; i++) {
+        $wrapper.appendChild(TEMPLATE(i + 1));
+      }
+
+      // Slight acceleration from zero to full speed
+      function easeInSine(t) {
+        return -1 * Math.cos(t * (Math.PI / 2)) + 1;
+      }
+
+      // Slight deceleration at the end
+      function easeOutSine(t) {
+        return Math.sin(t * (Math.PI / 2));
+      }
+
+      // Accelerating from zero velocity
+      function easeInCubic(t) {
+        return t * t * t;
+      }
+
+      // Decelerating to zero velocity
+      function easeOutCubic(t) {
+        const t1 = t - 1;
+        return t1 * t1 * t1 + 1;
+      }
+
+      let mousedown = "mousedown";
+      let mouseup = "mouseup";
+      let mousemove = "mousemove";
+
+      let getMousePosition = function (e) {
+        return { x: e.screenX, y: e.screenY };
+      };
+      let defineMouseEvents = function () {
+        // @ TODO
+      };
+
+      defineMouseEvents();
+
+      const $cards = [...$wrapper.querySelectorAll(".game-player-card")];
+      const $cardsData = $cards.map((el) => el.innerText);
+      const $originalCardStyles = $cards.map((el) => {
+        let translate = getComputedStyle(el)
+          .translate.split("px")
+          .map((el) => parseInt(el || 0));
+        let tx = translate[0] || 0;
+        let ty = translate[1] || 0;
+        let tz = translate[2] || 0;
+        return {
+          translate: [tx, ty, tz],
+          scale: parseFloat(getComputedStyle(el).scale),
+          opacity: 1,
+        };
+      });
+
+      let $cardFront = $cards[0];
+      let $cardNext = $cards[1];
+
+      function setCardOriginalStyles(
+        i,
+        percentageX = 0,
+        animationDuration = -1
+      ) {
+        if (animationDuration > 0) {
+          $cards[i].style.transition = `all ${animationDuration}ms`;
+        }
+        let cardTransformX = $originalCardStyles[i].translate[0];
+        let cardTransformY =
+          $originalCardStyles[i].translate[1] - 10 * percentageX;
+        let cardTransformZ = $originalCardStyles[i].translate[2];
+        let cardScale = 0.02 * percentageX + $originalCardStyles[i].scale;
+        $cards[
+          i
+        ].style.translate = `${cardTransformX}px ${cardTransformY}px ${cardTransformZ}px`;
+        $cards[i].style.scale = cardScale;
+      }
+
+      let activeCard = 0;
+
+      let startX;
+      let lastX;
+      let endX;
+      let lastDistanceX = 0;
+      let totalDistanceX = 0;
+      let isTransitioning = false;
+      let percentageX = 0;
+
+      let lastDistanceY = 0;
+      let totalDistanceY = 0;
+      let startY = 0;
+      let percentageY = 0;
+
+      let isMouseDown = false;
+
+      function onMouseDown(e) {
+        // console.log("onMouseDown", e);
+        if (isMouseDown) return;
+        if (isTransitioning) return;
+        isMouseDown = true;
+        let { x, y } = getMousePosition(e);
+        startX = x;
+        lastX = x;
+        totalDistanceX = 0;
+        percentageX = 0;
+        startY = y;
+        lastY = y;
+        totalDistanceY = 0;
+        percentageY = 0;
+      }
+      function onMouseMove(e) {
+        if (!isMouseDown) return;
+        if (isTransitioning) return;
+        let { x, y } = getMousePosition(e);
+        lastDistanceX = x - lastX;
+        lastX = x;
+        totalDistanceX += lastDistanceX;
+        lastDistanceY = y - lastY;
+        lastY = y;
+        totalDistanceY += lastDistanceY;
+
+        let opacity = 1;
+
+        let scale = 1;
+        let rotation = 0;
+        let translateY = 0;
+        let absDistanceX = Math.abs(totalDistanceX);
+        if (absDistanceX > 100) {
+          opacity = Math.min(
+            1,
+            Math.max(0, (100 - (absDistanceX - 100) / 2) / 100)
+          );
+          percentageX = 1 - opacity;
+          scale = 1 - opacity / 100;
+          rotation = 10 - opacity * 10 * Math.sign(totalDistanceX);
+          // translateY =
+          //   25 * Math.sign(totalDistanceX) -
+          //   opacity * 25 * Math.sign(totalDistanceX);
+
+          for (let i = 1; i < $cards.length; i++) {
+            let cardTransformX = $originalCardStyles[i].translate[0];
+            let cardTransformY =
+              $originalCardStyles[i].translate[1] - 10 * percentageX;
+            let cardTransformZ = $originalCardStyles[i].translate[2];
+            let cardScale = 0.02 * percentageX + $originalCardStyles[i].scale;
+            $cards[
+              i
+            ].style.translate = `${cardTransformX}px ${cardTransformY}px ${cardTransformZ}px`;
+            $cards[i].style.scale = cardScale;
+
+            // $cards[i].
+          }
+        }
+
+        let translateX = `${totalDistanceX}px`;
+        translateY = `${totalDistanceY}px`; // `translateY(${translateY}px)`
+        rotation = ""; // `rotate(${rotation}deg)`
+
+        $cardFront.style.translate = `${translateX} ${translateY} `;
+        $cardFront.style.opacity = opacity;
+        $cardFront.style.scale = scale;
+        //let cardOpacity = Math.max(100,100-Math.abs(totalDistanceX))/100;
+
+        if (absDistanceX > LIMIT_X + THRESHOLD_X) {
+          onMouseUp();
+          return;
+        }
+        // totalDistanceX = Math.max(0, Math.min(1000, totalDistanceX));
+        // //totalDistanceX = totalDistanceX % 1000; //Math.max(0,Math.min(100,totalDistanceX));
+        // let percentage = totalDistanceX / 1000; //.max(0,Math.min(1,totalDistanceX / 1000));
+      }
+      function onMouseUp(e) {
+        if (!isMouseDown) return;
+
+        //let x = getMousePosition(e);
+        if (Math.abs(totalDistanceX) > THRESHOLD_X) {
+          if (totalDistanceX > 0) {
+            swipeRight();
+          } else {
+            swipeLeft();
+          }
+        } else {
+          if (totalDistanceY * -1 > THRESHOLD_Y) {
+            swipeUp();
+          } else {
+            resetCards();
+          }
+        }
+
+        // endX = x;
+        // lastX = x;
+        // isMouseDown = false;
+
+        // Do something
+      }
+
+      function swipeLeft() {
+        console.log("swipe left");
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd(true);
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function swipeRight() {
+        console.log("swipe right");
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd(true);
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function swipeUp() {
+        console.log("swipe up");
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd(true, true);
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function resetCards() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd();
+          //isTransitioning = false;
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function onTransitionEnd(hasSwiped = false, y = false) {
+        let percentageDistanceX =
+          (Math.max(
+            0,
+            Math.min(THRESHOLD_X + LIMIT_X, Math.abs(totalDistanceX))
+          ) /
+            (THRESHOLD_X + LIMIT_X) +
+            Math.max(0, Math.min(THRESHOLD_Y, Math.abs(totalDistanceY))) /
+              THRESHOLD_Y) /
+          2;
+ 
+        let animationDuration = percentageDistanceX;
+        if (hasSwiped) {
+          animationDuration = 1 - percentageDistanceX;
+        }
+
+        animationDuration = animationDuration * 500;
+
+        if (hasSwiped) {
+          // Swipe card to it's direction
+          // Scale others accordingly
+          // Switch card info in the end of animation
+          // Remove all animation durations
+
+          // SWIPE Y
+          if (y) {
+            let $cardFrontTranslateY = -window.innerHeight + totalDistanceY;
+            $cardFront.style.transition = `all ${animationDuration}ms`;
+            $cardFront.style.translate = `0 ${$cardFrontTranslateY}px `;
+            $cardFront.style.scale = 1;
+            $cardFront.style.opacity = 0.5;
+
+            for (let i = 1; i < $cards.length; i++) {
+              let $card = $cards[i];
+              $card.style.transition = `all ${animationDuration}ms`;
+              $card.style.translate = `0 ${
+                $originalCardStyles[i].translate[1] - 10
+              }px 0`;
+              $card.style.scale = $originalCardStyles[i].scale + 0.02;
+              $card.style.opacity = 1;
+            }
+
+            activeCard += 1;
+            activeCard = activeCard % 10;
+            let nextCard = activeCard + 1;
+            nextCard = nextCard % 10;
+
+            setTimeout(() => {
+              $cardFront.classList.add("card-hidden");
+              $cardFront.style.transitionDuration = "none";
+              $cardFront.style.translate = `0px 0px 0px`;
+              $cardFront.style.scale = 1;
+              $cardFront.style.opacity = 1;
+              $cardFront.querySelector(".cell-content").innerHTML =
+                $cardsData[activeCard];
+              $cardNext.querySelector(".cell-content").innerHTML =
+                $cardsData[nextCard];
+                
+            }, Math.max(0, animationDuration));
+          } else {
+            // SWIPE X
+            let sign = 1;
+            if (totalDistanceX < 0) {
+              sign = -1;
+            }
+            let $cardFrontTranslateX = sign * 300;
+            $cardFront.style.transition = `all ${animationDuration}ms`;
+            $cardFront.style.translate = `${$cardFrontTranslateX}px `;
+            $cardFront.style.scale = 0.9;
+            $cardFront.style.opacity = 0;
+
+            for (let i = 1; i < $cards.length; i++) {
+              let $card = $cards[i];
+              $card.style.transition = `all ${animationDuration}ms`;
+              $card.style.translate = `0 ${
+                $originalCardStyles[i].translate[1] - 10
+              }px 0`;
+              $card.style.scale = $originalCardStyles[i].scale + 0.02;
+              $card.style.opacity = 1;
+            }
+
+            activeCard += 1;
+            activeCard = activeCard % 10;
+            let nextCard = activeCard + 1;
+            nextCard = nextCard % 10;
+
+            setTimeout(() => {
+              $cardFront.style.transitionDuration = "none";
+              $cardFront.style.translate = `0px 0px 0px`;
+              $cardFront.style.scale = 1;
+              $cardFront.style.opacity = 1;
+              $cardFront.querySelector(".cell-content").innerHTML =
+                $cardsData[activeCard];
+              $cardNext.querySelector(".cell-content").innerHTML =
+                $cardsData[nextCard];
+            }, Math.max(0, animationDuration));
+          }
+        } else {
+          // Swipe card back to it's place
+          // Unscale others
+          // Remove all animation durations
+
+          for (let i = 0; i < $cards.length; i++) {
+            $card = $cards[i];
+
+            setCardOriginalStyles(i, 1, animationDuration);
+          }
+        }
+
+        setTimeout(() => {
+          for (let i = 0; i < $cards.length; i++) {
+            $card = $cards[i];
+            $card.style.transition = "none";
+          }
+
+          isTransitioning = false;
+          console.log("animation finished");
+          isMouseDown = false;
+        }, animationDuration + 1);
+      }
+
+      $cardFront.addEventListener(mousedown, onMouseDown, false);
+      $cardFront.addEventListener(mousemove, onMouseMove, false);
+      $cardFront.addEventListener(mouseup, onMouseUp, false);
+      $cardFront.addEventListener("mouseleave", onMouseUp, false);
+    </script>
+  </body>
+</html>

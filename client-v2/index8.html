@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <!-- <script src="./index.js"></script> -->
+    <title>Draggable site</title>
+    <style>
+      body {
+        color: #333;
+        text-align: center;
+        background: #222;
+        margin: 0;
+      }
+      .game-container {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .game-component {
+        border: 1px solid red;
+      }
+      .game-header {
+        height: 140px;
+      }
+      .game-hand {
+        height: 300px;
+      }
+      .game-body {
+        flex: 1;
+      }
+
+      .index {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        background-color: wheat;
+      }
+
+      .main {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        height: 800px;
+        /* overflow: hidden; */
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        /* width: 80%; */
+        width: 100%;
+      }
+      .cell {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 250px;
+        font-size: 26px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+        color: rgba(0, 0, 0, 0.92);
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        height: 350px;
+        transform-origin: center bottom;
+        background: red;
+      }
+      .picker {
+        position: relative;
+        overflow: visible;
+        width: 100vw;
+        height: 90vh;
+        border-radius: 2px;
+        background-color: transparent;
+        box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset,
+          rgba(0, 0, 0, 0.75) -48px 0px 17px -7px inset;
+      }
+      .picker-wrapper {
+        position: relative;
+        overflow: visible;
+        width: 100%;
+        height: 100%;
+        border-radius: 2px;
+        background-color: transparent;
+        box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset,
+          rgba(0, 0, 0, 0.75) -48px 0px 17px -7px inset;
+        overflow: hidden;
+      }
+      /* .cell:nth-child(1){
+        left: 8em;
+        top: 4em;
+      } */
+
+      .game-player-card {
+        width: 250px;
+        height: 350px;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        font-weight: 700;
+        font-family: Helvetica, sans-serif;
+        background-color: #fff;
+        box-shadow: 0 0.5em 0.65em #0000000d;
+        font-size: 2em;
+        /* margin-left: -3.5rem; */
+        opacity: 1 !important;
+      }
+      #picker {
+        max-width: 1000px;
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="index">
+      <div class="main">
+        <h1></h1>
+        <div id="picker" class="picker">
+          <div class="picker-wrapper">
+            <div class="center-control" style="border: 1px solid red"></div>
+            <div
+              class="cell game-player-card"
+              style="transform: translateX(0px) translateY(100px)"
+            >
+              <div class="cell-content">Card 1</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 2</div>
+            </div>
+            <!--
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 3</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 4</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 5</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 6</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 7</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 8</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 9</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 10</div>
+            </div>
+          --></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Slight acceleration from zero to full speed
+      function easeInSine(t) {
+        return -1 * Math.cos(t * (Math.PI / 2)) + 1;
+      }
+
+      // Slight deceleration at the end
+      function easeOutSine(t) {
+        return Math.sin(t * (Math.PI / 2));
+      }
+
+      // Accelerating from zero velocity
+      function easeInCubic(t) {
+        return t * t * t;
+      }
+
+      // Decelerating to zero velocity
+      function easeOutCubic(t) {
+        const t1 = t - 1;
+        return t1 * t1 * t1 + 1;
+      }
+
+      const $picker = document.getElementById("picker");
+      const $card = [...document.querySelectorAll(".game-player-card")][0];
+      const $card2 = [...document.querySelectorAll(".game-player-card")][1];
+      const $h1 = document.querySelector("h1");
+      let mousedown = "mousedown";
+      let mouseup = "mouseup";
+      let mousemove = "mousemove";
+
+      console.log($card);
+      let isMouseDown = false;
+      let startX;
+      let endX;
+      let lastX;
+      let lastDistanceX;
+      let containerDistance = 1000 - $card.offsetWidth * 2;
+      let totalDistanceX = 0; //containerDistance/2;
+      let percentage = 0;
+      let cardDistanceX = totalDistanceX;
+      let cardDistanceY = 0;
+      $card.style.transform = `transform: translateX(0px) translateY(100px);`;
+
+      function getMousePosition(e) {
+        return e.screenX;
+      }
+      function onMouseDown(e) {
+        console.log("onMouseDown", e);
+        if (isMouseDown) return;
+        isMouseDown = true;
+        let x = getMousePosition(e);
+        startX = x;
+        lastX = x;
+      }
+      function onMouseMove(e) {
+        if (!isMouseDown) return;
+        let x = getMousePosition(e);
+        lastDistanceX = x - lastX;
+        lastX = x;
+        totalDistanceX += lastDistanceX;
+        totalDistanceX = Math.max(0, Math.min(1000, totalDistanceX));
+        //totalDistanceX = totalDistanceX % 1000; //Math.max(0,Math.min(100,totalDistanceX));
+        let percentage = totalDistanceX / 1000; //.max(0,Math.min(1,totalDistanceX / 1000));
+        /*if(percentage >= containerDistance/2){
+          cardDistanceX = easeInSine(percentage*2)*500 
+        }else{
+          cardDistanceX = 500+ easeOutSine((percentage-0.5)*2)*500
+        }
+        console.log({percentage, cardDistanceX,totalDistanceX})
+        //let cardDistanceX = easeInSine(percentage)* 1000
+        //let cardDistanceX = totalDistanceX;
+        // if (cardDistanceX < 0) {
+        //   cardDistanceX = 500 + totalDistanceX;
+        // }
+        */
+
+        //cardDistanceX = percentage*1000
+        cardDistanceY = 100 - percentage * 200;
+        if (percentage < 0.5) {
+          cardDistanceY = 100 - easeOutCubic(percentage * 2) * 100; //100-percentage*200
+          cardDistanceX = easeOutCubic(percentage * 2) * 500;
+          console.log(`
+        Percentage: ${percentage},
+        InSine: ${easeOutCubic(percentage * 2)},
+        cardDistanceY: ${cardDistanceY}
+        `);
+        } else {
+          console.log(`
+        Percentage: ${percentage},
+        OutSine: ${easeInCubic((0.5 - percentage) * 2)},
+        `);
+          cardDistanceX = 500 + easeInCubic((percentage - 0.5) * 2) * 500;
+          cardDistanceY = -easeInCubic((0.5 - percentage) * 2) * 100; // (percentage-0.5)*200
+        }
+        //console.log({i: easeInSine(percentage*2),o:easeOutSine(1-percentage*2)})
+        //console.log({percentage,cardDistanceY})
+
+        $h1.innerHTML =
+          Math.round(percentage * 100) + " " + Math.round(cardDistanceY);
+        let translateX = `translateX(${cardDistanceX}px)`;
+        let translateY = `translateY(${cardDistanceY}px)`;
+        $card.style.transform = `${translateX} ${translateY}`;
+
+        percentage += 0.1;
+        if (percentage < 0.5) {
+          cardDistanceY = 100 - easeOutCubic(percentage * 2) * 100; //100-percentage*200
+          cardDistanceX = easeOutCubic(percentage * 2) * 500;
+          console.log(`
+        Percentage: ${percentage},
+        InSine: ${easeOutCubic(percentage * 2)},
+        cardDistanceY: ${cardDistanceY}
+        `);
+        } else {
+          console.log(`
+        Percentage: ${percentage},
+        OutSine: ${easeInCubic((0.5 - percentage) * 2)},
+        `);
+          cardDistanceX = 500 + easeInCubic((percentage - 0.5) * 2) * 500;
+          cardDistanceY = -easeInCubic((0.5 - percentage) * 2) * 100; // (percentage-0.5)*200
+        }
+        translateX = `translateX(${cardDistanceX}px)`;
+        translateY = `translateY(${cardDistanceY}px)`;
+        $card2.style.transform = `${translateX} ${translateY}`;
+        
+        // console.log("onMouseMove", { totalDistanceX,cardDistanceX });
+        // Do something
+      }
+      function onMouseUp(e) {
+        if (!isMouseDown) return;
+        let x = getMousePosition(e);
+        endX = x;
+        lastX = x;
+        isMouseDown = false;
+
+        // Do something
+      }
+      $picker.addEventListener(mousedown, onMouseDown, false);
+      $picker.addEventListener(mousemove, onMouseMove, false);
+      $picker.addEventListener(mouseup, onMouseUp, false);
+    </script>
+  </body>
+</html>

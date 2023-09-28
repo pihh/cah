@@ -9,7 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { DirectivesModule } from './directives/directives.module';
 
 
+import { environment } from '../environments/environment';
 
+console.log('App Module',{ environment})
 @NgModule({
   declarations: [
     AppComponent,

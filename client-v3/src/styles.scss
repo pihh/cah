@@ -11,9 +11,28 @@
     url("assets/fonts/HelveticaNeueLTStd-Bd.otf") format("opentype"),
     url("assets/fonts/HelveticaNeueLTStd-Bd.otf") format("truetype");
 }
+
+:root {
+  --swiper-pagination-color: orangered!important;
+  /*
+  --swiper-pagination-bullet-size: 8px;
+  --swiper-pagination-bullet-width: 8px;
+  --swiper-pagination-bullet-height: 8px;
+  --swiper-pagination-bullet-inactive-color: #000;
+  --swiper-pagination-bullet-inactive-opacity: 0.2;
+  --swiper-pagination-bullet-opacity: 1;
+  --swiper-pagination-bullet-horizontal-gap: 4px;
+  --swiper-pagination-bullet-vertical-gap: 6px;
+  */
+}
+
 * {
   font-family: "helvetica-neue-lt-std-75-bold";
 }
+*:focus {
+  outline: none;
+}
+
 body {
   margin: 0;
   height: 100vh;
@@ -652,8 +671,9 @@ $box-shadow2: ();
   top: 0;
   left: 0;
   z-index: -1;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   &.showing{
     z-index: 1000;
   }
@@ -861,4 +881,9 @@ $box-shadow2: ();
 .modal-card.hidden{
   opacity: 0 !important;
   transition: 0s all !important;
+}
+
+
+.swiper-pagination-bullet-active {
+  background-color: #000 !important;
 }

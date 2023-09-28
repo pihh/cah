@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component,isDevMode  } from '@angular/core';
 import { GameService } from './services/game.service';
 import { Router } from '@angular/router';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -102,6 +102,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    console.log({dev:isDevMode(),environment})
     this.transitionToVotePageSubscription = this.gameService
       .getTransitionToVotePageEmiter()
       .subscribe(() => this.enterVotePage());
@@ -127,7 +128,8 @@ export class AppComponent {
       }
       try {
         // console.log('onUpdate', { data ,state:data.episode.state});
-        if (data.episode.state !== state) {
+        console.log(data)
+        if (data && data?.episode?.state !== state) {
           state = data.episode.state;
           try {
             this.resultQuestion =
@@ -156,6 +158,7 @@ export class AppComponent {
 
     this.gameService.onUpdatePlayer().subscribe((data: any) => {
       try {
+        console.log('update-player',data)
         if (typeof data == 'object' && data) {
           this.player = data;
         }

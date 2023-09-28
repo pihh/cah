@@ -1,5 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output , ViewChild} from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
+
+/* @ts-ignore */
+import {gsap,Draggable} from "gsap/all";
+import playerHandHelper from './player-hand.helper';
+// don't forget to register plugins
+gsap.registerPlugin( Draggable);
+
+gsap.defaults({
+  ease: "none",
+});
+
 
 @Component({
   selector: 'app-player-hand',
@@ -7,7 +18,7 @@ import { GameService } from 'src/app/services/game.service';
   styleUrls: ['./player-hand.component.scss'],
 })
 export class PlayerHandComponent implements OnInit {
-
+  @ViewChild('picker') picker:any;
   @Input() cards: any[] = [];
 
   canAnswer = true;
@@ -15,13 +26,23 @@ export class PlayerHandComponent implements OnInit {
   chosenCardIndex: number = -1;
   answeredCardIndex: number = -1;
   subscription: any;
-
+  cardIndex:any = 4
   constructor(public gameService: GameService) {}
   @Output() onAnswerEvent = new EventEmitter<any>();
+
+
   ngOnInit() {
     this.subscription = this.gameService
       .getResetHandEmiter()
       .subscribe(() => this.resetHand());
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+
+      playerHandHelper(gsap,Draggable,this.picker.nativeElement,this)
+
+    },500)
   }
 
   onAnswer(data:any){
@@ -29,6 +50,7 @@ export class PlayerHandComponent implements OnInit {
   }
 
   resetHand() {
+    console.log('reset hand')
     this.selectedCardIndex = 0;
     this.canAnswer = true;
     this.selectedCardIndex = 0;
@@ -75,6 +97,7 @@ export class PlayerHandComponent implements OnInit {
   }
 
   prevCard() {
+    this.discardAnswer()
     if (this.selectedCardIndex > 0) {
       this.selectedCardIndex -= 1;
     } else {
@@ -82,6 +105,7 @@ export class PlayerHandComponent implements OnInit {
     }
   }
   nextCard() {
+    this.discardAnswer()
     if (this.selectedCardIndex < 9) {
       this.selectedCardIndex += 1;
     } else {
@@ -94,10 +118,10 @@ export class PlayerHandComponent implements OnInit {
     this.chosenCardIndex = this.selectedCardIndex;
   }
 
-  confirmAnswer() {
+  confirmAnswer(i:any) {
     if (!this.canAnswer) return;
-    if (this.chosenCardIndex == -1) return;
-    this.answeredCardIndex = this.chosenCardIndex;
+    if (this.cardIndex !== i) return;
+    this.answeredCardIndex = this.cardIndex;
     this.canAnswer = false;
     this.onAnswer(this.answeredCardIndex)
   }

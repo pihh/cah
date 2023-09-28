@@ -140,7 +140,7 @@ class GameManager extends EventEmitter{
 
     if(this.questions.length < players.length || this.answers.length/10 < players.length){
       this.episode.state = "ended"
-      this.nextEpisode()
+      this.endGame()
       return
     }
     for (player of players) {
@@ -155,6 +155,10 @@ class GameManager extends EventEmitter{
       
       this.updatePlayer('draw',player)
     }
+  }
+
+  endGame(){
+    console.log('@TODO')
   }
   getData(){
     return {

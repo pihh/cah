@@ -81,6 +81,19 @@
         height: 90vh;
         border-radius: 2px;
         background-color: transparent;
+        box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset,
+          rgba(0, 0, 0, 0.75) -48px 0px 17px -7px inset;
+      }
+      .picker-wrapper {
+        position: relative;
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background-color: transparent;
+    box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset, rgba(0, 0, 0, 0.75) -48px 0px 17px -7px inset;
+    overflow: hidden;
+
       }
       /* .cell:nth-child(1){
         left: 8em;
@@ -96,8 +109,9 @@
         font-family: Helvetica, sans-serif;
         background-color: #fff;
         box-shadow: 0 0.5em 0.65em #0000000d;
-        font-size: 2em; 
+        font-size: 2em;
         margin-left: -3.5rem;
+        opacity: 1 !important;
       }
     </style>
   </head>
@@ -105,38 +119,38 @@
     <div class="index">
       <div class="main">
         <div id="picker" class="picker">
-          <div class="center-control" style="border:1px solid red">
-
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 1</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 2</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 3</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 4</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 5</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 6</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 7</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 8</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 9</div>
-          </div>
-          <div class="cell game-player-card">
-            <div class="cell-content">Card 10</div>
+            <div class="picker-wrapper">
+            <div class="center-control" style="border: 1px solid red"></div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 1</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 2</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 3</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 4</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 5</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 6</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 7</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 8</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 9</div>
+            </div>
+            <div class="cell game-player-card">
+              <div class="cell-content">Card 10</div>
+            </div>
           </div>
         </div>
       </div>

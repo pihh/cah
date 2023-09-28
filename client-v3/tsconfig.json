@@ -24,6 +24,9 @@
       "dom"
     ]
   },
+  "scripts":[
+    "./node_modules/gsap/all.js"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
