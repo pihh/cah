@@ -48,18 +48,19 @@
         display: flex;
         position: relative;
         flex-direction: column;
-        height: 800px;
+        height: 100vh;
         /* overflow: hidden; */
         align-items: center;
         justify-content: center;
         margin: 0 auto;
         /* width: 80%; */
-        width: 100%;
+        width: 100vw;
       }
       .cell {
         position: absolute;
-        top: 4em;
-        left: calc(50% - 125px);
+        bottom: 1em;
+
+        left: calc(50% - 150px);
         width: 250px;
         font-size: 26px;
         font-weight: 500;
@@ -78,7 +79,7 @@
         position: relative;
         overflow: visible;
         width: 100vw;
-        height: 90vh;
+        height: 100vh;
         border-radius: 2px;
         background-color: transparent;
         box-shadow: rgba(0, 0, 0, 0.75) 48px 0px 32px -10px inset,
@@ -199,7 +200,7 @@
   <body>
     <div class="index">
       <div class="main">
-        <h1></h1>
+  
         <div id="picker" class="picker">
           <div class="picker-wrapper"></div>
         </div>
@@ -256,8 +257,22 @@
       let getMousePosition = function (e) {
         return { x: e.screenX, y: e.screenY };
       };
+      function isTouchDevice() {
+        return (
+          "ontouchstart" in window 
+        );
+      }
       let defineMouseEvents = function () {
-        // @ TODO
+        console.log('isTouchDevice',isTouchDevice())
+        if (isTouchDevice()) {
+          
+          mousedown = "touchstart";
+          mouseup = "touchend";
+          mousemove = "touchmove";
+          getMousePosition = function (e) {
+            return { x: e.touches[0].screenX, y: e.touches[0].screenY };
+          };
+        }
       };
 
       defineMouseEvents();
@@ -468,7 +483,7 @@
             Math.max(0, Math.min(THRESHOLD_Y, Math.abs(totalDistanceY))) /
               THRESHOLD_Y) /
           2;
- 
+
         let animationDuration = percentageDistanceX;
         if (hasSwiped) {
           animationDuration = 1 - percentageDistanceX;
@@ -515,7 +530,6 @@
                 $cardsData[activeCard];
               $cardNext.querySelector(".cell-content").innerHTML =
                 $cardsData[nextCard];
-                
             }, Math.max(0, animationDuration));
           } else {
             // SWIPE X
