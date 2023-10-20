@@ -1,76 +1,154 @@
-<div
-  class="transition-container"
-  [class.showing]="transitionVoteShowing"
-  [class.enter]="transitionVoteEnter"
-  [class.leave]="transitionVoteLeave"
->
-  <span class="mas">It's Time to vote !!!</span>
-</div>
+<div id="app" class="{{ gameState }}" [class.transitioning]="isTransitioning" [class.round-ending]="roundEnding">
+  <app-modal-controls [active]="false"></app-modal-controls>
+  <app-modal-splash
+    [active]="isSplashActive"
+    [hidding]="isSplashHidding"
+    [hidden]="isSplashHidden"
+    [complete]="isSplashComplete"
+    [loading]="isSplashLoading"
+    (onJoinEvent)="onJoinEvent()"
+  ></app-modal-splash>
 
-<div
-  class="transition-container"
-  [class.showing]="resultShowing"
-  [class.enter]="resultEnter"
-  [class.leave]="resultLeave"
->
-  <div class="result-page hidden" [class.hidden]="resultHidden">
-    <div class="player-card result-card">
-      <div class="question-card">{{ resultQuestion }}</div>
-    </div>
-    <div class="player-card result-card">
-      <div class="answer-card">{{ resultAnswer }}</div>
-    </div>
-  </div>
+  <app-modal-results
+  [answer]="episodeAnswer"
+  [question]="episodeQuestion"
+  [isResultsShowing]="isResultsShowing"
+  [isResultsEntering]="isResultsEntering"
+  [isResultsLeaving]="isResultsLeaving"
+  [isResultsEntered]="isResultsEntered"
 
-  <div class="pyro">
-    <div class="before"></div>
-    <div class="after"></div>
-  </div>
-</div>
+  ></app-modal-results>
 
-<div class="modal-container-wraper" [class.showing]="isTransitioningModal">
-  <div
-    class="modal-container {{ modalShowingState }}"
-    [class.modal-container__show]="modalShowing"
-    [class.show]="modalShowing"
-    [class.modal-container__white-bg]="modalWhiteBg"
+  <app-game-header
+    [isAnswerSelected]="isAnswerSelected"
+    [isVoteSelected]="isVoteSelected"
+    [pageMessage]="pageMessage"
+    [headerMessage]="headerMessage"
+    [playerName]="playerName"
+    [score]="gameService.score"
+    [round]="round"
+    [roundTime]="roundTime"
+
   >
-    <div class="modal-container__panel">
-      <div class="modal-container__panel__content">
-        <h1 *ngIf="modalMode =='text'">It's time to vote</h1>
-      </div>
-      <div class="modal-container__panel__separator" >
-        <div
-          id="modal-container__panel__separator-line"
-          [class.modal-container__panel__separator__show]="modalSeparatorShowing"
-        ></div>
-      </div>
-    </div>
+  </app-game-header>
 
-    <div class="modal-container__panel">
-      <div
-        class="modal-container__panel__content modal-container__panel__content__bottom"
+  <app-game-board [question]="game.episode.question.text"></app-game-board>
+  <app-game-footer [question]="game.episode.question.text" [isVotePageLeaving]="isVotePageLeaving"></app-game-footer>
+
+  <div class="player-hand" [class.hidden]="handHidden">
+    <ul
+      class="cards"
+      #playerHandSlider
+      [class.overflow-x-hidden]="isAnswerSelected"
+    >
+      <li
+        *ngFor="let card of player.hand; let i = index"
+        (panstart)="onAnswerPanStart($event, i)"
+        (pan)="onAnswerPanMove($event)"
+        (panend)="onAnswerPanEnd($event)"
+        (swipe)="onAnswerSwipe($event)"
+        [class.chosen]="getAnswerVisibility(i)"
       >
-        <h1 *ngIf="modalMode =='text'">It's time to vote</h1>
-      </div>
-    </div>
-    <div *ngIf="modalMode == 'card'">
+        <!-- <img
 
-      <div class="player-card result-card modal-card " [class.show]="modalCardShowing">
-        <div class="question-card">{{ resultQuestion }}</div>
-      </div>
-      <div class="player-card result-card modal-card " [class.show]="modalCardShowing">
-        <div class="answer-card">{{ resultAnswer }}</div>
-      </div>
-      <div class="pyro">
-        <div class="before"></div>
-        <div class="after"></div>
-      </div>
-    </div>
 
+          src="https://assets.codepen.io/89905/coverflow--Front-1024x1024.jpg"
+        width="1200"
+        height="1200"
+        /> -->
+        <div class="card-content" [style.marginTop]="getAnswerTranslate(i)">
+          <div class="card-body">
+            <h2>{{ card.text }}</h2>
+            <img src="assets/images/logo-white.png" />
+          </div>
+        </div>
+      </li>
+      <li
+        *ngIf="
+          gameState == 'enter-page-answer' || gameState == 'enter-page-vote'
+        "
+      >
+        <div class="card-content placeholder">
+          <div class="card-body">
+            <h2>Placeholder</h2>
+            <img src="assets/images/logo-white.png" />
+          </div>
+        </div>
+      </li>
+      <li
+        *ngIf="
+          gameState == 'enter-page-answer' || gameState == 'enter-page-vote'
+        "
+      >
+        <div class="card-content placeholder">
+          <div class="card-body">
+            <h2>Placeholder</h2>
+            <img src="assets/images/logo-white.png" />
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
-</div>
+  <div class="vote-list" [class.hidden]="voteHidden || isVotePageLeaving">
+    <ul
+      class="cards"
+      #voteListSlider
+      [class.vote-page-leaving]="isVotePageLeaving"
+    >
+      <!-- [class.overflow-x-hidden]="isVoteSelected" -->
+      <li>
+        <div class="card-content placeholder">
+          <!-- <div class="card-body">
+            <h2>Placeholder</h2>
+            <img src="assets/images/logo-white.png" />
+          </div> -->
 
-<div class="game-container">
-  <router-outlet></router-outlet>
+          <div>
+            <div *ngFor="let i of [0, 1, 2, 3, 4, 5]" class="card-throw">
+              <div class="card-content">
+                <div class="card-body">
+                  <img src="assets/images/logo-white.png" />
+                </div>
+              </div>
+            </div>
+            <div class="card-throw">
+              <div class="card-content">
+                <div class="card-body">
+                  <h1>Time to vote</h1>
+                  <img src="assets/images/logo-white.png" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li *ngIf="isVotePageLeaving">
+        <div class="card-content placeholder-leave"></div>
+      </li>
+      <li *ngIf="isVotePageLeaving">
+        <div class="card-content placeholder-leave"></div>
+      </li>
+      <li
+        *ngFor="let card of game.episode.answers; let i = index"
+        (panstart)="onVotePanStart($event, i)"
+        (pan)="onVotePanMove($event)"
+        (panend)="onVotePanEnd($event)"
+        (swipe)="onVoteSwipe($event)"
+        class="vote-card"
+        [class.chosen]="getVoteVisibility(i)"
+      >
+        <div class="card-content" [style.marginTop]="getVoteTranslate(i)">
+          <!-- [style.marginTop]="getAnswerTranslate(i)" -->
+          <div class="card-body">
+            <h2>{{ card.text }}</h2>
+            <img src="assets/images/logo-white.png" />
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <app-button-voice-message
+    (onVoiceEvent)="onVoiceEvent($event)"
+    (onVoiceMessage)="onVoiceMessage($event)"
+  ></app-button-voice-message>
 </div>

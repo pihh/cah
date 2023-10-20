@@ -1,0 +1,28 @@
+:host{
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  z-index: 100;
+}
+#button-voice-message{
+
+  .button-voice-message-container{
+
+    .button-main{
+      border: 1px solid white;
+      border-radius: 100%;
+      width: 4em;
+      height: 4em;
+      background: black;
+      color: white;
+      svg{
+        height: 2em;
+        pointer-events: none;
+      }
+      &.active{
+
+      }
+
+    }
+  }
+}

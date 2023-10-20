@@ -183,12 +183,14 @@
       .cell.game.player-card {
         transition: 0s all;
       }
-
+      .invisible{
+        visibility: hidden;
+      }
       .card-hidden {
         background: transparent;
         color: transparent;
         box-shadow: none;
-        pointer-events: none;
+        /* pointer-events: none; */
       }
 
       #picker {
@@ -263,7 +265,7 @@
         );
       }
       let defineMouseEvents = function () {
-        console.log('isTouchDevice',isTouchDevice())
+        
         if (isTouchDevice()) {
           
           mousedown = "touchstart";
@@ -293,6 +295,10 @@
         };
       });
 
+      const $gameArea = TEMPLATE(-1)
+      $gameArea.classList.add('card-hidden')
+      
+      $wrapper.insertBefore($gameArea,$wrapper.firstChild)
       let $cardFront = $cards[0];
       let $cardNext = $cards[1];
 
@@ -521,7 +527,7 @@
             nextCard = nextCard % 10;
 
             setTimeout(() => {
-              $cardFront.classList.add("card-hidden");
+              $cardFront.classList.add("invisible");
               $cardFront.style.transitionDuration = "none";
               $cardFront.style.translate = `0px 0px 0px`;
               $cardFront.style.scale = 1;
@@ -593,10 +599,14 @@
         }, animationDuration + 1);
       }
 
-      $cardFront.addEventListener(mousedown, onMouseDown, false);
-      $cardFront.addEventListener(mousemove, onMouseMove, false);
-      $cardFront.addEventListener(mouseup, onMouseUp, false);
-      $cardFront.addEventListener("mouseleave", onMouseUp, false);
+      $gameArea.addEventListener(mousedown, onMouseDown, false);
+      $gameArea.addEventListener(mousemove, onMouseMove, false);
+      $gameArea.addEventListener(mouseup, onMouseUp, false);
+      $gameArea.addEventListener("mouseleave", onMouseUp, false);
+      // $cardFront.addEventListener(mousedown, onMouseDown, false);
+      // $cardFront.addEventListener(mousemove, onMouseMove, false);
+      // $cardFront.addEventListener(mouseup, onMouseUp, false);
+      // $cardFront.addEventListener("mouseleave", onMouseUp, false);
     </script>
   </body>
 </html>

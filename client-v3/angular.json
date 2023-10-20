@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "client-v3": {
+    "cards-against-humanity-angular-tests": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/client-v3",
+            "outputPath": "dist/cards-against-humanity-angular-tests",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -36,22 +36,16 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "50mb",
+                  "maximumError": "100mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "200kb",
+                  "maximumError": "10000kb"
                 }
               ],
               "outputHashing": "all"
@@ -71,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "client-v3:build:production"
+              "browserTarget": "cards-against-humanity-angular-tests:build:production"
             },
             "development": {
-              "browserTarget": "client-v3:build:development"
+              "browserTarget": "cards-against-humanity-angular-tests:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "client-v3:build"
+            "browserTarget": "cards-against-humanity-angular-tests:build"
           }
         },
         "test": {

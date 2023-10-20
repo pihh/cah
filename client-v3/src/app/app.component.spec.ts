@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'client-v3'`, () => {
+  it(`should have as title 'cards-against-humanity-angular-tests'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('client-v3');
+    expect(app.title).toEqual('cards-against-humanity-angular-tests');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('client-v3 app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('cards-against-humanity-angular-tests app is running!');
   });
 });

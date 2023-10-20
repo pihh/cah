@@ -1,0 +1,69 @@
+#app-header {
+  #app-header__game-action {
+    border-bottom: 1px solid white;
+    margin: 0 1em;
+    .app-header__game-action__container {
+      height: 72px;
+      overflow: hidden;
+      font-weight: bold;
+      .app-header__game-action__container__section {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        height: 72px;
+        overflow: hidden;
+        transition: all 0.2s;
+        &.message-container{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          div,img{
+            padding:0em 1em;
+            flex:1
+          }
+          img{
+            width: 1.5em;
+    height: 1.5em;
+          }
+        }
+        &.swiped-up{
+          transform:translateY(-72px)
+        }
+        &.opacity-none{
+          opacity:0
+        }
+      }
+    }
+  }
+  #app-header__game-state {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 44px;
+    div{
+      flex:1;
+      padding: 0 1em;
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+    }
+    .turn-timer{
+      text-align: center;
+      font-size: 2em !important;
+    }
+  }
+  .score-badge{
+    background: white;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 100%;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1em;
+  }
+}

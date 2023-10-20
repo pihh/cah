@@ -1,0 +1,69 @@
+<div
+  class="modal-results"
+  [class.hidden]="!isResultsShowing"
+  [class.entering]="isResultsEntering"
+  [class.leaving]="isResultsLeaving"
+>
+  <ul class="cards">
+    <li>
+      <div class="card-content placeholder">
+        <!-- <div class="card-body">
+        <h2>Placeholder</h2>
+        <img src="assets/images/logo-white.png" />
+      </div> -->
+
+        <div>
+          <div *ngFor="let i of [0, 1, 2, 3, 4, 5]" class="card-throw">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="marquee-container" *ngIf="i == 5">
+                  <div class="marquee">
+                    <div class="marquee__inner" aria-hidden="true">
+                      <span>Pihh</span>
+                      <span>Pihh</span>
+                      <span>Pihh</span>
+                      <span>Pihh</span>
+                    </div>
+                  </div>
+                  <div class="marquee">
+                    <div class="marquee__inner" aria-hidden="true">
+                      <span>Pihh</span>
+                      <span>Pihh</span>
+                      <span>Pihh</span>
+                      <span>Pihh</span>
+                    </div>
+                  </div>
+                </div>
+                <img src="assets/images/logo-white.png" />
+              </div>
+            </div>
+          </div>
+          <div class="card-throw">
+            <div class="card-content">
+              <div class="card-body">
+                <img src="assets/images/logo-white.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-question">
+          <div class="card-content">
+            <div class="card-body">
+              <h2>{{ question }}</h2>
+              <img src="assets/images/logo-black.png" />
+            </div>
+          </div>
+        </div>
+        <div class="card-answer">
+          <div class="card-content">
+            <div class="card-body">
+              <h2>{{ answer }}</h2>
+              <img src="assets/images/logo-white.png" />
+            </div>
+          </div>
+        </div>
+        <div class="firework" *ngIf="isResultsEntered"></div>
+      </div>
+    </li>
+  </ul>
+</div>

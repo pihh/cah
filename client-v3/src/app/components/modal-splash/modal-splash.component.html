@@ -1,0 +1,37 @@
+<div class="splash-transition-animation button-wrapper" [class.active]="active" [class.hidden]="isHidden">
+  <div class="button-container-2">
+    <span class="mas"></span>
+
+    <button type="button" name="Hover" [class.exit-in]="hidding" [class.exit-out]="hidden"></button>
+  </div>
+  <!-- <div class="button-container-2">
+    -- <button type="button" name="Hover" [class.exit-in]="hidding"></button> --
+  </div> -->
+</div>
+
+<div class="splash" [class.hidden]="hidden"  >
+  <section class="splash-logo">
+    <img src="/assets/images/box-front-black.jpeg" />
+  </section>
+  <!-- [class.display-none]="isInitialized" -->
+  <section class="splash-footer">
+    <div class="splash-loading" >
+
+      <app-icon-loading *ngIf="loading"></app-icon-loading>
+      <div *ngIf="!loading" class="splash-join-container">
+
+        <div class="splash-player-name" >
+          <h4>Welcome</h4>
+          <input [(ngModel)]="username" />
+        </div>
+        <div class="splash-join-game" >
+          <button (click)="join()">JOIN GAME</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="splash-disclaimer">* Unofficial game concept by Pihh.</div>
+  </section>
+</div>

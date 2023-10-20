@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+    />
+
+    <!-- <script src="./index.js"></script> -->
+    <title>Draggable site</title>
+    <style>
+      .swiper-3d .swiper-cube-shadow,
+      .swiper-3d .swiper-slide,
+      .swiper-3d .swiper-slide-shadow,
+      .swiper-3d .swiper-slide-shadow-bottom,
+      .swiper-3d .swiper-slide-shadow-left,
+      .swiper-3d .swiper-slide-shadow-right,
+      .swiper-3d .swiper-slide-shadow-top,
+      .swiper-3d .swiper-wrapper {
+        transform-style: preserve-3d;
+      }
+      .swiper-android .swiper-slide,
+      .swiper-wrapper {
+        transform: translate3d(0px, 0, 0);
+      }
+      .swiper-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        display: flex;
+        transition-property: transform;
+        box-sizing: content-box;
+      }
+
+      .sample-slider3 .swiper-slide {
+        border-radius: 20px;
+      }
+      .swiper-cards .swiper-slide {
+        transform-origin: center bottom;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        overflow: hidden;
+      }
+      .swiper-3d .swiper-cube-shadow,
+      .swiper-3d .swiper-slide,
+      .swiper-3d .swiper-slide-shadow,
+      .swiper-3d .swiper-slide-shadow-bottom,
+      .swiper-3d .swiper-slide-shadow-left,
+      .swiper-3d .swiper-slide-shadow-right,
+      .swiper-3d .swiper-slide-shadow-top,
+      .swiper-3d .swiper-wrapper {
+        transform-style: preserve-3d;
+      }
+      .swiper-slide {
+        width: 240px;
+        height: 300px;
+        background-color: white;
+        flex-shrink: 0;
+        /* width: 100%;
+        height: 100%; */
+        position: relative;
+        transition-property: transform;
+        border-radius: 1em;
+      }
+      .index {
+        margin: 0 auto;
+      }
+      .main {
+        width: 15em;
+        padding-left: 5em;
+      }
+      .touchpad {
+        width: 100%;
+        display: flex;
+      }
+      * {
+        user-select: none;
+      }
+      .swiper-slide:nth-child(1n) {
+        background-color: rgb(206, 17, 17);
+      }
+
+      .swiper-slide:nth-child(2n) {
+        background-color: rgb(0, 140, 255);
+      }
+
+      .swiper-slide:nth-child(3n) {
+        background-color: rgb(10, 184, 111);
+      }
+
+      .swiper-slide:nth-child(4n) {
+        background-color: rgb(211, 122, 7);
+      }
+
+      .swiper-slide:nth-child(5n) {
+        background-color: rgb(118, 163, 12);
+      }
+
+      .swiper-slide:nth-child(6n) {
+        background-color: rgb(180, 10, 47);
+      }
+
+      .swiper-slide:nth-child(7n) {
+        background-color: rgb(35, 99, 19);
+      }
+
+      .swiper-slide:nth-child(8n) {
+        background-color: rgb(0, 68, 255);
+      }
+
+      .swiper-slide:nth-child(9n) {
+        background-color: rgb(218, 12, 218);
+      }
+
+      .swiper-slide:nth-child(10n) {
+        background-color: rgb(54, 94, 77);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="touchpad">
+      <div class="index">
+        <div class="main">
+          <!-- <div id="picker" class="picker">
+          <div class="picker-wrapper"></div>
+        </div> -->
+          <div
+            class="swiper-wrapper"
+            id="swiper"
+            aria-live="polite"
+            style="cursor: grab"
+          >
+            <div
+              class="swiper-slide swiper-slide-visible swiper-slide-active"
+              style="
+                width: 240px;
+                z-index: 10;
+                transform: translate3d(0px, 0px, 0px) rotateZ(0deg);
+              "
+              role="group"
+              aria-label="1 / 10"
+            >
+              Slide 1
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 0"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide swiper-slide-next"
+              style="
+                width: 240px;
+                z-index: 9;
+                transform: translate3d(calc(-240px + 7.25%), 0px, -100px)
+                  rotateZ(2deg);
+              "
+              role="group"
+              aria-label="2 / 10"
+            >
+              Slide 2
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 8;
+                transform: translate3d(calc(-480px + 13%), 0px, -200px)
+                  rotateZ(4deg);
+              "
+              role="group"
+              aria-label="3 / 10"
+            >
+              Slide 3
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 7;
+                transform: translate3d(calc(-720px + 17.25%), 0px, -300px)
+                  rotateZ(6deg);
+              "
+              role="group"
+              aria-label="4 / 10"
+            >
+              Slide 4
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 6;
+                transform: translate3d(calc(-960px + 20%), 0px, -400px)
+                  rotateZ(8deg);
+              "
+              role="group"
+              aria-label="5 / 10"
+            >
+              Slide 5
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 5;
+                transform: translate3d(calc(-1200px + 20%), 0px, -400px)
+                  rotateZ(8deg);
+              "
+              role="group"
+              aria-label="6 / 10"
+            >
+              Slide 6
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 4;
+                transform: translate3d(calc(-1440px + 20%), 0px, -400px)
+                  rotateZ(8deg);
+              "
+              role="group"
+              aria-label="7 / 10"
+            >
+              Slide 7
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 3;
+                transform: translate3d(calc(-1680px + 20%), 0px, -400px)
+                  rotateZ(8deg);
+              "
+              role="group"
+              aria-label="8 / 10"
+            >
+              Slide 8
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              style="
+                width: 240px;
+                z-index: 2;
+                transform: translate3d(calc(-1920px + 20%), 0px, -400px)
+                  rotateZ(8deg);
+              "
+              role="group"
+              aria-label="9 / 10"
+            >
+              Slide 9
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+            <div
+              class="swiper-slide"
+              role="group"
+              aria-label="10 / 10"
+              style="
+                width: 240px;
+                z-index: 1;
+                transform: translate3d(calc(-2160px + 20%), 0px, -400px)
+                  rotateZ(8deg);
+              "
+            >
+              Slide 10
+              <div
+                class="swiper-slide-shadow swiper-slide-shadow-cards"
+                style="opacity: 1"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const TouchMouseEvent = {
+        DOWN: "touchmousedown",
+        UP: "touchmouseup",
+        MOVE: "touchmousemove",
+      };
+
+      // fn
+      (function () {
+        const slider = document.querySelector("#swiper");
+
+        // == EVENT LISTENERS ==
+        var onMouseEvent = function (event) {
+          var type;
+
+          switch (event.type) {
+            case "mousedown":
+              type = TouchMouseEvent.DOWN;
+              break;
+            case "mouseup":
+              type = TouchMouseEvent.UP;
+              break;
+            case "mousemove":
+              type = TouchMouseEvent.MOVE;
+              break;
+            default:
+              return;
+          }
+
+          var touchMouseEvent = normalizeEvent(
+            type,
+            event,
+            event.pageX,
+            event.pageY
+          );
+          console.log({ type });
+
+          switch (type) {
+            case TouchMouseEvent.DOWN:
+              onDown(touchMouseEvent);
+              break;
+            case TouchMouseEvent.UP:
+              onUp(touchMouseEvent);
+              break;
+            case TouchMouseEvent.MOVE:
+              onMove(touchMouseEvent);
+              break;
+            default:
+              return;
+          }
+          // $(event.target).trigger(touchMouseEvent);
+        };
+
+        var onTouchEvent = function (event) {
+          var type;
+
+          switch (event.type) {
+            case "touchstart":
+              type = TouchMouseEvent.DOWN;
+              break;
+            case "touchend":
+              type = TouchMouseEvent.UP;
+              break;
+            case "touchmove":
+              type = TouchMouseEvent.MOVE;
+              break;
+            default:
+              return;
+          }
+
+          var touch = event.touches[0];
+          var touchMouseEvent;
+
+          if (type == TouchMouseEvent.UP) {
+            touchMouseEvent = normalizeEvent(type, event, null, null);
+          } else {
+            touchMouseEvent = normalizeEvent(
+              type,
+              event,
+              touch.pageX,
+              touch.pageY
+            );
+          }
+
+          console.log({ touchMouseEvent });
+          switch (type) {
+            case TouchMouseEvent.DOWN:
+              onDown(touchMouseEvent);
+              break;
+            case TouchMouseEvent.UP:
+              onUp(touchMouseEvent);
+              break;
+            case TouchMouseEvent.MOVE:
+              onMove(touchMouseEvent);
+              break;
+            default:
+              return;
+          }
+          // $(event.target).trigger(touchMouseEvent);
+        };
+
+        // == NORMALIZE ==
+        var normalizeEvent = function (type, original, x, y) {
+          return { type, x, y, original };
+        };
+
+        let totalDistanceX = 0;
+        let totalDistanceY = 0;
+        let sessionDistanceX = 0;
+        let sessionDistanceY = 0;
+        let lastPositionX = 0;
+        let lastPositionY = 0;
+
+        let index = 0;
+        let threshold_x = 400;
+        let threshold_y = 200;
+
+        function onDown(event) {
+ 
+          sessionDistanceX = 0
+          sessionDistanceY = 0;
+          lastPositionX = event.x;
+          lastPositionY = event.y;
+          addMoveEventListener();
+        }
+
+        function onMove(event) {
+          event.original.stopPropagation();
+          let distanceX = event.x - lastPositionX;
+          let distanceY = event.y - lastPositionY;
+          totalDistanceX += distanceX;
+          totalDistanceY += distanceY;
+          sessionDistanceX += distanceX;
+          sessionDistanceY += distanceY;
+          lastPositionX = event.x;
+          lastPositionY = event.y;
+
+          // if (totalDistanceX > 11 * 400) {
+          //   totalDistanceX = 11 * 400;
+          // }
+          // if (totalDistanceX < 0) {
+          //   totalDistanceX = 0;
+          // }
+
+          console.log(sessionDistanceX/400, sessionDistanceY)
+          let percentage = sessionDistanceX/400
+          animate(5,percentage)
+          // index = Math.floor(totalDistanceX/400)
+
+          // animate(index,sessionDistanceX)
+
+          // let index = Math.floor(totalDistanceX / threshold_x);
+          // let percentage =
+          //   1 - (totalDistanceX - threshold_x * index) / threshold_x;
+
+          // if (index == 0) {
+          //   animation(index, percentage);
+          //   //Array.from(document.querySelectorAll('.swiper-slide'))[0].style.transform= `translate3d( calc( 0px + ${transformX}% ), 0px, ${transformZ}px) rotateZ(${rotateZ}deg) `
+          // }
+
+          //Array.from(document.querySelectorAll('.swiper-slide'))[0].style.transform= `translate3d( calc( 0px + ${(Math.abs(totalDistanceX) % threshold_x)/20}% ), ${(Math.abs(totalDistanceX) % threshold_x)/20}%, 0px) rotateZ(0deg) `
+          //console.log({totalDistanceX, totalDistanceY})
+          // console.log('onMove',event.x,event.y)
+        }
+
+        function onUp(event) {
+          event.original.stopPropagation();
+          removeMoveEventListener();
+        }
+        /*
+              function animation(index,percentage){
+                let from = ANIMATIONS[0].from;
+                let mid = ANIMATIONS[0].mid;
+                let to = ANIMATIONS[0].to;
+
+                let f = from;
+                let t = mid;
+                if(percentage > 0.5){
+                  percentage-=0.5 ;
+                  percentage*=2
+                  f = mid;
+                  t = to
+                }else{
+                  //percentage-=0.5 ;
+                  percentage*=2
+                }
+                for(let i in Array.from(document.querySelectorAll(".swiper-slide"))){
+                  console.log({i,f,t})
+                  i = parseInt(i)
+                  let card = Array.from(document.querySelectorAll(".swiper-slide"))[i]
+                  console.log(t[i].transform)
+                  let transformStart = f[i].translate[0]//f[i].transform.split('calc(')[1].split(')')[0].split(', ').map(el => el.replace('px',"").replace('%',""))
+                  let transformEnd = t[i].translate[0]//t[i].transform.split('calc(')[1].split(')')[0].split(', ').map(el => el.replace('px',"").replace('%',""))
+                  let translateX1 = f[i].translate[0] + (Number(f[i].translate[0]- t[i].translate[0]))*percentage
+                  let translateX2 = f[i].translate[1] + (Number(f[i].translate[1]- t[i].translate[1]))*percentage
+                  let translateX3 = f[i].translate[2] + (Number(f[i].translate[2]- t[i].translate[2]))*percentage
+                  let rotateZ = f[i].rotate + (Number(f[i].rotate - t[i].rotate))*percentage
+                  //let  rotateZ= Number(transformStart[2]) + (Number(transformStart[2]) - Number(transformEnd[2]))*percentage
+                  card.style.transform = `translate3d(calc(${translateX1}px, ${translateX2}%), 0px, ${translateX3}px) rotateZ(${rotateZ}deg) `
+                  console.log(`translate3d(calc(${translateX1}px, ${translateX2}%), 0px, ${translateX3}px) rotateZ(${rotateZ}deg) `)
+
+                }
+              }*/
+
+        if ("ontouchstart" in window) {
+          slider.addEventListener("touchstart", onTouchEvent);
+          function addMoveEventListener() {
+            slider.addEventListener("touchmove", onTouchEvent);
+          }
+          function removeMoveEventListener() {
+            slider.removeEventListener("touchmove", onTouchEvent);
+          }
+          // slider.addEventListener("touchmove", onTouchEvent);
+          slider.addEventListener("touchend", onTouchEvent);
+        } else {
+          slider.addEventListener("mousedown", onMouseEvent);
+          function addMoveEventListener() {
+            console.log("xxx");
+            document
+              .querySelector("html")
+              .addEventListener("mousemove", onMouseEvent);
+            document
+              .querySelector("html")
+              .addEventListener("mouseup", onMouseEvent);
+          }
+          function removeMoveEventListener() {
+            console.log("yyy");
+            document
+              .querySelector("html")
+              .removeEventListener("mousemove", onMouseEvent);
+            document
+              .querySelector("html")
+              .removeEventListener("mouseup", onMouseEvent);
+          }
+          // slider.addEventListener("mousemove", onMouseEvent);
+        }
+      })();
+
+
+      const animate = function(index ,percentage){
+        if(percentage<0){
+          index-=1
+          percentage = 1-percentage
+        }
+        let from = ANIMATIONS[index]
+        let to = ANIMATIONS[index+1]
+        console.log({from,to})
+        let cards = [...document.querySelectorAll(".swiper-slide")];
+        for(let i = 0 ; i < 10; i++){
+          let translateX1 =from[i].translate[0] +  (from[i].translate[0]- to[i].translate[0])*percentage
+          let translateX2 =from[i].translate[2] +  (from[i].translate[2]- to[i].translate[2])*percentage
+          let translateZ =from[i].translate[4] +  (from[i].translate[4]- to[i].translate[4])*percentage
+          let rotateZ =from[i].rotation +  (from[i].rotation- to[i].rotation)*percentage
+
+          cards[i].style.transform = `translate3d(calc(${translateX1}px + ${translateX2}%), 0px, ${translateZ}px) rotateZ(${rotateZ}deg)`
+          if(percentage > 0.5){
+            cards[i].style.zIndex = Z_INDEXS[1][i]
+          }else{
+            cards[i].style.zIndex = Z_INDEXS[0][i]
+          }
+       
+         // console.log({percentage,direction,str:`translate3d(calc(${translateX1}px + ${translateX2}%), 0px, ${translateZ}px) rotateZ(${rotateZ}deg)`})
+        }
+        /*
+        let percentage = Math.abs(sessionDistanceX / 400)
+        let direction= Math.sign(sessionDistanceX)
+        // if(sessionDistanceX < 0){
+        //   let from = ANIMATIONS[1]
+        //   let to = ANIMATIONS[0]
+        // }else{
+        //   let from = ANIMATIONS[0]
+        //   let to = ANIMATIONS[1]
+
+        // }
+        let from = ANIMATIONS[index]
+        let to = ANIMATIONS[index+1]
+        if(direction == 1){
+           from = ANIMATIONS[index]
+           to = ANIMATIONS[index+1]
+        }
+        let cards = [...document.querySelectorAll(".swiper-slide")];
+        for(let i = 0 ; i < 10; i++){
+          let translateX1 =from[i].translate[0] +  (from[i].translate[0]- to[i].translate[0])*percentage
+          let translateX2 =from[i].translate[2] +  (from[i].translate[2]- to[i].translate[2])*percentage
+          let translateZ =from[i].translate[4] +  (from[i].translate[4]- to[i].translate[4])*percentage
+          let rotateZ =from[i].rotation +  (from[i].rotation- to[i].rotation)*percentage
+
+          cards[i].style.transform = `translate3d(calc(${translateX1}px + ${translateX2}%), 0px, ${translateZ}px) rotateZ(${rotateZ}deg)`
+          if(percentage > 0.5){
+            cards[i].style.zIndex = Z_INDEXS[1][i]
+          }else{
+            cards[i].style.zIndex = Z_INDEXS[0][i]
+          }
+       
+          console.log({percentage,direction,str:`translate3d(calc(${translateX1}px + ${translateX2}%), 0px, ${translateZ}px) rotateZ(${rotateZ}deg)`})
+        }
+        */
+      }
+
+      let animationIndex = -1;
+      const animation = function (direction = 1) {
+        animationIndex += direction;
+        let cards = [...document.querySelectorAll(".swiper-slide")];
+        for (let i = 0; i < 10; i++) {
+          console.log(ANIMATIONS[animationIndex][i])
+          // console.log(cards[i],i)
+          const _transform = `translate3d(calc(${ANIMATIONS[animationIndex][i].translate[0]}px + ${ANIMATIONS[animationIndex][i].translate[2]}%), 0px, ${ANIMATIONS[animationIndex][i].translate[4]}px) rotateZ(${ANIMATIONS[animationIndex][i].rotation}deg)`
+          console.log(_transform)
+          cards[i].style.transform = _transform;
+          cards[i].style.zIndex = Z_INDEXS[animationIndex][i];
+          // ANIMATIONS[animationIndex].to;
+        }
+      };
+      let Z_INDEXS = [
+        [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+        [9, 10, 9, 8, 7, 6, 5, 4, 3, 2],
+        [8, 9, 10, 9, 8, 7, 6, 5, 4, 3],
+        [7, 8, 9, 10, 9, 8, 7, 6, 5, 4],
+        [6, 7, 8, 9, 10, 9, 8, 7, 6, 5],
+        [5, 6, 7, 8, 9, 10, 9, 8, 7, 6],
+        [4, 5, 6, 7, 8, 9, 10, 9, 8, 7],
+        [3, 4, 5, 6, 7, 8, 9, 10, 9, 8],
+        [2, 3, 4, 5, 6, 7, 8, 9, 10, 9],
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      ];
+
+      // parseInt("translate3d(calc(0px, + 0%) 0px, 0px) rotateZ(-8deg) ".split('rotateZ(')[1])
+      //"translate3d(calc(0px, + 0%) 0px, 0px) rotateZ(-8deg) ".split('calc(')[1].split(') ro')[0].split(' ').map(el=>parseInt(el)).filter(el => el!= null)
+      let ANIMATIONS = [
+        [
+          "translate3d(calc(0px, + 0%) 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-240px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-480px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-720px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+          "translate3d(calc(-960px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1200px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1440px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1680px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-2160px + 20%), 0px, -400px) rotateZ(8deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-240px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-480px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-720px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-960px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+          "translate3d(calc(-1200px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1440px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1680px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-2160px + 20%), 0px, -400px) rotateZ(8deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-240px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-480px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-720px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-960px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-1200px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+          "translate3d(calc(-1440px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1680px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-2160px + 20%), 0px, -400px) rotateZ(8deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-240px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-480px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-720px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-960px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-1200px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-1440px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+          "translate3d(calc(-1680px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-2160px + 20%), 0px, -400px) rotateZ(8deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-240px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-480px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-720px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-960px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-1200px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-1440px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-1680px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+          "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+          "translate3d(calc(-2160px + 20%), 0px, -400px) rotateZ(8deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-240px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-480px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-720px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-960px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-1200px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-1440px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-1680px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-1920px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+          "translate3d(calc(-2160px + 20%), 0px, -400px) rotateZ(8deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-240px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-480px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-720px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-960px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-1200px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-1440px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-1680px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-1920px + 13%), 0px, -200px) rotateZ(4deg) ",
+          "translate3d(calc(-2160px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-240px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-480px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-720px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-960px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-1200px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-1440px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-1680px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-1920px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+          "translate3d(calc(-2160px + 13%), 0px, -200px) rotateZ(4deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-240px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-480px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-720px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-960px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-1200px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-1440px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-1680px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-1920px + 0%), 0px, 0px) rotateZ(0deg) ",
+          "translate3d(calc(-2160px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+        ],
+        [
+          "translate3d(calc(0px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-240px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-480px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-720px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-960px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-1200px + -20%), 0px, -400px) rotateZ(-8deg) ",
+          "translate3d(calc(-1440px + -17.25%), 0px, -300px) rotateZ(-6deg) ",
+          "translate3d(calc(-1680px + -13%), 0px, -200px) rotateZ(-4deg) ",
+          "translate3d(calc(-1920px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+          "translate3d(calc(-2160px + 0%), 0px, 0px) rotateZ(0deg) ",
+        ],
+      ];
+
+      let getRotation = function(str){
+   return parseInt(str.split('rotateZ(')[1])
+ }
+ let getTranslate = function(str){
+  	return  str.split('calc(')[1].split(') ro')[0].split(' ').map(el=>parseFloat(el)).filter(el => el!= null)
+ }
+      ANIMATIONS = ANIMATIONS.map((el) => {
+        return el.map((_el) => {
+          return {
+            rotation: getRotation(_el),
+            translate: getTranslate(_el),
+          };
+        });
+      });
+      /*
+      // POSITION 0
+      [
+          {
+              "transform": "translate3d(0px, 0px, 0px) rotateZ(0deg) ",
+              "zIndex":9
+          },
+          {
+              "transform": "translate3d(calc(-240px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+              "zIndex":8
+          },
+          {
+              "transform": "translate3d(calc(-480px + 13%), 0px, -200px) rotateZ(4deg) ",
+              "zIndex":7
+          },
+          {
+              "transform": "translate3d(calc(-720px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+              "zIndex":6
+          },
+          {
+              "transform": "translate3d(calc(-960px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":5
+          },
+          {
+              "transform": "translate3d(calc(-1200px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":4
+          },
+          {
+              "transform": "translate3d(calc(-1440px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":3
+          },
+          {
+              "transform": "translate3d(calc(-1680px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":2
+          },
+          {
+              "transform": "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":1
+          }
+      ]
+
+      // POSITION 1
+
+      [
+          {
+              "transform": "translate3d(calc(0px + -7.25%), 0px, -100px) rotateZ(-2deg) ",
+              "zIndex":8
+          },
+          {
+              "transform": "translate3d(-240px, 0px, 0px) rotateZ(0deg) ",
+              "zIndex":9
+          },
+          {
+              "transform": "translate3d(calc(-480px + 7.25%), 0px, -100px) rotateZ(2deg) ",
+              "zIndex":8
+          },
+          {
+              "transform": "translate3d(calc(-720px + 13%), 0px, -200px) rotateZ(4deg) ",
+              "zIndex":7
+          },
+          {
+              "transform": "translate3d(calc(-960px + 17.25%), 0px, -300px) rotateZ(6deg) ",
+              "zIndex":6
+          },
+          {
+              "transform": "translate3d(calc(-1200px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":5
+          },
+          {
+              "transform": "translate3d(calc(-1440px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":4
+          },
+          {
+              "transform": "translate3d(calc(-1680px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":3
+          },
+          {
+              "transform": "translate3d(calc(-1920px + 20%), 0px, -400px) rotateZ(8deg) ",
+              "zIndex":2
+          }
+      ]
+
+          */
+    </script>
+    <!--
+    <script>
+      const THRESHOLD_X = 100;
+      const THRESHOLD_Y = 150;
+      const LIMIT_X = 200;
+
+      const TEMPLATE = function (index) {
+        const $container = document.createElement("div");
+        const $content = document.createElement("div");
+
+        $container.classList.add("cell");
+        $container.classList.add("game-player-card");
+        $content.classList.add("cell-content");
+        $content.innerHTML = `Card #${index}`;
+        $container.appendChild($content);
+        return $container;
+      };
+
+      const $wrapper = document.querySelector(".picker-wrapper");
+
+      for (let i = 0; i < 10; i++) {
+        $wrapper.appendChild(TEMPLATE(i + 1));
+      }
+
+      // Slight acceleration from zero to full speed
+      function easeInSine(t) {
+        return -1 * Math.cos(t * (Math.PI / 2)) + 1;
+      }
+
+      // Slight deceleration at the end
+      function easeOutSine(t) {
+        return Math.sin(t * (Math.PI / 2));
+      }
+
+      // Accelerating from zero velocity
+      function easeInCubic(t) {
+        return t * t * t;
+      }
+
+      // Decelerating to zero velocity
+      function easeOutCubic(t) {
+        const t1 = t - 1;
+        return t1 * t1 * t1 + 1;
+      }
+
+      let mousedown = "mousedown";
+      let mouseup = "mouseup";
+      let mousemove = "mousemove";
+
+      let getMousePosition = function (e) {
+        return { x: e.screenX, y: e.screenY };
+      };
+      function isTouchDevice() {
+        return (
+          "ontouchstart" in window 
+        );
+      }
+      let defineMouseEvents = function () {
+        
+        if (isTouchDevice()) {
+          
+          mousedown = "touchstart";
+          mouseup = "touchend";
+          mousemove = "touchmove";
+          getMousePosition = function (e) {
+            return { x: e.touches[0].screenX, y: e.touches[0].screenY };
+          };
+        }
+      };
+
+      defineMouseEvents();
+
+      const $cards = [...$wrapper.querySelectorAll(".game-player-card")];
+      const $cardsData = $cards.map((el) => el.innerText);
+      const $originalCardStyles = $cards.map((el) => {
+        let translate = getComputedStyle(el)
+          .translate.split("px")
+          .map((el) => parseInt(el || 0));
+        let tx = translate[0] || 0;
+        let ty = translate[1] || 0;
+        let tz = translate[2] || 0;
+        return {
+          translate: [tx, ty, tz],
+          scale: parseFloat(getComputedStyle(el).scale),
+          opacity: 1,
+        };
+      });
+
+      const $gameArea = TEMPLATE(-1)
+      $gameArea.classList.add('card-hidden')
+      
+      $wrapper.insertBefore($gameArea,$wrapper.firstChild)
+      let $cardFront = $cards[0];
+      let $cardNext = $cards[1];
+
+      function setCardOriginalStyles(
+        i,
+        percentageX = 0,
+        animationDuration = -1
+      ) {
+        if (animationDuration > 0) {
+          $cards[i].style.transition = `all ${animationDuration}ms`;
+        }
+        let cardTransformX = $originalCardStyles[i].translate[0];
+        let cardTransformY =
+          $originalCardStyles[i].translate[1] - 10 * percentageX;
+        let cardTransformZ = $originalCardStyles[i].translate[2];
+        let cardScale = 0.02 * percentageX + $originalCardStyles[i].scale;
+        $cards[
+          i
+        ].style.translate = `${cardTransformX}px ${cardTransformY}px ${cardTransformZ}px`;
+        $cards[i].style.scale = cardScale;
+      }
+
+      let activeCard = 0;
+
+      let startX;
+      let lastX;
+      let endX;
+      let lastDistanceX = 0;
+      let totalDistanceX = 0;
+      let isTransitioning = false;
+      let percentageX = 0;
+
+      let lastDistanceY = 0;
+      let totalDistanceY = 0;
+      let startY = 0;
+      let percentageY = 0;
+
+      let isMouseDown = false;
+
+      function onMouseDown(e) {
+        // console.log("onMouseDown", e);
+        if (isMouseDown) return;
+        if (isTransitioning) return;
+        isMouseDown = true;
+        let { x, y } = getMousePosition(e);
+        startX = x;
+        lastX = x;
+        totalDistanceX = 0;
+        percentageX = 0;
+        startY = y;
+        lastY = y;
+        totalDistanceY = 0;
+        percentageY = 0;
+      }
+      function onMouseMove(e) {
+        if (!isMouseDown) return;
+        if (isTransitioning) return;
+        let { x, y } = getMousePosition(e);
+        lastDistanceX = x - lastX;
+        lastX = x;
+        totalDistanceX += lastDistanceX;
+        lastDistanceY = y - lastY;
+        lastY = y;
+        totalDistanceY += lastDistanceY;
+
+        let opacity = 1;
+
+        let scale = 1;
+        let rotation = 0;
+        let translateY = 0;
+        let absDistanceX = Math.abs(totalDistanceX);
+        if (absDistanceX > 100) {
+          opacity = Math.min(
+            1,
+            Math.max(0, (100 - (absDistanceX - 100) / 2) / 100)
+          );
+          percentageX = 1 - opacity;
+          scale = 1 - opacity / 100;
+          rotation = 10 - opacity * 10 * Math.sign(totalDistanceX);
+          // translateY =
+          //   25 * Math.sign(totalDistanceX) -
+          //   opacity * 25 * Math.sign(totalDistanceX);
+
+          for (let i = 1; i < $cards.length; i++) {
+            let cardTransformX = $originalCardStyles[i].translate[0];
+            let cardTransformY =
+              $originalCardStyles[i].translate[1] - 10 * percentageX;
+            let cardTransformZ = $originalCardStyles[i].translate[2];
+            let cardScale = 0.02 * percentageX + $originalCardStyles[i].scale;
+            $cards[
+              i
+            ].style.translate = `${cardTransformX}px ${cardTransformY}px ${cardTransformZ}px`;
+            $cards[i].style.scale = cardScale;
+
+            // $cards[i].
+          }
+        }
+
+        let translateX = `${totalDistanceX}px`;
+        translateY = `${totalDistanceY}px`; // `translateY(${translateY}px)`
+        rotation = ""; // `rotate(${rotation}deg)`
+
+        $cardFront.style.translate = `${translateX} ${translateY} `;
+        $cardFront.style.opacity = opacity;
+        $cardFront.style.scale = scale;
+        //let cardOpacity = Math.max(100,100-Math.abs(totalDistanceX))/100;
+
+        if (absDistanceX > LIMIT_X + THRESHOLD_X) {
+          onMouseUp();
+          return;
+        }
+        // totalDistanceX = Math.max(0, Math.min(1000, totalDistanceX));
+        // //totalDistanceX = totalDistanceX % 1000; //Math.max(0,Math.min(100,totalDistanceX));
+        // let percentage = totalDistanceX / 1000; //.max(0,Math.min(1,totalDistanceX / 1000));
+      }
+      function onMouseUp(e) {
+        if (!isMouseDown) return;
+
+        //let x = getMousePosition(e);
+        if (Math.abs(totalDistanceX) > THRESHOLD_X) {
+          if (totalDistanceX > 0) {
+            swipeRight();
+          } else {
+            swipeLeft();
+          }
+        } else {
+          if (totalDistanceY * -1 > THRESHOLD_Y) {
+            swipeUp();
+          } else {
+            resetCards();
+          }
+        }
+
+        // endX = x;
+        // lastX = x;
+        // isMouseDown = false;
+
+        // Do something
+      }
+
+      function swipeLeft() {
+        console.log("swipe left");
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd(true);
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function swipeRight() {
+        console.log("swipe right");
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd(true);
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function swipeUp() {
+        console.log("swipe up");
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd(true, true);
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function resetCards() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        setTimeout(() => {
+          onTransitionEnd();
+          //isTransitioning = false;
+          // isMouseDown = false;
+        }, 100);
+      }
+
+      function onTransitionEnd(hasSwiped = false, y = false) {
+        let percentageDistanceX =
+          (Math.max(
+            0,
+            Math.min(THRESHOLD_X + LIMIT_X, Math.abs(totalDistanceX))
+          ) /
+            (THRESHOLD_X + LIMIT_X) +
+            Math.max(0, Math.min(THRESHOLD_Y, Math.abs(totalDistanceY))) /
+              THRESHOLD_Y) /
+          2;
+
+        let animationDuration = percentageDistanceX;
+        if (hasSwiped) {
+          animationDuration = 1 - percentageDistanceX;
+        }
+
+        animationDuration = animationDuration * 500;
+
+        if (hasSwiped) {
+          // Swipe card to it's direction
+          // Scale others accordingly
+          // Switch card info in the end of animation
+          // Remove all animation durations
+
+          // SWIPE Y
+          if (y) {
+            let $cardFrontTranslateY = -window.innerHeight + totalDistanceY;
+            $cardFront.style.transition = `all ${animationDuration}ms`;
+            $cardFront.style.translate = `0 ${$cardFrontTranslateY}px `;
+            $cardFront.style.scale = 1;
+            $cardFront.style.opacity = 0.5;
+
+            for (let i = 1; i < $cards.length; i++) {
+              let $card = $cards[i];
+              $card.style.transition = `all ${animationDuration}ms`;
+              $card.style.translate = `0 ${
+                $originalCardStyles[i].translate[1] - 10
+              }px 0`;
+              $card.style.scale = $originalCardStyles[i].scale + 0.02;
+              $card.style.opacity = 1;
+            }
+
+            activeCard += 1;
+            activeCard = activeCard % 10;
+            let nextCard = activeCard + 1;
+            nextCard = nextCard % 10;
+
+            setTimeout(() => {
+              $cardFront.classList.add("invisible");
+              $cardFront.style.transitionDuration = "none";
+              $cardFront.style.translate = `0px 0px 0px`;
+              $cardFront.style.scale = 1;
+              $cardFront.style.opacity = 1;
+              $cardFront.querySelector(".cell-content").innerHTML =
+                $cardsData[activeCard];
+              $cardNext.querySelector(".cell-content").innerHTML =
+                $cardsData[nextCard];
+            }, Math.max(0, animationDuration));
+          } else {
+            // SWIPE X
+            let sign = 1;
+            if (totalDistanceX < 0) {
+              sign = -1;
+            }
+            let $cardFrontTranslateX = sign * 300;
+            $cardFront.style.transition = `all ${animationDuration}ms`;
+            $cardFront.style.translate = `${$cardFrontTranslateX}px `;
+            $cardFront.style.scale = 0.9;
+            $cardFront.style.opacity = 0;
+
+            for (let i = 1; i < $cards.length; i++) {
+              let $card = $cards[i];
+              $card.style.transition = `all ${animationDuration}ms`;
+              $card.style.translate = `0 ${
+                $originalCardStyles[i].translate[1] - 10
+              }px 0`;
+              $card.style.scale = $originalCardStyles[i].scale + 0.02;
+              $card.style.opacity = 1;
+            }
+
+            activeCard += 1;
+            activeCard = activeCard % 10;
+            let nextCard = activeCard + 1;
+            nextCard = nextCard % 10;
+
+            setTimeout(() => {
+              $cardFront.style.transitionDuration = "none";
+              $cardFront.style.translate = `0px 0px 0px`;
+              $cardFront.style.scale = 1;
+              $cardFront.style.opacity = 1;
+              $cardFront.querySelector(".cell-content").innerHTML =
+                $cardsData[activeCard];
+              $cardNext.querySelector(".cell-content").innerHTML =
+                $cardsData[nextCard];
+            }, Math.max(0, animationDuration));
+          }
+        } else {
+          // Swipe card back to it's place
+          // Unscale others
+          // Remove all animation durations
+
+          for (let i = 0; i < $cards.length; i++) {
+            $card = $cards[i];
+
+            setCardOriginalStyles(i, 1, animationDuration);
+          }
+        }
+
+        setTimeout(() => {
+          for (let i = 0; i < $cards.length; i++) {
+            $card = $cards[i];
+            $card.style.transition = "none";
+          }
+
+          isTransitioning = false;
+          console.log("animation finished");
+          isMouseDown = false;
+        }, animationDuration + 1);
+      }
+
+      $gameArea.addEventListener(mousedown, onMouseDown, false);
+      $gameArea.addEventListener(mousemove, onMouseMove, false);
+      $gameArea.addEventListener(mouseup, onMouseUp, false);
+      $gameArea.addEventListener("mouseleave", onMouseUp, false);
+      // $cardFront.addEventListener(mousedown, onMouseDown, false);
+      // $cardFront.addEventListener(mousemove, onMouseMove, false);
+      // $cardFront.addEventListener(mouseup, onMouseUp, false);
+      // $cardFront.addEventListener("mouseleave", onMouseUp, false);
+    </script>
+    -->
+  </body>
+</html>

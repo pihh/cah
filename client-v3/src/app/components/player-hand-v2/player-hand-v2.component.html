@@ -1,0 +1,31 @@
+
+<div
+  class="player-hand"
+  (pan)="onPan($event)"
+  (panStart)="onPanStart($event)"
+  (panEnd)="onPanEnd($event)"
+
+>
+  <div
+  *ngFor="let card of cards; let i = index"
+  class="card card-stack"
+  [style.transform]="getCardTimelineTransform(i)"
+  [class.animated-out]="isSelectingCard"
+  [class.selected]="i == selectedCardIndex"
+  [class.animated-in]="isEnteringCard"
+  [class.animated-change]="onTransitioning(i)"
+  (click)="onSelectCard(i)"
+
+>
+  <div class="card-content">
+
+    <p>
+      {{ card.text  }}
+    </p>
+    <div>
+      <img src="assets/images/logo-white.png" />
+    </div>
+  </div>
+</div>
+
+</div>

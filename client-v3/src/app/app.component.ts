@@ -1,256 +1,395 @@
-import { Component,isDevMode  } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+
+import { GAME, PLAYER } from './data/game.data';
+import { animationSplashLeave } from './animations/splash';
+import { animationPageAnswerEnter, animationPageAnswerLeave } from './animations/answer';
+import { animationPageVoteEnter, animationPageVoteLeave } from './animations/vote';
+import { getCardVisibility, getTranslate, onConfirm, onDiscard, onPanEnd, onPanMove, onPanStart, onSwipe } from './animations/pan';
+import { pageResultsEnter, pageResultsLeave } from './animations/results';
 import { GameService } from './services/game.service';
-import { Router } from '@angular/router';
-import { environment } from '../environments/environment';
+import { LogService } from './services/log.service';
+import { VOICE } from './data/events.data';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent {
-  title = 'client-v3';
-  resultQuestion = "What is a must-have at a children's party?";
-  resultAnswer = 'Carlos Cruz';
+  @ViewChild("playerHandSlider") playerHandSlider!: ElementRef;
+  @ViewChild("voteListSlider") voteListSlider!: ElementRef;
 
-  transitionToVotePageSubscription: any;
-  transitionToGamePageSubscription: any;
 
-  gameUpdateSubscription: any;
-  playerUpdateSubscription: any;
+  public player: any = PLAYER
+  public game: any = GAME
 
-  player: any = {
-    hand: [],
-  };
-  constructor(public gameService: GameService, public router: Router) {
-    this.isFirstTime();
+  // APPLICATION STATE
+  public controls: boolean = false;
+  public isTransitioning = false;
+  public isInitialized: boolean = false;
+  public currentGamePage = "";
+  public hasPlayer = false;
+  public hasGame = false;
+  public gameState: string = "state-loading"
 
-  }
+  public handHidden = true
+  public voteHidden = true;
 
-  isTransitioningModal = false;
-  modalShowing: boolean = false;
-  modalWhiteBg: boolean = false;
-  modalShowingState = 'in';
-  modalSeparatorShowing = true;
-  modalMode = 'text';
-  modalCardShowing: boolean = false;
 
-  openModal(mode = 'text', callback?: any) {
-    if (this.isTransitioningModal) return;
-    this.isTransitioningModal = true;
+  // HEADER STATE
+  public isShowingAction: boolean = false;
+  public headerMessage: string = "Swipe up."
+  public pageMessage: boolean | string = false;
 
-    this.modalMode = mode;
-    this.modalShowing = true;
-    setTimeout(() => {
-      this.modalWhiteBg = true;
-      this.closeSeparator();
 
-      setTimeout(() => {
-        this.modalShowingState = '';
+  // SUBSCRIPTIONS
+  public playerUpdateSubscription: any;
+  public gameUpdateSubscription: any;
+  public audioSubscription: any;
 
-        this.openCards();
 
-        setTimeout(() => {
-          this.isTransitioningModal = false;
-          if (callback) callback();
-        }, 4000);
-      }, 300);
-    }, 700);
-  }
-  closeModal(mode = 'text') {
-    if (this.isTransitioningModal) return;
-    this.isTransitioningModal = true;
-    this.modalMode = mode;
-    this.modalShowingState = 'out';
+  constructor(public gameService: GameService, public logService: LogService) {
+    // Voice messages
 
-    this.closeCards();
-    setTimeout(() => {
-      this.openSeparator();
-      setTimeout(() => {
-        this.modalWhiteBg = false;
-        this.modalShowing = false;
-
-        setTimeout(() => {
-          this.modalShowingState = 'in';
-          this.isTransitioningModal = false;
-        }, 700);
-      }, 200);
-    }, 100);
-  }
-
-  openCards() {
-    this.modalCardShowing = true;
-  }
-  closeCards() {
-    this.modalCardShowing = false;
-  }
-
-  openSeparator() {
-    this.modalSeparatorShowing = true;
-  }
-  closeSeparator() {
-    this.modalSeparatorShowing = false;
-  }
-
-  public isFirstTime() {
-    const username = this.gameService.username;
-    const uuid = this.gameService.connection;
-    if (username == '' || uuid == '') {
-      this.router.navigate(['/game']);
-      return true;
-    }
-    return false;
-  }
-
-  ngOnInit() {
-    console.log({dev:isDevMode(),environment})
-    this.transitionToVotePageSubscription = this.gameService
-      .getTransitionToVotePageEmiter()
-      .subscribe(() => this.enterVotePage());
-
-    this.transitionToGamePageSubscription = this.gameService
-      .getTransitionToGamePageEmiter()
-      .subscribe(() => this.enterResultPage());
-
-    /*
-
-    this.gameService.onAudio().subscribe((data:any)=>{
-      // console.log('onAudio', { data });
-      var audio = new Audio(data);
-      audio.play();
-    })
-    */
-    let state = '';
-
-    this.gameService.onUpdate().subscribe((data: any) => {
-      let canRedirect = true;
-      if (this.router.url == '/login') {
-        canRedirect = false;
-      }
+    this.audioSubscription = this.gameService.onVoiceMessage().subscribe((data: any) => {
       try {
-        // console.log('onUpdate', { data ,state:data.episode.state});
-        console.log(data)
-        if (data && data?.episode?.state !== state) {
-          state = data.episode.state;
-          try {
-            this.resultQuestion =
-              data.history[data.history.length - 1].result.question.text;
-            this.resultAnswer =
-              data.history[data.history.length - 1].result.answer.text;
-          } catch (ex) {}
-          if (state === 'vote') {
-            if (canRedirect) {
-              this.enterVotePage();
-            }
-          } else if (state === 'results') {
-            if (canRedirect) {
-              this.enterResultPage();
-            }
-          } else {
-            if (canRedirect) {
-              this.router.navigate(['/game']);
+        console.log('audio recieved', data)
+
+      } catch (e) {
+      }
+    })
+    // Game messages
+    this.gameUpdateSubscription = this.gameService.onUpdate().subscribe((data: any) => {
+
+      try {
+
+        if (typeof data == 'object' && data) {
+
+
+          const state = data.episode.state;
+          const eventName = data?.eventName || "answer"
+
+          this.resetCounter(data.episode.timeout);
+          if (data.episode.state !== this.currentGamePage) {
+            this.currentGamePage = state;
+            if (state === "answer") {
+              if (eventName === "reset-countdown") {
+                this.resetCounter();
+              }
+
+              this.pageAnswerEnter()
+            } else if (state === "vote") {
+              if (eventName === "reset-countdown") {
+                this.resetCounter();
+              }
+              this.pageVoteEnter()
+            } else if (state === "results") {
+              this.pageResultsEnter()
             }
           }
+          this.game = data;
         }
       } catch (ex) {
-        console.warn(ex);
+        console.warn(ex)
+        this.logService.warn(this, 'ngOnInit:gameUpdateSubscription', { ex })
+      }
+    });
+    // Player events
+    this.playerUpdateSubscription = this.gameService.onUpdatePlayer().subscribe((data: any) => {
+      try {
+
+        if (typeof data == 'object' && data) {
+
+          this.player = data;
+          this.canAnswer = data.canAnswer;
+          this.canVote = data.canVote;
+
+
+        }
+      } catch (ex) {
+        this.logService.warn(this, 'ngOnInit:playerUpdateSubscription', { ex })
       }
     });
 
-    this.gameService.onUpdatePlayer().subscribe((data: any) => {
-      try {
-        console.log('update-player',data)
-        if (typeof data == 'object' && data) {
-          this.player = data;
-        }
-      } catch (ex) {}
-    });
-  }
-
-  // Enter results page animation
-  resultShowing = false;
-  resultEnter = false;
-  resultLeave = false;
-  resultHidden = true;
-
-  enterResultPage() {
-    this.openModal("card",()=>{
-      this.closeModal()
-      this.router.navigate(['/game']);
-    })
-    // if (this.transitioning) return;
-    // this.transitioning = true;
-    // this.resultShowing = true;
-
-    // setTimeout(() => {
-    //   this.resultLeave = false;
-    //   this.resultEnter = true;
-    // }, 10);
-    // setTimeout(() => {
-    //   this.resultHidden = false;
-    // }, 500);
-    // setTimeout(() => {
-    //   this.router.navigate(['/game']);
-    // }, 1500);
-    // setTimeout(() => {
-    //   this.leaveResultPage();
-    // }, 5000);
-  }
-  leaveResultPage() {
-    this.resultShowing = true;
-    this.resultLeave = true;
-    this.resultEnter = false;
-    this.resultHidden = true;
-    setTimeout(() => {
-      this.transitioning = false;
-      this.resultShowing = false;
-      this.resultLeave = false;
-      this.resultEnter = false;
-    }, 500);
-  }
-
-  // Enter votes page animation
-  transitionVoteShowing = false;
-  transitionVoteEnter = false;
-  transitionVoteLeave = false;
-  transitioning = false;
-  enterVotePage() {
-
-    this.openModal("text",()=>{
-      this.closeModal()
-      this.router.navigate(['/vote']);
-    })
-    /*
-    if (this.transitioning) return;
-    this.transitioning = true;
-    this.transitionVoteShowing = true;
-    setTimeout(() => {
-      this.transitionVoteLeave = false;
-      this.transitionVoteEnter = true;
-      // console.log('enterVotePage');
-    }, 1);
-    setTimeout(() => {
-      this.router.navigate(['/vote']);
-    }, 2500);
-    setTimeout(() => {
-      this.leaveVotePage();
-    }, 2000);
-    */
-  }
-
-  leaveVotePage() {
-    this.transitionVoteShowing = true;
-    this.transitionVoteLeave = true;
-    this.transitionVoteEnter = false;
-    setTimeout(() => {
-      this.transitioning = false;
-      this.transitionVoteShowing = false;
-      this.transitionVoteLeave = false;
-      this.transitionVoteEnter = false;
-    }, 1000);
   }
 
   ngOnDestroy() {
-    this.transitionToVotePageSubscription.unsubscribe();
-    this.transitionToGamePageSubscription.unsubscribe();
+    this.playerUpdateSubscription.unsubscribe();
+    this.gameUpdateSubscription.unsubscribe();
+    this.audioSubscription.unsubscribe();
+  }
+
+  // COMPUTED GETTERS/SETTERS
+  get isSplashLoading(){
+    try{
+      return !this.gameService.identified
+    }catch(ex){
+      return true;
+    }
+  }
+
+  get playerName() {
+    try {
+      return this.player.username
+    } catch (ex) {
+      return ""
+    }
+  }
+  get score() {
+    try {
+      return this.player.score
+    } catch (ex) {
+      return 0
+    }
+  }
+  get round() {
+    try {
+      return this.game.history.length
+    } catch (ex) {
+      return 0
+    }
+  }
+
+  get episodeAnswer() {
+    try {
+      return this.game.episode.result.answer.text
+    } catch (ex) {
+      return ""
+    }
+  }
+  get episodeQuestion() {
+    try {
+      return this.game.episode.result.question.text
+    } catch (ex) {
+      return ""
+    }
+  }
+
+
+  // ! ||--------------------------------------------------------------------------------||
+  // ! ||                                   ROUND TIME                                   ||
+  // ! ||--------------------------------------------------------------------------------||
+
+  private counterResetTimeout: any;
+  public resetCounterTimeout(seconds: number = 120) {
+
+    clearTimeout(this.counterResetTimeout)
+    this.counterResetTimeout = setTimeout(() => {
+      this.resetCounter(seconds)
+    }, 100)
+  }
+
+  public timeCounter: number = 120;
+  public resetCounter(seconds: number = 120) {
+    this.timeCounter = seconds
+    clearInterval(this.timeInterval)
+    this.timeInterval = setInterval(() => {
+      if (this.timeCounter > 0) {
+        this.timeCounter -= 1
+      } else {
+        clearInterval(this.timeInterval)
+      }
+    }, 1000)
+  }
+
+  public timeInterval: any;
+
+
+  get roundTime() {
+    try {
+      let minutes = Math.floor(this.timeCounter / 60)
+      let seconds: any = this.timeCounter % 60;
+      if (seconds < 10) {
+        seconds = "0" + seconds
+      }
+      return `${minutes}:${seconds}`
+    } catch (ex) {
+      return "0:00"
+    }
+  }
+
+  get roundEnding() {
+    return this.timeCounter < 30 && this.timeCounter > 0;
+  }
+
+
+
+  public onJoinEvent(){
+    this.pageSplashLeave()
+  }
+
+  async wait(ms: any) {
+    return new Promise((resolve: any) => {
+      setTimeout(() => {
+        resolve();
+      }, ms)
+    })
+  }
+
+  // ! ||--------------------------------------------------------------------------------||
+  // ! ||                                 VOICE MESSAGES                                 ||
+  // ! ||--------------------------------------------------------------------------------||
+
+  public prevMessage:any ;
+  public onVoiceEventTimeout:any;
+  public onVoiceEvent($event: any) {
+    if(Object.values(VOICE).map((el:any) => el.message).indexOf(this.pageMessage) == -1){
+      this.prevMessage = this.pageMessage;
+    }
+    this.pageMessage = $event.message
+    if($event?.code == VOICE.CANCEL.code || $event?.code == VOICE.SENT.code){
+      clearTimeout(this.onVoiceEventTimeout);
+       this.onVoiceEventTimeout = setTimeout(() => {
+         if(this.pageMessage == $event.message) {
+           this.pageMessage = this.prevMessage
+         }
+       },500)
+    }
+
+  }
+
+  public onVoiceMessage($event: any) {
+    this.logService.info(this, 'onVoiceMessage', $event)
+
+    if ($event.success) {
+      this.gameService.sendVoiceMessage($event.data)
+    }
+  }
+
+  // ! ||--------------------------------------------------------------------------------||
+  // ! ||                                 RESULTS SCREEN                                 ||
+  // ! ||--------------------------------------------------------------------------------||
+  public isResultsShowing: boolean = false;
+  public isResultsEntering: boolean = false;
+  public isResultsLeaving: boolean = false;
+  public isResultsEntered: boolean = false;
+
+  public async pageResultsEnter() {
+    pageResultsEnter(this)
+  }
+
+  public async pageResultsLeave() {
+    pageResultsLeave(this)
+  }
+  // ! ||--------------------------------------------------------------------------------||
+  // ! ||                                  SPLASH SCREEN                                 ||
+  // ! ||--------------------------------------------------------------------------------||
+
+  public isSplashActive: boolean = true
+  public isSplashHidding: boolean = false
+  public isSplashHidden: boolean = false
+  public isSplashComplete: boolean = false
+  // public isSplashLoading: boolean = true
+
+  public async pageSplashLeave() {
+    animationSplashLeave(this)
+  }
+
+
+
+
+  // ! ||--------------------------------------------------------------------------------||
+  // ! ||                                ANSWER SCREEN                                   ||
+  // ! ||--------------------------------------------------------------------------------||
+
+  public canAnswer = true;
+  public lastAnswerPanY = 0;
+  public lastAnswerDeltaY = 0;
+  public isAnswerPan = false;
+  public selectedAnswer = -1
+  public isAnswerSelected = false;
+  public isAnswerPanFirst = true;
+
+
+  async pageAnswerEnter() {
+    return animationPageAnswerEnter(this)
+  }
+  async pageAnswerLeave() {
+    return animationPageAnswerLeave(this)
+  }
+  public onAnswerPanStart($event: any, i: number) {
+    onPanStart(this, 'answer', $event, i);
+  }
+  public onAnswerPanMove($event: any) {
+    onPanMove(this, 'answer', $event)
+  }
+  public async onAnswerPanEnd($event: any) {
+    onPanEnd(this, 'answer', $event)
+  }
+
+  async onAnswerSwipe($event: any) {
+    onSwipe(this, 'answer', $event)
+  }
+
+  public async onDiscardAnswer() {
+    onDiscard(this, 'answer')
+  }
+  public async onConfirmAnswer() {
+    onConfirm(this, 'answer')
+    // this.pageVoteEnter();
+  }
+  public getAnswerTranslate(i: number) {
+    return getTranslate(this, "answer", i);
+  }
+
+  public getAnswerVisibility(i: number) {
+    return getCardVisibility(this, 'answer', i)
+  }
+
+  // ! ||--------------------------------------------------------------------------------||
+  // ! ||                                   VOTE SCREEN                                  ||
+  // ! ||--------------------------------------------------------------------------------||
+
+  public lastVotePanY: any = 0
+  public isVoteSelected: any = false;
+  public isVotePan: any = false;
+  public selectedVote: any = false;
+  public lastVoteDeltaY: any = 0
+  public canVote: any = true;
+  public isVotePageLeaving: boolean = false;
+
+  public voteListCardsAnimation: boolean = false
+  async pageVoteEnter() {
+    return animationPageVoteEnter(this)
+  }
+
+  async pageVoteLeave() {
+    return animationPageVoteLeave(this)
+  }
+
+  public onVotePanStart($event: any, i: any) {
+    onPanStart(this, 'vote', $event, i)
+  }
+  public onVotePanMove($event: any,) {
+    onPanMove(this, 'vote', $event)
+  }
+  public onVotePanEnd($event: any,) {
+    onPanEnd(this, 'vote', $event)
+  }
+
+
+  public getVoteTranslate(i: any) {
+    return getTranslate(this, "vote", i);
+
+  }
+
+  public getVoteVisibility(i: number) {
+    return getCardVisibility(this, 'vote', i)
+  }
+  public onVoteSwipe($event: any) {
+    onSwipe(this, 'vote', $event)
+  }
+
+  public async onConfirmVote() {
+    await onConfirm(this, 'vote')
+    await this.wait(1000)
+    // this.pageResultsEnter()
+  }
+  public onDiscardVote() {
+    onDiscard(this, 'vote')
   }
 }
+
+

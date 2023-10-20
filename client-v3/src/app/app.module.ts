@@ -1,32 +1,75 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { Injectable, NgModule } from '@angular/core';
+import { BrowserModule, HammerModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG, } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ComponentsModule } from './components/components.module';
-import { PagesModule } from './pages/pages.module';
-import { FormsModule } from '@angular/forms';
-import { DirectivesModule } from './directives/directives.module';
+import { PlayerHandComponent } from './components/player-hand/player-hand.component';
+import { PlayerHandV2Component } from './components/player-hand-v2/player-hand-v2.component';
+import { GameHeaderComponent } from './components/game-header/game-header.component';
+import { GameBoardComponent } from './components/game-board/game-board.component';
+import { ModalSplashComponent } from './components/modal-splash/modal-splash.component';
+import { ModalControlsComponent } from './components/modal-controls/modal-controls.component';
+import { IconLoadingComponent } from './components/icon-loading/icon-loading.component';
+import { ModalResultsComponent } from './components/modal-results/modal-results.component';
+import { GameFooterComponent } from './components/game-footer/game-footer.component';
+import { ButtonVoiceMessageComponent } from './components/button-voice-message/button-voice-message.component';
+import { ButtonSettingsComponent } from './components/button-settings/button-settings.component';
 
 
-import { environment } from '../environments/environment';
+/**
+ * HammerJS gestures configuration
+ */
+@Injectable()
+export class CustomHammerConfig extends HammerGestureConfig {
 
-console.log('App Module',{ environment})
+  override overrides = {
+    pan: {
+      // direction: Hammer.DIRECTION_VERTICAL, // this code enables only horizontal direction
+      direction: Hammer.DIRECTION_ALL, // this code enables only horizontal direction
+      threshold: 10
+    },
+    pinch: {
+      enable: false
+    },
+    rotate: {
+      enable: false
+    },
+    swipe: {
+      direction: Hammer.DIRECTION_VERTICAL,
+    }
+
+  };
+}
+
 @NgModule({
   declarations: [
     AppComponent,
-
+    PlayerHandComponent,
+    PlayerHandV2Component,
+    GameHeaderComponent,
+    GameBoardComponent,
+    ModalSplashComponent,
+    ModalControlsComponent,
+    IconLoadingComponent,
+    ModalResultsComponent,
+    GameFooterComponent,
+    ButtonVoiceMessageComponent,
+    ButtonSettingsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ComponentsModule,
-    PagesModule,
-    FormsModule,
-    DirectivesModule
+    HammerModule,
+    FormsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  providers: [
+    //
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: CustomHammerConfig
+    }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

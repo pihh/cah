@@ -1,0 +1,450 @@
+
+.player-hand {
+  position: absolute;
+
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  background-color: white;
+  background-size: auto 85%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 200px !important;
+  height: 250px !important;
+  will-change: transform;
+  border-radius: 10px;
+  box-shadow: 0px 12px 12px rgba(0,0,0,0.15);
+  padding: 1.25em 1em;
+  font-weight: 800;
+  color: black;
+  overflow: hidden;
+}
+
+span {
+  position: absolute;
+  top: -100px;
+  right: -80px;
+  opacity: 0.1;
+}
+.card,
+.card > div {
+  touch-action: none;
+}
+
+.card {
+  transform: none;
+  background: white;
+  height: 10em;
+  width: 10em;
+  border-radius: 1em;
+  flex: 1;
+}
+.top-card {
+  z-index: 11;
+  margin-top: -5px;
+  box-shadow: none;
+  scale:1.05;
+}
+.next-card {
+  margin-left: -200px;
+  z-index: 10;
+  margin-top: -5px;
+}
+.player-hand.transitioning .top-card{
+  box-shadow: 0px 12px 12px rgba(0,0,0,0.15);
+  transition-duration: 0.15s;
+}
+.next-card{
+  transform: scale(1.05);
+  transition: all 1ms;
+
+}
+.player-hand.transitioning .next-card{
+  transform: scale(1);
+  transition: all 0s;
+
+}
+.card-stack {
+  position: absolute !important;
+  transition: all 0.2s;
+}
+
+.card-stack:nth-child(3) {
+  z-index: 9;
+}
+.card-stack:nth-child(4) {
+  z-index: 8;
+}
+
+.card-stack:nth-child(5) {
+  z-index: 7;
+}
+
+.card-stack:nth-child(6) {
+  z-index: 6;
+}
+
+.card-stack:nth-child(7) {
+  z-index: 5;
+}
+
+.card-stack:nth-child(8) {
+  z-index: 4;
+}
+
+.card-stack:nth-child(9) {
+  z-index: 3;
+}
+
+.card-stack:nth-child(10) {
+  z-index: 2;
+}
+
+.card-stack:nth-child(3) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+
+.card-stack:nth-child(4) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+
+.card-stack:nth-child(5) {
+  transform: translate3d(30px, 6px, 0px) rotateZ(6deg);
+}
+
+.card-stack:nth-child(6) {
+  transform: translate3d(40px, 8px, 0px) rotateZ(8deg);
+}
+
+.card-stack:nth-child(7) {
+  transform: translate3d(50px, 10px, 0px) rotateZ(10deg);
+}
+
+.card-stack:nth-child(8) {
+  transform: translate3d(60px, 12px, 0px) rotateZ(12deg);
+}
+
+.card-stack:nth-child(9) {
+  transform: translate3d(70px, 14px, 0px) rotateZ(14deg);
+}
+.card-stack:nth-child(10) {
+  transform: translate3d(80px, 16px, 0px) rotateZ(16deg);
+}
+
+/* INDEX 1 */
+.player-hand-index-1 .card-stack:nth-child(3) {
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+  z-index: 0;
+}
+.player-hand-index-1 .card-stack:nth-child(4) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+.player-hand-index-1 .card-stack:nth-child(5) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+.player-hand-index-1 .card-stack:nth-child(6) {
+  transform: translate3d(30px, 6px, 0px) rotateZ(6deg);
+}
+.player-hand-index-1 .card-stack:nth-child(7) {
+  transform: translate3d(40px, 8px, 0px) rotateZ(8deg);
+}
+.player-hand-index-1 .card-stack:nth-child(8) {
+  transform: translate3d(50px, 10px, 0px) rotateZ(10deg);
+}
+.player-hand-index-1 .card-stack:nth-child(9) {
+  transform: translate3d(60px, 12px, 0px) rotateZ(12deg);
+}
+.player-hand-index-1 .card-stack:nth-child(10) {
+  transform: translate3d(70px, 14px, 0px) rotateZ(14deg);
+}
+/* Index 2 */
+.player-hand-index-2 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-20px, 2px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-2 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+.player-hand-index-2 .card-stack:nth-child(5) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+.player-hand-index-2 .card-stack:nth-child(6) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+.player-hand-index-2 .card-stack:nth-child(7) {
+  transform: translate3d(30px, 6px, 0px) rotateZ(6deg);
+}
+.player-hand-index-2 .card-stack:nth-child(8) {
+  transform: translate3d(40px, 8px, 0px) rotateZ(8deg);
+}
+.player-hand-index-2 .card-stack:nth-child(9) {
+  transform: translate3d(50px, 10px, 0px) rotateZ(10deg);
+}
+.player-hand-index-2 .card-stack:nth-child(10) {
+  transform: translate3d(60px, 12px, 0px) rotateZ(12deg);
+}
+
+/* INDEX 3 */
+.player-hand-index-3 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-30px, 12px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-3 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-20px, 2px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-3 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+.player-hand-index-3 .card-stack:nth-child(6) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+.player-hand-index-3 .card-stack:nth-child(7) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+.player-hand-index-3 .card-stack:nth-child(8) {
+  transform: translate3d(30px, 6px, 0px) rotateZ(6deg);
+}
+.player-hand-index-3 .card-stack:nth-child(9) {
+  transform: translate3d(40px, 8px, 0px) rotateZ(8deg);
+}
+.player-hand-index-3 .card-stack:nth-child(10) {
+  transform: translate3d(50px, 10px, 0px) rotateZ(10deg);
+}
+
+/* INDEX 4 */
+.player-hand-index-4 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-40px, 12px, 0px) rotateZ(-6deg);
+}
+
+.player-hand-index-4 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-30px, 6px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-4 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-20px, 4px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-4 .card-stack:nth-child(6) {
+  z-index: 3;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+.player-hand-index-4 .card-stack:nth-child(7) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+.player-hand-index-4 .card-stack:nth-child(8) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+.player-hand-index-4 .card-stack:nth-child(9) {
+  transform: translate3d(30px, 6px, 0px) rotateZ(6deg);
+}
+.player-hand-index-4 .card-stack:nth-child(10) {
+  transform: translate3d(40px, 8px, 0px) rotateZ(8deg);
+}
+
+/* INDEX 5 */
+.player-hand-index-5 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-50px, 14px, 0px) rotateZ(-8deg);
+}
+.player-hand-index-5 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-40px, 12px, 0px) rotateZ(-6deg);
+}
+
+.player-hand-index-5 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-30px, 6px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-5 .card-stack:nth-child(6) {
+  z-index: 3;
+  transform: translate3d(-20px, 4px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-5 .card-stack:nth-child(7) {
+  z-index: 4;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+.player-hand-index-5 .card-stack:nth-child(8) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+.player-hand-index-5 .card-stack:nth-child(9) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+.player-hand-index-5 .card-stack:nth-child(10) {
+  transform: translate3d(30px, 6px, 0px) rotateZ(6deg);
+}
+
+/* INDEX 6 */
+.player-hand-index-6 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-60px, 16px, 0px) rotateZ(-10deg);
+}
+.player-hand-index-6 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-50px, 14px, 0px) rotateZ(-8deg);
+}
+.player-hand-index-6 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-40px, 12px, 0px) rotateZ(-6deg);
+}
+
+.player-hand-index-6 .card-stack:nth-child(6) {
+  z-index: 3;
+  transform: translate3d(-30px,6px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-6 .card-stack:nth-child(7) {
+  z-index: 4;
+  transform: translate3d(-20px, 4px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-6 .card-stack:nth-child(8) {
+  z-index: 5;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+.player-hand-index-6 .card-stack:nth-child(9) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+.player-hand-index-6 .card-stack:nth-child(10) {
+  transform: translate3d(20px, 4px, 0px) rotateZ(4deg);
+}
+
+/* INDEX 7 */
+.player-hand-index-7 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-70px, 20px, 0px) rotateZ(-12deg);
+}
+.player-hand-index-7 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-60px, 16px, 0px) rotateZ(-10deg);
+}
+.player-hand-index-7 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-50px, 14px, 0px) rotateZ(-8deg);
+}
+.player-hand-index-7 .card-stack:nth-child(6) {
+  z-index: 3;
+  transform: translate3d(-40px, 12px, 0px) rotateZ(-6deg);
+}
+
+.player-hand-index-7 .card-stack:nth-child(7) {
+  z-index: 4;
+  transform: translate3d(-30px, 6px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-7 .card-stack:nth-child(8) {
+  z-index: 5;
+  transform: translate3d(-20px, 4px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-7 .card-stack:nth-child(9) {
+  z-index: 6;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+.player-hand-index-7 .card-stack:nth-child(10) {
+  transform: translate3d(10px, 2px, 0px) rotateZ(2deg);
+}
+
+/* INDEX 8 */
+.player-hand-index-8 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-80px, 22px, 0px) rotateZ(-14deg);
+}
+
+.player-hand-index-8 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-70px, 20px, 0px) rotateZ(-12deg);
+}
+.player-hand-index-8 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-60px, 16px, 0px) rotateZ(-10deg);
+}
+.player-hand-index-8 .card-stack:nth-child(6) {
+  z-index: 3;
+  transform: translate3d(-50px, 14px, 0px) rotateZ(-8deg);
+}
+.player-hand-index-8 .card-stack:nth-child(7) {
+  z-index: 4;
+  transform: translate3d(-40px, 12px, 0px) rotateZ(-6deg);
+}
+
+.player-hand-index-8 .card-stack:nth-child(8) {
+  z-index: 5;
+  transform: translate3d(-30px, 6px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-8 .card-stack:nth-child(9) {
+  z-index: 6;
+  transform: translate3d(-20px, 4px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-8 .card-stack:nth-child(10) {
+  z-index: 7;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+
+.player-hand-index-9 .card-stack:nth-child(3) {
+  z-index: 0;
+  transform: translate3d(-80px, 22px, 0px) rotateZ(-14deg);
+}
+
+.player-hand-index-9 .card-stack:nth-child(4) {
+  z-index: 1;
+  transform: translate3d(-70px, 20px, 0px) rotateZ(-12deg);
+}
+.player-hand-index-9 .card-stack:nth-child(5) {
+  z-index: 2;
+  transform: translate3d(-60px, 16px, 0px) rotateZ(-10deg);
+}
+.player-hand-index-9 .card-stack:nth-child(6) {
+  z-index: 3;
+  transform: translate3d(-50px, 14px, 0px) rotateZ(-8deg);
+}
+.player-hand-index-9 .card-stack:nth-child(7) {
+  z-index: 4;
+  transform: translate3d(-40px, 12px, 0px) rotateZ(-6deg);
+}
+
+.player-hand-index-9 .card-stack:nth-child(8) {
+  z-index: 5;
+  transform: translate3d(-30px, 6px, 0px) rotateZ(-6deg);
+}
+.player-hand-index-9 .card-stack:nth-child(9) {
+  z-index: 6;
+  transform: translate3d(-20px, 4px, 0px) rotateZ(-4deg);
+}
+.player-hand-index-9 .card-stack:nth-child(10) {
+  z-index: 7;
+  transform: translate3d(-10px, 2px, 0px) rotateZ(-2deg);
+}
+
+
+.shaking {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}

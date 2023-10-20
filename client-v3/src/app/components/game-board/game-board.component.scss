@@ -1,0 +1,33 @@
+.game-board{
+  padding: 1em 1.5em;
+  height: calc( 100vh - 116px - 300px );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .game-board-container{
+
+    width: 100vw;
+    text-align: center;
+
+  }
+  h1{
+    margin-bottom: 0.25em
+  }
+  .score-badge{
+    margin: 0 auto;
+    background: white;
+    border-radius: 100%;
+    width: 8em;
+    height: 8em;
+    display: flex;
+    color: black;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    h1,h4,h6{
+      margin:0;
+      font-weight: bold;
+    }
+  }
+}
