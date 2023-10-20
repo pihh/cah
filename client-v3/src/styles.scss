@@ -1013,9 +1013,11 @@ img {
   transform: translate(-50%, -50%) rotate(-37deg) !important;
 }
 
-// .cards li{
-//   touch-action: pan-y pan-x !important;
-// }
+
+
+.cards{
+  touch-action: pan-x !important;
+}
 
 .overflow-x-hidden{
   overflow-x: hidden;

@@ -30,7 +30,7 @@ const types: any = {
 }
 export const onPanStart = (controller: any, type: string, $event: any, i: any) => {
   let keys = types[type]
-  if (['panleft', 'panright'].indexOf($event.additionalEvent) > -1) return;
+  if (!$event.additionalEvent || ['panleft', 'panright'].indexOf($event.additionalEvent) > -1) return;
   if (controller[keys.lastPanY] == -keys.panLimit && $event.additionalEvent == "pandown" && controller[keys.isSelected]) {
     controller[keys.isPan] = false;
     controller[keys.isSelected] = false;
@@ -50,6 +50,7 @@ export const onPanStart = (controller: any, type: string, $event: any, i: any) =
 export const onPanMove = (controller: any, type: string, $event: any) => {
   let keys = types[type]
   if (!controller[keys.isPan] || controller[keys.isSelected]) return;
+  if (!$event.additionalEvent || ['panleft', 'panright'].indexOf($event.additionalEvent) > -1) return;
   // console.log('panMove',$event)
 
   controller[keys.lastPanY] += ($event.deltaY - controller[keys.lastDeltaY])

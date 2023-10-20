@@ -23,24 +23,41 @@ import { ButtonSettingsComponent } from './components/button-settings/button-set
 @Injectable()
 export class CustomHammerConfig extends HammerGestureConfig {
 
-  override overrides = {
+  override overrides = <any>{
     pan: {
       // direction: Hammer.DIRECTION_VERTICAL, // this code enables only horizontal direction
       direction: Hammer.DIRECTION_ALL, // this code enables only horizontal direction
-      threshold: 10
-    },
-    pinch: {
-      enable: false
-    },
-    rotate: {
-      enable: false
+      threshold: 1
     },
     swipe: {
       direction: Hammer.DIRECTION_VERTICAL,
+    },
+  }
+  override buildHammer(element: any) {
+    let options = {};
+
+    if (element.attributes['data-mc-options']) {
+      try {
+        options = JSON.parse(element.attributes['data-mc-options'].nodeValue);
+      }
+      catch (err) {
+        console.error('An error occurred when attempting to parse Hammer.js options: ', err);
+      }
     }
 
-  };
-}
+    const mc = new Hammer(element, options);
+
+
+    // retain support for angular overrides object
+    for (const eventName of Object.keys(this.overrides)) {
+      mc.get(eventName).set(this.overrides[eventName]);
+    }
+
+    return mc;
+  }
+
+};
+
 
 @NgModule({
   declarations: [

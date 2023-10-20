@@ -39,23 +39,19 @@
     <ul
       class="cards"
       #playerHandSlider
-      [class.overflow-x-hidden]="isAnswerSelected"
-    >
+      >
+
       <li
         *ngFor="let card of player.hand; let i = index"
         (panstart)="onAnswerPanStart($event, i)"
-        (pan)="onAnswerPanMove($event)"
+        (panup)="onAnswerPanMove($event)"
+        (pandown)="onAnswerPanMove($event)"
         (panend)="onAnswerPanEnd($event)"
         (swipe)="onAnswerSwipe($event)"
+        data-mc-options='{ "touchAction": "pan-x" }'
         [class.chosen]="getAnswerVisibility(i)"
       >
-        <!-- <img
 
-
-          src="https://assets.codepen.io/89905/coverflow--Front-1024x1024.jpg"
-        width="1200"
-        height="1200"
-        /> -->
         <div class="card-content" [style.marginTop]="getAnswerTranslate(i)">
           <div class="card-body">
             <h2>{{ card.text }}</h2>
