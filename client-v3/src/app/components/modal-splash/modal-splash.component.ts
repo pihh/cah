@@ -23,13 +23,15 @@ export class ModalSplashComponent {
 
   // Subscriptions
   public initSubscription:any;
+
   ngOnInit() {
     this.pristine = false;
     this.loading = !this.gameService.identified
     this.initSubscription = this.gameService.onInit().subscribe((data:any)=>{
       this.loading = !this.gameService.identified;
       this.username = this.gameService.username;
-
+      console.log('join?')
+      this.join()
     })
   }
 

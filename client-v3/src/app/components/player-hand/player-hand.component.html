@@ -1,37 +1,50 @@
-<div id="root">
-  <div
-    class="player-hand player-hand-index-{{ playerHandCardIndex }} {{
-      isNavigatingClass
-    }}"
-  >
-    <div
-      class="shake-container {{ isShakingClass }}"
-      [style.zIndex]="isPanReseting ? -1 : 11"
+<div class="player-hand" [class.hidden]="handHidden">
+  <ul
+    class="cards"
+    #playerHandSlider
     >
-      <div
-        (pan)="onPan($event)"
-        (panStart)="onPanStart($event)"
-        (panEnd)="onPanEnd($event)"
-        class="card top-card"
-        [style.transform]="cardTopTransform"
-        [style.transition]="isNavigatingSpeed"
-      >
-        {{ cardText }}
+
+    <li
+      *ngFor="let card of player.hand; let i = index"
+      (panstart)="onAnswerPanStart($event, i)"
+      (panup)="onAnswerPanMove($event)"
+      (pandown)="onAnswerPanMove($event)"
+      (panend)="onAnswerPanEnd($event)"
+      (swipe)="onAnswerSwipe($event)"
+      data-mc-options='{ "touchAction": "pan-x" }'
+      [class.chosen]="getAnswerVisibility(i)"
+    >
+
+      <div class="card-content" [style.marginTop]="getAnswerTranslate(i)">
+        <div class="card-body">
+          <h2>{{ card.text }}</h2>
+          <img src="assets/images/logo-white.png" />
+        </div>
       </div>
-    </div>
-    <div
-      class="card next-card"
-      [style.transition]="isNavigatingSpeed"
-      [style.transform]="cardNextTransform"
+    </li>
+    <li
+      *ngIf="
+        gameState == 'enter-page-answer' || gameState == 'enter-page-vote'
+      "
     >
-      {{ cardNextText }}
-    </div>
-    <div
-      *ngFor="let card of cardsBackDisplay; let i = index"
-      class="card card-stack"
-      [style.transition]="isNavigatingSpeed"
+      <div class="card-content placeholder">
+        <div class="card-body">
+          <h2>Placeholder</h2>
+          <img src="assets/images/logo-white.png" />
+        </div>
+      </div>
+    </li>
+    <li
+      *ngIf="
+        gameState == 'enter-page-answer' || gameState == 'enter-page-vote'
+      "
     >
-      {{ i + 2 }}
-    </div>
-  </div>
+      <div class="card-content placeholder">
+        <div class="card-body">
+          <h2>Placeholder</h2>
+          <img src="assets/images/logo-white.png" />
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>

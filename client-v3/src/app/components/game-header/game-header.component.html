@@ -16,6 +16,12 @@
           </div>
           <img src="/assets/images/logo-black.png" class="logo-small" />
         </div>
+
+        <button class="btn-nav" (click)="toggleSideMenu()" [class.animated]="isSideMenuOpen">
+          <span class="icon-bar top"></span>
+          <span class="icon-bar middle"></span>
+          <span class="icon-bar bottom"></span>
+        </button>
       </div>
       <div id="app-header--top--section-action" class="flex-center">
         <div id="app-header--top--section-action--container">
@@ -50,9 +56,29 @@
           </span>
           <span class="badge">{{ score }}</span>
         </div>
-        <div class="app-header--bottom-container--player--round-time">{{roundTime}}</div>
+        <div class="app-header--bottom-container--player--round-time">
+          {{ roundTime }}
+        </div>
         <div>Round #{{ round }}</div>
       </div>
     </section>
   </header>
+</div>
+<div id="game-side-menu" class="nav-content hideNav hidden" [class.hideNav]="!isSideMenuOpen" [class.hideNav]="!isSideMenuOpen" [class.animated]="isSideMenuOpen" [class.showNav]="isSideMenuOpen">
+  <ul class="nav-list">
+    <li class="nav-item"><a href="index.html" class="item-anchor">Home</a></li>
+    <li class="nav-item"><a href="about.html" class="item-anchor">About</a></li>
+    <li class="nav-item"><a href="projects.html" class="item-anchor">Projects</a></li>
+    <li class="nav-item"><a href="contact.html" class="item-anchor">Contact</a></li>
+  </ul>
+  <div class="line-betwen"></div>
+  <div class="social-links">
+    <ul class="social-list">
+      <li><a href="https://www.facebook.com/mitar.djakovic.7" target="_blank"><i class="fa fa-facebook"></i></a></li>
+      <li><a href="https://rs.linkedin.com/in/mitar-djakovic-77490ab5" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+      <li><a href="mailto:mitar-djakovic2401993@hotmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
+      <li><a href="https://github.com/roker93" target="_blank"><i class="fa fa-github"></i></a></li>
+      <li><a href="https://codepen.io/roker2401993" target="_blank"><i class="fa fa-codepen"></i></a></li>
+    </ul>
+  </div>
 </div>

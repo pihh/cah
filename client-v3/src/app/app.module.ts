@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlayerHandComponent } from './components/player-hand/player-hand.component';
-import { PlayerHandV2Component } from './components/player-hand-v2/player-hand-v2.component';
+
 import { GameHeaderComponent } from './components/game-header/game-header.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { ModalSplashComponent } from './components/modal-splash/modal-splash.component';
@@ -15,6 +15,7 @@ import { ModalResultsComponent } from './components/modal-results/modal-results.
 import { GameFooterComponent } from './components/game-footer/game-footer.component';
 import { ButtonVoiceMessageComponent } from './components/button-voice-message/button-voice-message.component';
 import { ButtonSettingsComponent } from './components/button-settings/button-settings.component';
+import { GameSideMenuComponent } from './components/game-side-menu/game-side-menu.component';
 
 
 /**
@@ -63,7 +64,6 @@ export class CustomHammerConfig extends HammerGestureConfig {
   declarations: [
     AppComponent,
     PlayerHandComponent,
-    PlayerHandV2Component,
     GameHeaderComponent,
     GameBoardComponent,
     ModalSplashComponent,
@@ -72,7 +72,8 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ModalResultsComponent,
     GameFooterComponent,
     ButtonVoiceMessageComponent,
-    ButtonSettingsComponent
+    ButtonSettingsComponent,
+    GameSideMenuComponent
   ],
   imports: [
     BrowserModule,

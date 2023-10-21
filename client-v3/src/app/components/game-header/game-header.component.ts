@@ -14,4 +14,9 @@ export class GameHeaderComponent {
   @Input() playerName:any = 0
   @Input() score:any = 0
   @Input() round:any = 1
+
+  public isSideMenuOpen:boolean = false
+  public toggleSideMenu(){
+    this.isSideMenuOpen = !this.isSideMenuOpen
+  }
 }
