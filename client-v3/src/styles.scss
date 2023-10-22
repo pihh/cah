@@ -1,3 +1,5 @@
+@use 'variables';
+
 * {
   box-sizing: border-box;
   font-family: Helvetica, sans-serif;
@@ -34,7 +36,10 @@ body {
   margin: 0;
   padding: 0;
 }
-
+html{
+  overflow: hidden;
+    width: 100%;
+}
 body {
   display: flex;
   flex-direction: column;
@@ -44,6 +49,9 @@ body {
   place-content: safe center;
   overscroll-behavior: contain;
   box-sizing: none !important;
+  position: fixed;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 img {
@@ -999,7 +1007,7 @@ img {
   width: 1vmin;
   aspect-ratio: 1;
   z-index: 1000000;
-  background: radial-gradient(circle, #ff0 0.2vmin, rgba(0, 0, 0, 0) 0) 50% 0%, radial-gradient(circle, #ff0 0.3vmin, rgba(0, 0, 0, 0) 0) 0% 50%, radial-gradient(circle, #ff0 0.5vmin, rgba(0, 0, 0, 0) 0) 50% 99%, radial-gradient(circle, #ff0 0.2vmin, rgba(0, 0, 0, 0) 0) 99% 50%, radial-gradient(circle, #ff0 0.3vmin, rgba(0, 0, 0, 0) 0) 80% 90%, radial-gradient(circle, #ff0 0.5vmin, rgba(0, 0, 0, 0) 0) 95% 90%, radial-gradient(circle, #ff0 0.5vmin, rgba(0, 0, 0, 0) 0) 10% 60%, radial-gradient(circle, #ff0 0.2vmin, rgba(0, 0, 0, 0) 0) 31% 80%, radial-gradient(circle, #ff0 0.3vmin, rgba(0, 0, 0, 0) 0) 80% 10%, radial-gradient(circle, #ff0 0.2vmin, rgba(0, 0, 0, 0) 0) 90% 23%, radial-gradient(circle, #ff0 0.3vmin, rgba(0, 0, 0, 0) 0) 45% 20%, radial-gradient(circle, #ff0 0.5vmin, rgba(0, 0, 0, 0) 0) 13% 24%;
+  background: radial-gradient(circle, variables.$emphasis-color 0.2vmin, rgba(0, 0, 0, 0) 0) 50% 0%, radial-gradient(circle, variables.$emphasis-color 0.3vmin, rgba(0, 0, 0, 0) 0) 0% 50%, radial-gradient(circle, variables.$emphasis-color 0.5vmin, rgba(0, 0, 0, 0) 0) 50% 99%, radial-gradient(circle, variables.$emphasis-color 0.2vmin, rgba(0, 0, 0, 0) 0) 99% 50%, radial-gradient(circle, variables.$emphasis-color 0.3vmin, rgba(0, 0, 0, 0) 0) 80% 90%, radial-gradient(circle, variables.$emphasis-color 0.5vmin, rgba(0, 0, 0, 0) 0) 95% 90%, radial-gradient(circle, variables.$emphasis-color 0.5vmin, rgba(0, 0, 0, 0) 0) 10% 60%, radial-gradient(circle, variables.$emphasis-color 0.2vmin, rgba(0, 0, 0, 0) 0) 31% 80%, radial-gradient(circle, variables.$emphasis-color 0.3vmin, rgba(0, 0, 0, 0) 0) 80% 10%, radial-gradient(circle, variables.$emphasis-color 0.2vmin, rgba(0, 0, 0, 0) 0) 90% 23%, radial-gradient(circle, variables.$emphasis-color 0.3vmin, rgba(0, 0, 0, 0) 0) 45% 20%, radial-gradient(circle, variables.$emphasis-color 0.5vmin, rgba(0, 0, 0, 0) 0) 13% 24%;
   background-size: 2vmin 1vmin;
   background-repeat: no-repeat;
   animation: firework 2s infinite;
@@ -1020,7 +1028,7 @@ img {
 }
 
 .overflow-x-hidden{
-  overflow-x: none !important;
+  overflow-x: hidden !important;
   .cards li {
     transition: all 0.2s !important;
   }

@@ -177,24 +177,29 @@ export const onConfirm = async (controller:any, type:string) => {
     controller.controls = true;
     controller[keys.chosen] = controller[keys.selected]
 
-    controller.wait(1000);
     controller.gameService[keys.confirmAction](controller[keys.selected])
-    let allPlayers = controller.gameService.game.players.map((el:any) => el.uuid);
-    let donePlayers = controller.gameService.game.episode[keys.episode_complete];
-    for(let donePlayer of donePlayers) {
-      let idx = allPlayers.indexOf(donePlayer);
-      if(idx >-1){
-        allPlayers.splice(idx,1);
-      }
-    }
-    controller.pageMessage = "Waiting for " + allPlayers.length + "other players.";
+    await controller.wait(250);
+    // let allPlayers = controller.gameService.game.players.map((el:any) => el.uuid);
+    // let donePlayers = controller.gameService.game.episode[keys.episode_complete];
+    // for(let donePlayer of donePlayers) {
+    //   let idx = allPlayers.indexOf(donePlayer);
+    //   if(idx >-1){
+    //     allPlayers.splice(idx,1);
+    //   }
+    // }
+    // controller.pageMessage = "Waiting for " + allPlayers.length + "other players.";
     //console.log({controller: controller,players:controller.gameService.game.players.map((el:any) => el.uuid),names:controller.gameService.game.players.map((el:any) => el.username)})
-    controller[keys.lastPanY] = 500
+    controller.isTransitioning =false;
+    await controller.wait(1);
+    controller.playerHandSliderActive= true;
+    controller[keys.lastPanY] = 1000
+    await controller.wait(1)
     controller.isTransitioning = true
     await controller.wait(1)
     controller[keys.lastPanY] = 0
     await controller.wait(200);
     controller.isTransitioning = false
-
+    await controller.wait(1);
+    controller.playerHandSliderActive= false;
 
 }

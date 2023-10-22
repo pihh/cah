@@ -36,7 +36,7 @@ export class PanelComponent {
   }
   get onlinePlayers() {
     try {
-      return this.gameService.game.players
+      return this.gameService.game.players.sort((a:any,b:any)=>a.score > b.score)
     } catch (e) {
       return []
     }

@@ -36,7 +36,7 @@ export class AppComponent {
 
   public handHidden = true
   public voteHidden = true;
-
+  public playerHandSliderActive= false;
 
   // HEADER STATE
   public isShowingAction: boolean = false;
@@ -181,6 +181,13 @@ export class AppComponent {
     }
   }
 
+  get episodeWinner(){
+    try{
+      return this.gameService.game.lastEpisodeResult.winner.username
+    }catch(ex){
+      return "No winners"
+    }
+  }
 
   // ! ||--------------------------------------------------------------------------------||
   // ! ||                                   ROUND TIME                                   ||

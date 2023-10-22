@@ -1,3 +1,5 @@
+@use '../../../variables';
+
 @mixin button($bcolor, $url, $x1, $y1, $bor, $col) {
   background: $bcolor;
   -webkit-mask: url($url);
@@ -269,7 +271,7 @@
   input {
     background: black;
     border: none;
-    color: #FED053;
+    color: variables.$emphasis-color;
     text-align: center;
   }
 }

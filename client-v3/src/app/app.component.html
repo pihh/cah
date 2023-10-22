@@ -16,6 +16,7 @@
   [isResultsEntering]="isResultsEntering"
   [isResultsLeaving]="isResultsLeaving"
   [isResultsEntered]="isResultsEntered"
+  [winner]="episodeWinner"
 
   ></app-modal-results>
 
@@ -40,7 +41,7 @@
     <ul
       class="cards    answered-{{chosenAnswer}}-{{canAnswer}}-{{isAnswerSelected}}"
       #playerHandSlider
-      [class.active]="!canAnswer"
+      [class.active]="playerHandSliderActive"
       [class.overflow-x-hidden]="isAnswerSelected && canAnswer"
       >
     <!-- <li class="hand-placeholder">
@@ -60,7 +61,7 @@
 
         <div class="card-content" [style.marginTop]="getAnswerTranslate(i)"  >
           <div class="card-body">
-            <h2>{{ card.text }}</h2>
+            <h2>{{ card.text }} </h2>
             <img src="assets/images/logo-white.png" />
           </div>
         </div>

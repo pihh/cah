@@ -22,9 +22,9 @@ export class GameService {
   public environment: any = environment;
   public connection = localStorage.getItem('connection-identifier') || '';
   public username = localStorage.getItem('username-identifier') || '';
-  public socketUrl: any = "http://localhost:3000/";
+  //public socketUrl: any = "http://localhost:3000/";
   // public socketUrl: any = environment.socketUrl;
-  //public socketUrl: any = "https://cards-against-humanity-concept.adaptable.app/";
+  public socketUrl: any = "https://cards-against-humanity-concept.adaptable.app/";
 
   // Observers
   public init$: BehaviorSubject<any> = new BehaviorSubject(false);
@@ -133,7 +133,7 @@ export class GameService {
       try {
         if (game) {
           if (this.updateEventIds.indexOf(game.eventUuid) === -1) {
-            console.log('update-game-subscription', game)
+            console.log('update-game-subscription', game.lastEpisodeResult)
             this.updateEventIds.push(game.eventUuid);
             this.game = game
             this.round = game.history.length + 1;

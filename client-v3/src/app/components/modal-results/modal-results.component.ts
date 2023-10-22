@@ -12,4 +12,5 @@ export class ModalResultsComponent {
   @Input() isResultsEntering: boolean = true
   @Input() isResultsLeaving: boolean = true
   @Input() isResultsEntered: boolean = true
+  @Input() winner:any;
 }
