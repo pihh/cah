@@ -117,7 +117,7 @@ export const getEdgesTranslate = (controller:any, type:string, i:number)=>{
     let rotateZ = percentage * 4;
     let translateX = percentage * 12;
     let translateY = percentage * 10;
-    let scale = Math.min(0.3,Math.max(0,percentage * 0.3)) + 0.7;
+    let scale = Math.min(0.2,Math.max(0,percentage * 0.2)) + 0.8;
 
     if(controller[keys.selected] == i){
       return `scale(${scale})`
@@ -125,14 +125,14 @@ export const getEdgesTranslate = (controller:any, type:string, i:number)=>{
       rotateZ *=-1
       translateX *=-1
 
-      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg) scale(0.7)`
+      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg) scale(0.8)`
     }else if(controller[keys.selected] == i-1){
-      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg) scale(0.7)`
+      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg) scale(0.8)`
     }else{
-      return "scale(0.7)"
+      return "scale(0.8)"
     }
   }
-  return "scale(0.7)"
+  return "scale(0.8)"
 }
 
 export const getCardVisibility = (controller:any, type:string,i:any)=>{
@@ -196,11 +196,11 @@ export const onConfirm = async (controller:any, type:string) => {
     await controller.wait(1);
     controller.playerHandSliderActive= true;
     controller[keys.lastPanY] = 1000
-    await controller.wait(1)
+    await controller.wait(100)
     controller.isTransitioning = true
     await controller.wait(1)
     controller[keys.lastPanY] = 0
-    await controller.wait(200);
+    await controller.wait(250);
     controller.isTransitioning = false
     await controller.wait(1);
     controller.playerHandSliderActive= false;

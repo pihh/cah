@@ -330,29 +330,32 @@ export class AppComponent {
     // console.log('onPlayerHandScroll',{$event})
   }
   public onPlayerHandScrollEnd($event: any) {
+    // console.log('onPlayerHandScrollEnd - clearTimeout', this.playerHandScrollTimeout)
     clearTimeout(this.playerHandScrollTimeout)
     if(this.gameState !== "page-answer") return;
     const scrollLeft = $event.target.scrollLeft;
-    const scrollWidth = $event.target.scrollWidth;
+    const scrollWidth = $event.target.scrollWidth //- document.body.offsetWidth/2;
     const currentCardIndex = Math.round(scrollLeft / scrollWidth *110 /10)
     const currentLiIndex = currentCardIndex + 1
     const numberOfCards = this.player.hand.length;
+    const currentLi = this.playerHandSlider.nativeElement.querySelector(`li:nth-child(${currentLiIndex})`)
+    const firstLi = this.playerHandSlider.nativeElement.querySelector(`li:nth-child(1)`)
+    const liWidth = 200//firstLi.getBoundingClientRect().width -20
     this.playerHandScrollTimeout = setTimeout(() => {
 
       console.log('onPlayerHandScrollEnd', {
-        // scrollLeft,
-        // scrollWidth,
-        gameState:this.gameState,
-        currentCardIndex,
-        currentLiIndex,
-        numberOfCards
+        scrollLeft,
+        scrollWidth,
+        liWidth
       })
       this.playerHandSlider.nativeElement.scrollTo({
-        left: this.playerHandSlider.nativeElement.querySelector(`li:nth-child(${currentLiIndex})`).offsetLeft,
-        behavior: 'smooth',
-      })
+          left:  Math.round(scrollLeft/liWidth) * liWidth,//- (document.body.offsetWidth-150 )/2 +20,//scrollWidth/numberOfCards,//currentLi.offsetLeft + currentLi.offsetWidth/2,
+
+          behavior: 'smooth',
+       })
+
       //document.querySelector('.player-hand .cards').scrollTo({left:document.querySelector("#app > div.player-hand > ul > li:nth-child(9)").offsetLeft})
-    }, 0)
+    }, 100)
   }
 
   async pageAnswerEnter() {

@@ -79,11 +79,12 @@ img {
 }
 
 .game-footer {
-  height: 250px;
-
+  height: 150px;
   display: flex;
   flex-direction: column;
   max-height: 25dvh;
+
+  width: 100dvw;
   .game-footer-question {
     height: 100%;
     .game-footer-question-content {
@@ -97,7 +98,8 @@ img {
       animation-fill-mode: both;
       -webkit-animation-duration: 0.4s;
       -webkit-animation-fill-mode: both;
-      font-weight: 600;
+      font-weight: 200;
+      font-size: small;
     }
   }
   .game-footer-logo img {
@@ -149,8 +151,7 @@ img {
     transform: translateX(-100%) rotateY(-45deg);
 
     will-change: transform;
-    height: 400px;
-    max-height: 50dvh;
+
     &.placeholder {
       background: transparent;
       color: transparent;
@@ -173,10 +174,10 @@ img {
   display: flex;
   align-items: flex-end;
   --size: 6;
-  min-height: calc(var(--cover-size) * 2.5);
-  /* width: calc(var(--cover-size) * var(--size)); */
+  min-height: calc(variables.$card-width * 2.5);
+  /* width: calc(variables.$card-width * var(--size)); */
   margin: 0 auto;
-  /* padding: calc(var(--cover-size) / 3 * 2) 0; */
+  /* padding: calc(variables.$card-width / 3 * 2) 0; */
   position: relative;
   /* max-width: 90vw; */
   overflow-y: hidden;
@@ -187,24 +188,27 @@ img {
 }
 
 .cards:not(.active) {
-  scroll-snap-type: x proximity;
+  // scroll-snap-type: x proximity;
 }
 
 .cards li {
   scroll-snap-align: center;
   display: inline-block;
-  width: var(--cover-size);
-  height: 400px;
+  width: variables.$card-width;
+  max-width: variables.$card-max-width;
+  aspect-ratio: variables.$card-aspect-ratio;
   max-height: 50dvh;
   border-radius: 1em;
 }
 
 .cards li .card-content {
   display: block;
-  width: var(--cover-size);
-  height: 400px;
-  max-height: 50dvh;
-  border-radius: 0.5em;
+  width: variables.$card-width;
+  max-width: variables.$card-width;
+  aspect-ratio: variables.$card-aspect-ratio;
+  // height: 400px;
+  // max-height: 50dvh;
+  border-radius: 0.3em;
   // -webkit-box-reflect: below 0.5em
   //   linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25));
   background: white;
@@ -212,10 +216,10 @@ img {
 }
 
 .cards li:first-of-type {
-  margin-left: calc(60% - (var(--cover-size) / 2));
+  margin-left: calc(50dvw - (variables.$card-width / 2));
 }
 .cards li:last-of-type {
-  margin-right: calc(60% - (var(--cover-size) / 2));
+  margin-right: calc(50dvw - (variables.$card-width / 2));
 }
 
 .cards li > .card-content .card-body {
@@ -263,13 +267,11 @@ img {
   0% {
     transform: translateY(60px) rotateZ(10deg);
   }
-  45% {
+  50% {
     transform: translateY(0) rotateZ(0deg);
   }
 
-  55% {
-    transform: translateY(0) rotateZ(0deg);
-  }
+
   100% {
     transform: translateY(60px) rotateZ(-10deg);
   }
@@ -411,8 +413,8 @@ img {
   }
 }
 .vote-list {
-  position: absolute;
-  top: 0;
+  position: fixed;
+  bottom: 0px;
   left: 0;
 
   .vote-card {
@@ -426,22 +428,22 @@ img {
     }
   }
   .cards {
-    padding-bottom: 250px;
+    padding-bottom: 175px;
     li {
       user-select: none;
       margin-right: 1em;
-      max-height: 50dvh;
+      height: calc( 100dvh - 320px );
       .card-content {
-        max-width: calc(var(--cover-size) - 2em);
+        max-width: calc(variables.$card-width - 2em);
       }
       z-index: 10;
     }
     li:first-of-type {
-      margin-left: calc(50dvw + 0.5em - var(--cover-size) / 2);
+      margin-left: calc(50dvw + 0.5em - variables.$card-width / 2);
     }
-    li:last-of-type {
-      margin-right: calc(50dvw + 0.5em - var(--cover-size) / 2);
-    }
+    // li:last-of-type {
+    //   margin-right: calc(50dvw + 0.5em - variables.$card-width / 2);
+    // }
   }
   .placeholder {
     background: transparent !important;
@@ -528,7 +530,7 @@ img {
     -webkit-animation-name: fadeInUp;
     // animation-delay: 1.2s;
   }
-  .placeholder {
+  .placeholder, .vote-page-placeholder {
     width: 0 !important;
   }
   .placeholder-leave {
@@ -879,12 +881,12 @@ img {
       z-index: 6;
     }
     .card-answer{
-      transition-delay: 2250ms;
+      transition-delay: 2750ms;
       transform: rotateZ(12deg);
     }
 
     .card-question{
-      transition-delay: 2000ms;
+      transition-delay: 3000ms;
       transform: rotateZ(-12deg);
     }
   }

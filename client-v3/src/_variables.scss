@@ -6,7 +6,8 @@ $game-header-section-height: 64px;
 $game-header-size: 130px;
 $game-footer-size: 250px;
 $card-width: 300px;
-$card-height: 400px;
+$card-max-width: 100dvw;
+$card-aspect-ratio: calc( 1 / 1.4 ); //63.5/88;
 
 
 $z-index-overlay: 10000;

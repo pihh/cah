@@ -46,8 +46,19 @@
       (scroll)="onPlayerHandScroll($event)"
       (scrollend)="onPlayerHandScrollEnd($event)"
       >
-    <!-- <li class="hand-placeholder">
-      <div _ngcontent-ng-c1074178092="" class="card-content" style="margin-top: 0px;"><div _ngcontent-ng-c1074178092="" class="card-body"><h2 _ngcontent-ng-c1074178092="">Hatsune Miku's screams.</h2><img _ngcontent-ng-c1074178092="" src="assets/images/logo-white.png"></div></div>
+      <!-- <li
+
+      data-mc-options='{ "touchAction": "pan-x" }'
+      style="max-width: 150px;"
+      >
+      -- [class.chosen]="getAnswerVisibility(i)" --
+
+      <div class="card-content"   style="max-width: 150px;">
+        <div class="card-body">
+          <h2>x </h2>
+          <img src="assets/images/logo-white.png" />
+        </div>
+      </div>
     </li> -->
       <li
         *ngFor="let card of player.hand; let i = index"
