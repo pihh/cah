@@ -117,19 +117,22 @@ export const getEdgesTranslate = (controller:any, type:string, i:number)=>{
     let rotateZ = percentage * 4;
     let translateX = percentage * 12;
     let translateY = percentage * 10;
-    if(controller[keys.selected] == i+1){
+    let scale = Math.min(0.3,Math.max(0,percentage * 0.3)) + 0.7;
 
+    if(controller[keys.selected] == i){
+      return `scale(${scale})`
+    }else if(controller[keys.selected] == i+1){
       rotateZ *=-1
       translateX *=-1
 
-      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg)`
+      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg) scale(0.7)`
     }else if(controller[keys.selected] == i-1){
-      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg)`
+      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg) scale(0.7)`
     }else{
-      return "none"
+      return "scale(0.7)"
     }
   }
-  return "none"
+  return "scale(0.7)"
 }
 
 export const getCardVisibility = (controller:any, type:string,i:any)=>{

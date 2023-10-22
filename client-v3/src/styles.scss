@@ -135,7 +135,8 @@ img {
     will-change: z-index;
 
     user-select: none;
-    margin-right: -40px;
+    // margin-right: -40px;
+    margin-right: -100px;
     margin-bottom: -100px;
   }
 
@@ -260,17 +261,17 @@ img {
         */
 @keyframes rotate-cover {
   0% {
-    transform: translateY(60px) rotateZ(8deg);
+    transform: translateY(60px) rotateZ(10deg);
   }
-  35% {
+  45% {
     transform: translateY(0) rotateZ(0deg);
   }
 
-  65% {
+  55% {
     transform: translateY(0) rotateZ(0deg);
   }
   100% {
-    transform: translateY(60px) rotateZ(-8deg);
+    transform: translateY(60px) rotateZ(-10deg);
   }
 }
 
@@ -429,7 +430,7 @@ img {
     li {
       user-select: none;
       margin-right: 1em;
-
+      max-height: 50dvh;
       .card-content {
         max-width: calc(var(--cover-size) - 2em);
       }

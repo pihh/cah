@@ -43,6 +43,8 @@
       #playerHandSlider
       [class.active]="playerHandSliderActive"
       [class.overflow-x-hidden]="isAnswerSelected && canAnswer"
+      (scroll)="onPlayerHandScroll($event)"
+      (scrollend)="onPlayerHandScrollEnd($event)"
       >
     <!-- <li class="hand-placeholder">
       <div _ngcontent-ng-c1074178092="" class="card-content" style="margin-top: 0px;"><div _ngcontent-ng-c1074178092="" class="card-body"><h2 _ngcontent-ng-c1074178092="">Hatsune Miku's screams.</h2><img _ngcontent-ng-c1074178092="" src="assets/images/logo-white.png"></div></div>
@@ -99,8 +101,8 @@
       [class.vote-page-leaving]="isVotePageLeaving"
     >
       <!-- [class.overflow-x-hidden]="isVoteSelected" -->
-      <li>
-        <div class="card-content placeholder">
+      <li class="vote-page-placeholder">
+        <div class="card-content placeholder" >
           <!-- <div class="card-body">
             <h2>Placeholder</h2>
             <img src="assets/images/logo-white.png" />

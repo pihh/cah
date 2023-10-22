@@ -25,12 +25,13 @@ export class ModalSplashComponent {
   public initSubscription:any;
 
   ngOnInit() {
+    console.log('init modal splash')
     this.pristine = false;
     this.loading = !this.gameService.identified
     this.initSubscription = this.gameService.onInit().subscribe((data:any)=>{
       this.loading = !this.gameService.identified;
       this.username = this.gameService.username;
-      console.log('join?',this.gameService)
+
       //this.join()
     })
   }

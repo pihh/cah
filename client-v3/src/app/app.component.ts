@@ -36,7 +36,7 @@ export class AppComponent {
 
   public handHidden = true
   public voteHidden = true;
-  public playerHandSliderActive= false;
+  public playerHandSliderActive = false;
 
   // HEADER STATE
   public isShowingAction: boolean = false;
@@ -44,7 +44,7 @@ export class AppComponent {
   public headerMessage: string = "Swipe up."
   public pageMessage: boolean | string = false;
 
-  public onToggleSideMenuEvent(){
+  public onToggleSideMenuEvent() {
     this.isSideMenuOpen = !this.isSideMenuOpen;
   }
 
@@ -77,12 +77,12 @@ export class AppComponent {
 
           this.resetCounter(data.episode.timeout);
 
-          if(state === "answer" || state === "vote"){
-            if((state ==="answer" && !this.canAnswer) || (state ==="vote" && !this.canVote)){
+          if (state === "answer" || state === "vote") {
+            if ((state === "answer" && !this.canAnswer) || (state === "vote" && !this.canVote)) {
               let missing_players = data.episode.missing_actions.length
               let total_players = data.players.length
-              let pageMessage = "Waiting for " + missing_players+"/"+total_players + " player";
-              pageMessage += missing_players >1 ? "s." : "."
+              let pageMessage = "Waiting for " + missing_players + "/" + total_players + " player";
+              pageMessage += missing_players > 1 ? "s." : "."
               this.pageMessage = pageMessage;
             }
           }
@@ -136,10 +136,10 @@ export class AppComponent {
   }
 
   // COMPUTED GETTERS/SETTERS
-  get isSplashLoading(){
-    try{
+  get isSplashLoading() {
+    try {
       return !this.gameService.identified
-    }catch(ex){
+    } catch (ex) {
       return true;
     }
   }
@@ -181,10 +181,10 @@ export class AppComponent {
     }
   }
 
-  get episodeWinner(){
-    try{
+  get episodeWinner() {
+    try {
       return this.gameService.game.lastEpisodeResult.winner.username
-    }catch(ex){
+    } catch (ex) {
       return "No winners"
     }
   }
@@ -237,7 +237,7 @@ export class AppComponent {
 
 
 
-  public onJoinEvent(){
+  public onJoinEvent() {
 
     this.pageSplashLeave()
   }
@@ -254,20 +254,20 @@ export class AppComponent {
   // ! ||                                 VOICE MESSAGES                                 ||
   // ! ||--------------------------------------------------------------------------------||
 
-  public prevMessage:any ;
-  public onVoiceEventTimeout:any;
+  public prevMessage: any;
+  public onVoiceEventTimeout: any;
   public onVoiceEvent($event: any) {
-    if(Object.values(VOICE).map((el:any) => el.message).indexOf(this.pageMessage) == -1){
+    if (Object.values(VOICE).map((el: any) => el.message).indexOf(this.pageMessage) == -1) {
       this.prevMessage = this.pageMessage;
     }
     this.pageMessage = $event.message
-    if($event?.code == VOICE.CANCEL.code || $event?.code == VOICE.SENT.code){
+    if ($event?.code == VOICE.CANCEL.code || $event?.code == VOICE.SENT.code) {
       clearTimeout(this.onVoiceEventTimeout);
-       this.onVoiceEventTimeout = setTimeout(() => {
-         if(this.pageMessage == $event.message) {
-           this.pageMessage = this.prevMessage
-         }
-       },500)
+      this.onVoiceEventTimeout = setTimeout(() => {
+        if (this.pageMessage == $event.message) {
+          this.pageMessage = this.prevMessage
+        }
+      }, 500)
     }
 
   }
@@ -325,6 +325,35 @@ export class AppComponent {
   public isAnswerSelected = false;
   public isAnswerPanFirst = true;
 
+  private playerHandScrollTimeout: any;
+  public onPlayerHandScroll($event: any) {
+    // console.log('onPlayerHandScroll',{$event})
+  }
+  public onPlayerHandScrollEnd($event: any) {
+    clearTimeout(this.playerHandScrollTimeout)
+    if(this.gameState !== "page-answer") return;
+    const scrollLeft = $event.target.scrollLeft;
+    const scrollWidth = $event.target.scrollWidth;
+    const currentCardIndex = Math.round(scrollLeft / scrollWidth *110 /10)
+    const currentLiIndex = currentCardIndex + 1
+    const numberOfCards = this.player.hand.length;
+    this.playerHandScrollTimeout = setTimeout(() => {
+
+      console.log('onPlayerHandScrollEnd', {
+        // scrollLeft,
+        // scrollWidth,
+        gameState:this.gameState,
+        currentCardIndex,
+        currentLiIndex,
+        numberOfCards
+      })
+      this.playerHandSlider.nativeElement.scrollTo({
+        left: this.playerHandSlider.nativeElement.querySelector(`li:nth-child(${currentLiIndex})`).offsetLeft,
+        behavior: 'smooth',
+      })
+      //document.querySelector('.player-hand .cards').scrollTo({left:document.querySelector("#app > div.player-hand > ul > li:nth-child(9)").offsetLeft})
+    }, 0)
+  }
 
   async pageAnswerEnter() {
     return animationPageAnswerEnter(this)
@@ -357,8 +386,8 @@ export class AppComponent {
     return getTranslate(this, "answer", i);
   }
 
-  public getAnswerEdgesTranslate(i:number){
-    return getEdgesTranslate(this,"answer",i)
+  public getAnswerEdgesTranslate(i: number) {
+    return getEdgesTranslate(this, "answer", i)
   }
 
   public getAnswerVisibility(i: number) {

@@ -83,11 +83,15 @@ export class GameService {
         console.log('identified',data);
         this.setConnection(data.uuid);
         this.setUsername(data.username);
-        setTimeout(() => {
-          this.identified = true;
+        this.identified = true;
+        // if(!this.identified){
 
-          this.init$.next(this.identified);
-        }, 500)
+        //   this.identified = true;
+        //   setTimeout(() => {
+
+        //     this.init$.next(this.identified);
+        //   }, 500)
+        // }
 
       });
 
@@ -120,6 +124,7 @@ export class GameService {
 
   public onInit() {
     this.socket.on('identified', (data: any) => {
+
       setTimeout(() => {
         this.init$.next(this.identified);
       }, 500)

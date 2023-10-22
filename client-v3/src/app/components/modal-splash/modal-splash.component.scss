@@ -1,4 +1,4 @@
-@use '../../../variables';
+@use "../../../variables";
 
 @mixin button($bcolor, $url, $x1, $y1, $bor, $col) {
   background: $bcolor;
@@ -273,5 +273,61 @@
     border: none;
     color: variables.$emphasis-color;
     text-align: center;
+  }
+}
+
+.loading {
+  .splash-join-container {
+    position: fixed;
+    width: 0;
+    overflow: hidden;
+    display: hidden;
+  }
+}
+
+.splash-join-container {
+  transition: all 0.4s;
+  .splash-player-name,
+  .splash-join-game {
+    transition: all 0.5s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+app-icon-loading {
+  transition: all 0.4s ease-out;
+  width: 100vw;
+  text-align: center;
+  position: fixed;
+}
+.loaded {
+  .splash-join-container {
+    animation-delay: 0.5s;
+    display: flex;
+    // animation: linear loaded both;
+  }
+  .splash-player-name,
+  .splash-join-game {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  .splash-join-game {
+    transition-delay: 0.5s;
+  }
+  .splash-player-name {
+    transition-delay: 0.7s;
+  }
+  app-icon-loading {
+    opacity: 0;
+  }
+}
+
+@keyframes loaded {
+  0% {
+    display: none;
+  }
+
+  100% {
+    display: block;
   }
 }

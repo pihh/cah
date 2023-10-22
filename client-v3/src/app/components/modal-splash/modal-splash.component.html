@@ -15,10 +15,10 @@
   </section>
   <!-- [class.display-none]="isInitialized" -->
   <section class="splash-footer">
-    <div class="splash-loading" >
+    <div class="splash-loading" [class.loading]="loading" [class.loaded]="!loading">
 
-      <app-icon-loading *ngIf="loading"></app-icon-loading>
-      <div *ngIf="!loading" class="splash-join-container">
+      <app-icon-loading ></app-icon-loading>
+      <div  class="splash-join-container">
 
         <div class="splash-player-name" >
           <h4>Welcome</h4>
