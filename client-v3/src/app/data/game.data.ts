@@ -116,6 +116,7 @@ export const GAME = {
       "answer": {},
       "votes": 0
     },
+    "missing_actions":[PLAYER.uuid],
     "state": "answer"
   },
   "eventUuid": "abdb8e00-ff4d-44c4-b2bc-c42190191f61",

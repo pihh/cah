@@ -12,7 +12,8 @@ const types: any = {
     confirm: "onConfirmAnswer",
     translate: "getAnswerTranslate",
     panLimit: 200,
-    confirmAction: "answer"
+    confirmAction: "answer",
+    episode_complete: "player_answers"
   }, vote: {
     lastPanY: 'lastVotePanY',
     isSelected: 'isVoteSelected',
@@ -25,7 +26,8 @@ const types: any = {
     confirm: "onConfirmVote",
     translate: "getVoteTranslate",
     panLimit: 100,
-    confirmAction: "vote"
+    confirmAction: "vote",
+    episode_complete: "player_votes"
   }
 }
 export const onPanStart = (controller: any, type: string, $event: any, i: any) => {
@@ -56,6 +58,8 @@ export const onPanMove = (controller: any, type: string, $event: any) => {
   controller[keys.lastPanY] += ($event.deltaY - controller[keys.lastDeltaY])
   controller[keys.lastDeltaY] = $event.deltaY
   controller[keys.lastPanY] = Math.min(0, Math.max(-keys.panLimit, controller[keys.lastPanY]))
+
+
 }
 export const onPanEnd = async (controller: any, type: string, $event: any) => {
   let keys = types[type]
@@ -94,11 +98,38 @@ export const onSwipe = (controller: any, type: string, $event: any) => {
 export const getTranslate = (controller:any, type:string, i:any)=>{
   let keys = types[type]
 
+
+
+
   if (controller[keys.selected]  == i) {
     return `${controller[keys.lastPanY] }px`
   } else {
     return '0px'
   }
+}
+
+export const getEdgesTranslate = (controller:any, type:string, i:number)=>{
+  let keys = types[type]
+  if(type ==="answer" && keys['can'] ){
+
+
+    let percentage = Math.max(0,Math.min(1,Math.abs(controller[keys.lastPanY])/keys.panLimit))
+    let rotateZ = percentage * 4;
+    let translateX = percentage * 12;
+    let translateY = percentage * 10;
+    if(controller[keys.selected] == i+1){
+
+      rotateZ *=-1
+      translateX *=-1
+
+      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg)`
+    }else if(controller[keys.selected] == i-1){
+      return `translate(${translateX}px,${translateY}px) rotateZ(${rotateZ}deg)`
+    }else{
+      return "none"
+    }
+  }
+  return "none"
 }
 
 export const getCardVisibility = (controller:any, type:string,i:any)=>{
@@ -112,7 +143,7 @@ export const getCardVisibility = (controller:any, type:string,i:any)=>{
 
 
 export const onDiscard = async (controller:any, type:string)=>{
-  console.log('onDiscard',type)
+
   let keys = types[type]
   controller.isTransitioning = true;
   await controller.wait(1)
@@ -148,5 +179,22 @@ export const onConfirm = async (controller:any, type:string) => {
 
     controller.wait(1000);
     controller.gameService[keys.confirmAction](controller[keys.selected])
+    let allPlayers = controller.gameService.game.players.map((el:any) => el.uuid);
+    let donePlayers = controller.gameService.game.episode[keys.episode_complete];
+    for(let donePlayer of donePlayers) {
+      let idx = allPlayers.indexOf(donePlayer);
+      if(idx >-1){
+        allPlayers.splice(idx,1);
+      }
+    }
+    controller.pageMessage = "Waiting for " + allPlayers.length + "other players.";
+    //console.log({controller: controller,players:controller.gameService.game.players.map((el:any) => el.uuid),names:controller.gameService.game.players.map((el:any) => el.username)})
+    controller[keys.lastPanY] = 500
+    controller.isTransitioning = true
+    await controller.wait(1)
+    controller[keys.lastPanY] = 0
+    await controller.wait(200);
+    controller.isTransitioning = false
+
 
 }

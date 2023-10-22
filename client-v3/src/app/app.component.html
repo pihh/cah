@@ -28,7 +28,8 @@
     [score]="gameService.score"
     [round]="round"
     [roundTime]="roundTime"
-
+    [isSideMenuOpen]="isSideMenuOpen"
+    (onToggleSideMenuEvent)="onToggleSideMenuEvent()"
   >
   </app-game-header>
 
@@ -37,10 +38,14 @@
 
   <div class="player-hand" [class.hidden]="handHidden">
     <ul
-      class="cards"
+      class="cards    answered-{{chosenAnswer}}-{{canAnswer}}-{{isAnswerSelected}}"
       #playerHandSlider
+      [class.active]="!canAnswer"
+      [class.overflow-x-hidden]="isAnswerSelected && canAnswer"
       >
-
+    <!-- <li class="hand-placeholder">
+      <div _ngcontent-ng-c1074178092="" class="card-content" style="margin-top: 0px;"><div _ngcontent-ng-c1074178092="" class="card-body"><h2 _ngcontent-ng-c1074178092="">Hatsune Miku's screams.</h2><img _ngcontent-ng-c1074178092="" src="assets/images/logo-white.png"></div></div>
+    </li> -->
       <li
         *ngFor="let card of player.hand; let i = index"
         (panstart)="onAnswerPanStart($event, i)"
@@ -49,10 +54,11 @@
         (panend)="onAnswerPanEnd($event)"
         (swipe)="onAnswerSwipe($event)"
         data-mc-options='{ "touchAction": "pan-x" }'
-        [class.chosen]="getAnswerVisibility(i)"
-      >
+        [style.transform]="getAnswerEdgesTranslate(i)"
+        >
+        <!-- [class.chosen]="getAnswerVisibility(i)" -->
 
-        <div class="card-content" [style.marginTop]="getAnswerTranslate(i)">
+        <div class="card-content" [style.marginTop]="getAnswerTranslate(i)"  >
           <div class="card-body">
             <h2>{{ card.text }}</h2>
             <img src="assets/images/logo-white.png" />

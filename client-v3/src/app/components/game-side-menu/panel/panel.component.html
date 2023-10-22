@@ -1,0 +1,52 @@
+<div id="game-side-menu" class="nav-content hideNav hidden" [class.hideNav]="!isSideMenuOpen" [class.hideNav]="!isSideMenuOpen" [class.animated]="isSideMenuOpen" [class.showNav]="isSideMenuOpen">
+  <ul class="nav-list">
+    <!-- <li class="nav-item"><a href="index.html" class="item-anchor">Home</a></li>
+    <li class="nav-item"><a href="about.html" class="item-anchor">About</a></li>
+    <li class="nav-item"><a href="projects.html" class="item-anchor">Projects</a></li>
+    <li class="nav-item"><a href="contact.html" class="item-anchor">Contact</a></li> -->
+  </ul>
+
+  <section id="game-side-menu-panel--player">
+    <h1>You:</h1>
+    <ul>
+      <li><b>Username:</b> <span class="text-capitalize">
+
+        {{username}}
+      </span>
+    </li>
+      <li><b>ID:</b>{{id}}</li>
+      <li><b>Score:</b><span class="badge">
+        {{score}}
+      </span>
+    </li>
+    </ul>
+  </section>
+  <div class="line-betwen"></div>
+  <section id="game-side-menu-panel--players">
+    <h1>Players:</h1>
+    <ul>
+      <li *ngFor="let player of onlinePlayers">
+        <span class="text-capitalize">
+
+          {{player.username}}
+        </span>
+        <span class="badge">{{player.score}}</span>
+      </li>
+    </ul>
+  </section>
+  <div class="line-betwen"></div>
+  <section id="game-side-menu-panel--history">
+    <h1>Game history:</h1>
+    <ul>
+      <li *ngFor="let history of gameHistory; let i = index">
+        <div class="game-side-menu-panel--history--content">
+
+          <div><b>#{{i}}</b> <b *ngIf="history?.result?.answer?.player?.username"> {{history?.result?.answer?.player?.username}}</b> <span class="badge badge-small badge-{{getGameResult(i)}}"></span></div>
+          <div><b>Q:</b> {{history.question.text}}</div>
+          <div><b>A:</b>{{history?.result?.answer?.text}}</div>
+
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>

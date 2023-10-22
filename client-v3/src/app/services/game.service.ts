@@ -22,9 +22,9 @@ export class GameService {
   public environment: any = environment;
   public connection = localStorage.getItem('connection-identifier') || '';
   public username = localStorage.getItem('username-identifier') || '';
-  //public socketUrl: any = "http://localhost:3000/";
+  public socketUrl: any = "http://localhost:3000/";
   // public socketUrl: any = environment.socketUrl;
-  public socketUrl: any = "https://cards-against-humanity-concept.adaptable.app/";
+  //public socketUrl: any = "https://cards-against-humanity-concept.adaptable.app/";
 
   // Observers
   public init$: BehaviorSubject<any> = new BehaviorSubject(false);
@@ -49,7 +49,8 @@ export class GameService {
     localStorage.setItem('connection-identifier', connection);
   }
   setUsername(username: any) {
-    if(username.trim() ==!this.username.trim()){
+
+    if(username && username.trim() !== this.username.trim()){
       this.username = username.trim();
       localStorage.setItem('username-identifier', username.trim());
     }
@@ -79,7 +80,7 @@ export class GameService {
       });
 
       this.socket.on('identified', (data: any) => {
-        console.log('identified');
+        console.log('identified',data);
         this.setConnection(data.uuid);
         this.setUsername(data.username);
         setTimeout(() => {
@@ -110,8 +111,11 @@ export class GameService {
     this.socket.emit('update-username', this.username);
   }
   public setAndUpdateUsername(username: string) {
-    this.setUsername(username);
-    this.updateUsername()
+    if(username){
+
+      this.setUsername(username);
+      this.updateUsername()
+    }
   }
 
   public onInit() {
@@ -124,13 +128,12 @@ export class GameService {
   }
 
   public onUpdate() {
-    // console.log('update-game-subscription')
     this.socket.on('update-game', (game: any) => {
 
       try {
         if (game) {
-
           if (this.updateEventIds.indexOf(game.eventUuid) === -1) {
+            console.log('update-game-subscription', game)
             this.updateEventIds.push(game.eventUuid);
             this.game = game
             this.round = game.history.length + 1;

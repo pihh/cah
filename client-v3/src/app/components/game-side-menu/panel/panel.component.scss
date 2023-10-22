@@ -1,0 +1,58 @@
+#game-side-menu {
+  color: white;
+  padding: 2em 1em;
+  overflow-y: scroll;
+  font-weight: 100;
+  font-size: small;
+  .game-side-menu-panel--history--content {
+    font-weight: 100;
+    font-size: small;
+    padding-bottom: 0.5em;
+    width: 100%;
+    div {
+      width: 100%;
+      font-weight: 100;
+      font-size: small;
+      margin-bottom: 0.25em;
+    }
+    li {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+  li {
+    font-weight: 100 !important;
+    font-size: small;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+  }
+  b {
+    margin-right: 0.25em;
+    font-size: initial;
+  }
+  .text-capitalize {
+    text-transform: capitalize;
+  }
+}
+.badge-small {
+  float: right;
+  height: 0.5em;
+  width: 0.5em;
+  min-width: 0.5em;
+  &.badge-red {
+    background: red;
+  }
+  &.badge-green {
+    background: green;
+  }
+  &.badge-transparent {
+    background: transparent !important;
+    border: 1px solid white;
+  }
+}
+#game-side-menu-panel--history {
+  li{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 0.5em
+  }
+}

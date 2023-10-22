@@ -16,6 +16,8 @@ import { GameFooterComponent } from './components/game-footer/game-footer.compon
 import { ButtonVoiceMessageComponent } from './components/button-voice-message/button-voice-message.component';
 import { ButtonSettingsComponent } from './components/button-settings/button-settings.component';
 import { GameSideMenuComponent } from './components/game-side-menu/game-side-menu.component';
+import { ButtonComponent } from './components/game-side-menu/button/button.component';
+import { PanelComponent } from './components/game-side-menu/panel/panel.component';
 
 
 /**
@@ -73,7 +75,9 @@ export class CustomHammerConfig extends HammerGestureConfig {
     GameFooterComponent,
     ButtonVoiceMessageComponent,
     ButtonSettingsComponent,
-    GameSideMenuComponent
+    GameSideMenuComponent,
+    ButtonComponent,
+    PanelComponent
   ],
   imports: [
     BrowserModule,

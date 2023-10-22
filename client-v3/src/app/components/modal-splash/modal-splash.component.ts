@@ -30,8 +30,8 @@ export class ModalSplashComponent {
     this.initSubscription = this.gameService.onInit().subscribe((data:any)=>{
       this.loading = !this.gameService.identified;
       this.username = this.gameService.username;
-      console.log('join?')
-      this.join()
+      console.log('join?',this.gameService)
+      //this.join()
     })
   }
 
@@ -56,8 +56,8 @@ export class ModalSplashComponent {
   // Actions
   public join(){
     console.log(this.username)
-    this.gameService.setAndUpdateUsername(this.username);
     this.gameService.join()
+    this.gameService.setAndUpdateUsername(this.username);
     this.onJoin()
   }
 

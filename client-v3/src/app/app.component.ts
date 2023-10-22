@@ -4,7 +4,7 @@ import { GAME, PLAYER } from './data/game.data';
 import { animationSplashLeave } from './animations/splash';
 import { animationPageAnswerEnter, animationPageAnswerLeave } from './animations/answer';
 import { animationPageVoteEnter, animationPageVoteLeave } from './animations/vote';
-import { getCardVisibility, getTranslate, onConfirm, onDiscard, onPanEnd, onPanMove, onPanStart, onSwipe } from './animations/pan';
+import { getCardVisibility, getEdgesTranslate, getTranslate, onConfirm, onDiscard, onPanEnd, onPanMove, onPanStart, onSwipe } from './animations/pan';
 import { pageResultsEnter, pageResultsLeave } from './animations/results';
 import { GameService } from './services/game.service';
 import { LogService } from './services/log.service';
@@ -40,8 +40,13 @@ export class AppComponent {
 
   // HEADER STATE
   public isShowingAction: boolean = false;
+  public isSideMenuOpen: boolean = false;
   public headerMessage: string = "Swipe up."
   public pageMessage: boolean | string = false;
+
+  public onToggleSideMenuEvent(){
+    this.isSideMenuOpen = !this.isSideMenuOpen;
+  }
 
 
   // SUBSCRIPTIONS
@@ -52,7 +57,6 @@ export class AppComponent {
 
   constructor(public gameService: GameService, public logService: LogService) {
     // Voice messages
-
     this.audioSubscription = this.gameService.onVoiceMessage().subscribe((data: any) => {
       try {
         console.log('audio recieved', data)
@@ -72,6 +76,16 @@ export class AppComponent {
           const eventName = data?.eventName || "answer"
 
           this.resetCounter(data.episode.timeout);
+
+          if(state === "answer" || state === "vote"){
+            if((state ==="answer" && !this.canAnswer) || (state ==="vote" && !this.canVote)){
+              let missing_players = data.episode.missing_actions.length
+              let total_players = data.players.length
+              let pageMessage = "Waiting for " + missing_players+"/"+total_players + " player";
+              pageMessage += missing_players >1 ? "s." : "."
+              this.pageMessage = pageMessage;
+            }
+          }
           if (data.episode.state !== this.currentGamePage) {
             this.currentGamePage = state;
             if (state === "answer") {
@@ -92,7 +106,7 @@ export class AppComponent {
           this.game = data;
         }
       } catch (ex) {
-        console.warn(ex)
+        // console.warn(ex)
         this.logService.warn(this, 'ngOnInit:gameUpdateSubscription', { ex })
       }
     });
@@ -101,7 +115,7 @@ export class AppComponent {
       try {
 
         if (typeof data == 'object' && data) {
-
+          //console.log('update player',data.hand.length)
           this.player = data;
           this.canAnswer = data.canAnswer;
           this.canVote = data.canVote;
@@ -217,6 +231,7 @@ export class AppComponent {
 
 
   public onJoinEvent(){
+
     this.pageSplashLeave()
   }
 
@@ -299,6 +314,7 @@ export class AppComponent {
   public lastAnswerDeltaY = 0;
   public isAnswerPan = false;
   public selectedAnswer = -1
+  public chosenAnswer = -1
   public isAnswerSelected = false;
   public isAnswerPanFirst = true;
 
@@ -334,6 +350,10 @@ export class AppComponent {
     return getTranslate(this, "answer", i);
   }
 
+  public getAnswerEdgesTranslate(i:number){
+    return getEdgesTranslate(this,"answer",i)
+  }
+
   public getAnswerVisibility(i: number) {
     return getCardVisibility(this, 'answer', i)
   }
@@ -345,7 +365,8 @@ export class AppComponent {
   public lastVotePanY: any = 0
   public isVoteSelected: any = false;
   public isVotePan: any = false;
-  public selectedVote: any = false;
+  public selectedVote: any = -1;
+  public chosenVote: any = -1;
   public lastVoteDeltaY: any = 0
   public canVote: any = true;
   public isVotePageLeaving: boolean = false;

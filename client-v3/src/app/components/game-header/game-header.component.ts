@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-game-header',
@@ -8,15 +8,18 @@ import { Component, Input } from '@angular/core';
 export class GameHeaderComponent {
   @Input() isAnswerSelected:any = false
   @Input() isVoteSelected:any = false
+  @Input() isSideMenuOpen:any = false
   @Input() pageMessage:any = "playerName"
   @Input() headerMessage:any = 0
   @Input() roundTime:any = "0:00"
   @Input() playerName:any = 0
   @Input() score:any = 0
   @Input() round:any = 1
+  @Output() onToggleSideMenuEvent:any = new EventEmitter<any>()
 
-  public isSideMenuOpen:boolean = false
+
   public toggleSideMenu(){
-    this.isSideMenuOpen = !this.isSideMenuOpen
+    this.onToggleSideMenuEvent.emit()
+    //this.isSideMenuOpen = !this.isSideMenuOpen
   }
 }
